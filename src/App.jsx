@@ -12,7 +12,7 @@ function App() {
 
         <nav className="nav">
           <ul>
-            <li><a href="#">Kahve Arenası</a></li>
+            <li><a href="#">coffee Arenası</a></li>
             <li><a href="#">Hakkımızda</a></li>
             <li><a href="#">Menü</a></li>
             <li><a href="#">Kahveni Tasarla</a></li>
