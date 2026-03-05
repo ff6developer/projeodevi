@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./index.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="layout">
+
+      <header className="header">
+        <div className="header-left">
+          <img src="/logo.png" alt="logo" className="logo" />
+          <h1 className="logo-text">ELMENES COFFEE</h1>
+        </div>
+
+        <nav className="nav">
+          <ul>
+            <li><a href="#">Kahve Arenası</a></li>
+            <li><a href="#">Hakkımızda</a></li>
+            <li><a href="#">Menü</a></li>
+            <li><a href="#">Kahveni Tasarla</a></li>
+            <li><a href="#">Kampanyalar</a></li>
+            <li><a href="#">Kayıt Ol</a></li>
+            <li><a href="#">Giriş Yap</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <div className="main">
+        <aside className="sidebar">
+          <ul>
+            <li className="active"><a href="#">Kahve Arenası</a></li>
+            <li className="active"><a href="#">Hakkımızda</a></li>
+            <li className="active"><a href="#">Menü</a></li>
+            <li className="active"><a href="#">Kahveni Tasarla</a></li>
+            <li className="active"><a href="#">Kampanyalar</a></li>
+            <li className="active"><a href="#">Kayıt Ol</a></li>
+            <li className="active"><a href="#">Giriş Yap</a></li>
+          </ul>
+        </aside>
+
+        <div className="anasayfaicerik">
+          
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      <footer className="footer">
+        <p>© 2026 ELMENES COFFEE</p>
+      </footer>
+
+    </div>
+  );
 }
 
-export default App
+export default App;
