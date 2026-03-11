@@ -1,13 +1,13 @@
-
 import React from "react";
-import "./index.css";
+import "./App.css";
 import Header from "./components/header.jsx";
+import Menu from "./components/menu.jsx";
+
 function App() {
   return (
     <div className="layout">
-
       <Header />
-
+      
       <div className="main">
         <aside className="sidebar">
           <ul>
@@ -21,15 +21,14 @@ function App() {
           </ul>
         </aside>
 
-        <div className="anasayfaicerik">
-          
+        <div className="content">
+          <Menu />
         </div>
       </div>
 
       <footer className="footer">
         <p>© 2026 ELMENES COFFEE</p>
       </footer>
-
     </div>
   );
 }

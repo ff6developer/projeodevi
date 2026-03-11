@@ -133,3 +133,15 @@ body {
   padding: 12px;
   box-shadow: inset 0 -3px 5px rgba(0, 0, 0, 0.3);
 }
+/* Menüdeki ürünler ve fotoğraflar */
+ul li {
+  display: flex;          /* yan yana gösterir */
+  align-items: center;    /* dikey ortala */
+  gap: 15px;              /* foto ile isim arası boşluk */
+  margin-bottom: 15px;
+}
+
+ul li img {
+  border-radius: 10px;    /* köşeleri yuvarlat */
+  object-fit: cover;      /* oran bozulmasın */
+}
