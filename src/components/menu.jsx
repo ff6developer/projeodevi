@@ -7,11 +7,11 @@ export default function Menu() {
       <div className="category">
         <h3>Sıcak Kahveler</h3>
         <div className="menu-item">
-          <img src={espressoImg} width="120" alt="Espresso" />
+          <img src="/espresso.png" width="120" alt="Espresso" />
           <p>Espresso</p>
         </div>
         <div className="menu-item">
-          <img src={latteImg} width="120" alt="Latte" />
+          <img src="/latte.png" width="120" alt="Latte" />
           <p>Latte</p>
         </div>
       </div>
@@ -19,8 +19,8 @@ export default function Menu() {
       <div className="category">
         <h3>Tatlılar</h3>
         <div className="menu-item">
-          <img src={mocaImg} width="120" alt="Moca" />
-          <p>Moca</p>
+          <img src="/mocha.png" width="120" alt="Mocha" />
+          <p>Mocha</p>
         </div>
       </div>
     </div>

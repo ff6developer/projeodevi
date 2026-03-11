@@ -3,7 +3,7 @@ import Genel from "./components/genel";
 import Login from "./pages/login";
 import Menu from "./pages/menu";
 import Signin from "./pages/signin";
-
+import "./index.css";
 function Home() {
   return <h2>Ana Sayfa</h2>;
 }
