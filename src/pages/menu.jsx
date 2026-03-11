@@ -1,27 +1,30 @@
 export default function Menu() {
   return (
-    <div>
+    <div className="menu-container">
       <h2>Menümüz</h2>
 
-      <h3>Sıcak Kahveler</h3>
-      <ul>
-        <li>
-          <img src="/src/assets/espresso.jpg" alt="Espresso" width="120" />
-          Espresso
-        </li>
-        <li>
-          <img src="/src/assets/latte.jpg" alt="Latte" width="120" />
-          Latte
-        </li>
-      </ul>
+      <div className="category">
+        <h3>Sıcak Kahveler</h3>
 
-      <h3>Tatlılar</h3>
-      <ul>
-        <li>
-          <img src="/src/assets/tiramisu.jpg" alt="Tiramisu" width="120" />
-          Tiramisu
-        </li>
-      </ul>
+        <div className="menu-item">
+          <img src="./public/espresso.jpg" width="120" alt="Espresso" />
+          <p>Espresso</p>
+        </div>
+
+        <div className="menu-item">
+          <img src="./public/latte.jpg" width="120" alt="Latte" />
+          <p>Latte</p>
+        </div>
+      </div>
+
+      <div className="category">
+        <h3>Tatlılar</h3>
+
+        <div className="menu-item">
+          <img src="./public/tramisu.jpg" width="120" alt="Tiramisu" />
+          <p>Tiramisu</p>
+        </div>
+      </div>
     </div>
   );
 }
