@@ -1,0 +1,81 @@
+.coffee-page{
+  position:relative;
+  min-height:100vh;
+  overflow:hidden;
+}
+
+/* BLUR BACKGROUND */
+.coffee-bg{
+  position:fixed;
+  inset:0;
+  background-image:url("/coffee-bg.jpg");
+  background-size:cover;
+  background-position:center;
+  filter:blur(20px) brightness(0.45);
+  transform:scale(1.15);
+  z-index:0;
+}
+
+/* DARK GRADIENT OVERLAY */
+.coffee-page::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.55),
+    rgba(0,0,0,0.75)
+  );
+  z-index:0;
+}
+
+/* CONTENT */
+.hero{
+  position:relative;
+  z-index:1;
+  min-height:100vh;
+
+  display:flex;
+  align-items:center;
+}
+
+.hero-inner{
+  max-width:620px;
+  margin-left:120px;
+}
+
+.hero-title{
+  font-size:96px;
+  line-height:1.05;
+  font-weight:800;
+  letter-spacing:-3px;
+  color:white;
+  margin-bottom:28px;
+
+  text-shadow:0 20px 60px rgba(0,0,0,0.7);
+}
+
+.hero-sub{
+  font-size:22px;
+  color:rgba(255,255,255,0.82);
+  line-height:1.7;
+  margin-bottom:40px;
+}
+
+.hero-btn{
+  padding:20px 48px;
+  font-size:18px;
+  border-radius:60px;
+  border:none;
+  cursor:pointer;
+
+  background:linear-gradient(135deg,#c58a5c,#8b5e3c);
+  color:white;
+
+  box-shadow:0 25px 70px rgba(0,0,0,0.6);
+  transition:0.35s;
+}
+
+.hero-btn:hover{
+  transform:translateY(-8px) scale(1.05);
+}
