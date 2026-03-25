@@ -33,7 +33,6 @@ export default function Login() {
               onBlur={() => setFocused(false)}
             />
           </div>
-
           <button className="login-button">Giriş Yap</button>
 
           <div className="login-links">

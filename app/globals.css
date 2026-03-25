@@ -1,0 +1,14 @@
+.order-screen{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#0f0f0f;
+}
+
+.order-text{
+  font-size:64px;
+  color:white;
+  font-weight:800;
+  letter-spacing:-2px;
+}
