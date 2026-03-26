@@ -1,6 +1,6 @@
 "use client";
-
 import React from 'react';
+
 import '../../styles/hakkimizda.css';
 
 const About = () => {
