@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Camera, Plus, Share2, Coffee, Users, X, CheckCircle2, Star, LogOut } from "lucide-react"
+import { Camera, Plus, Share2, Coffee, Users, X, CheckCircle2, Star, LogOut, Heart, MessageCircle, Trophy, Zap } from "lucide-react"
 import "../../styles/profil.css"
 
 export default function Profil() {
@@ -11,7 +11,7 @@ export default function Profil() {
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
   const [bio, setBio] = useState("Kahve tasarlamayı seviyorum ☕")
   const [avatar, setAvatar] = useState("/profilikon.png")
-  const [post, setPost] = useState("")
+  const [postText, setPostText] = useState("")
   const [posts, setPosts] = useState<any[]>([])
   
   const [lastDesign, setLastDesign] = useState<any>(null)
@@ -20,15 +20,16 @@ export default function Profil() {
 
   // --- GİRİŞ KONTROLÜ VE VERİ YÜKLEME ---
   useEffect(() => {
-    // 1. Giriş kontrolü
     const loggedInUser = localStorage.getItem("user")
     if (!loggedInUser) {
-      router.push("/giris") // Kullanıcı yoksa giriş sayfasına gönder
+      router.push("/giris")
       return
     }
     setUser(JSON.parse(loggedInUser))
 
-    // 2. Yerel verileri çek
+    const savedPosts = localStorage.getItem("userPosts")
+    if (savedPosts) setPosts(JSON.parse(savedPosts))
+
     const savedCoffee = localStorage.getItem("lastCoffeeDesign")
     if (savedCoffee) setLastDesign(JSON.parse(savedCoffee))
 
@@ -40,16 +41,14 @@ export default function Profil() {
   }, [router])
 
   // --- FONKSİYONLAR ---
-
   const handleLogout = () => {
-    localStorage.removeItem("user") // Kullanıcı bilgisini sil
+    localStorage.removeItem("user") 
     router.push("/giris")
   }
 
   const handleAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-
     const reader = new FileReader()
     reader.onloadend = () => {
       const base64String = reader.result as string
@@ -67,33 +66,43 @@ export default function Profil() {
   const selectSuggestedCoffee = () => {
     if (!lastDesign) return
     setSelectedCoffee(lastDesign)
-    setPost(`${lastDesign.name} hazırladım, tadı efsane oldu! ☕✨`)
+    setPostText(`${lastDesign.name} hazırladım, Arenada oylarınızı bekliyorum! ☕🔥`)
     setShowSuggestion(false)
   }
 
   const sharePost = () => {
-    if (!post.trim()) return
+    // KONTROL: Metin boşsa VEYA kahve seçilmediyse paylaşma
+    if (!postText.trim() || !selectedCoffee) return
     
     const newPost = {
       id: Date.now(),
-      text: post,
+      text: postText,
       coffee: selectedCoffee, 
-      date: "Şimdi"
+      date: new Date().toLocaleString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+      likes: 0,
+      arenaScore: selectedCoffee.score || 0 // Tasarımdan gelen yaratıcılık puanı
     }
 
-    setPosts([newPost, ...posts])
-    setPost("")
+    const updatedPosts = [newPost, ...posts]
+    setPosts(updatedPosts)
+    localStorage.setItem("userPosts", JSON.stringify(updatedPosts))
+    
+    // Arena Sayfası için genel bir "Arena Posts" listesi oluştur/güncelle
+    const allArenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
+    localStorage.setItem("arenaPosts", JSON.stringify([{ ...newPost, userName: user?.name, userAvatar: avatar }, ...allArenaPosts]))
+
+    setPostText("")
     setSelectedCoffee(null) 
+    setShowSuggestion(false)
   }
 
-  // Kullanıcı verisi yüklenene kadar boş ekran veya loading göster
-  if (!user) return <div className="loading-screen">Yükleniyor...</div>
+  const deletePost = (postId: number) => {
+    const filteredPosts = posts.filter(p => p.id !== postId)
+    setPosts(filteredPosts)
+    localStorage.setItem("userPosts", JSON.stringify(filteredPosts))
+  }
 
-  const designs = [
-    { id: 1, name: "Vanilyalı Latte", rating: 4.8 },
-    { id: 2, name: "Buzlu Karamel", rating: 4.5 },
-    { id: 3, name: "Protein Cappuccino", rating: 4.9 }
-  ]
+  if (!user) return <div className="loading-screen"><h2>ELMENES COFFEE Yükleniyor...</h2></div>
 
   const suggestedUsers = [
     { name: "Baristanesli", img: "/pp1.jpg", title: "Master Barista" },
@@ -101,13 +110,15 @@ export default function Profil() {
     { name: "LatteKing", img: "/pp3.jpg", title: "Artiste" }
   ]
 
+  // BUTON AKTİFLİK KONTROLÜ
+  const isShareDisabled = !postText.trim() || !selectedCoffee;
+
   return (
     <div className="profil-page">
       <div className="profil-container">
 
         {/* --- HERO SECTION --- */}
         <header className="profil-hero">
-          {/* Çıkış Yap Butonu */}
           <button className="logout-button" onClick={handleLogout} title="Çıkış Yap">
             <LogOut size={20} />
           </button>
@@ -115,9 +126,7 @@ export default function Profil() {
           <div className="avatar-wrapper">
             <label className="avatar-upload">
               <img src={avatar} alt="Profil" className="profil-avatar" />
-              <div className="avatar-overlay">
-                <Camera size={24} />
-              </div>
+              <div className="avatar-overlay"><Camera size={24} /></div>
               <input type="file" onChange={handleAvatar} style={{ display: "none" }} accept="image/*" />
             </label>
           </div>
@@ -136,43 +145,36 @@ export default function Profil() {
           </div>
 
           <div className="profil-stats">
-            <div className="stat-item"><strong>24</strong><span>Tasarım</span></div>
-            <div className="stat-item"><strong>540</strong><span>Takipçi</span></div>
-            <div className="stat-item"><strong>180</strong><span>Takip</span></div>
+            <div className="stat-item">
+              <strong>{posts.length}</strong>
+              <span>Gönderi</span>
+            </div>
+            <div className="stat-item">
+              <strong><Zap size={14} className="stat-icon" /> {posts.reduce((acc, p) => acc + (p.arenaScore || 0), 0)}</strong>
+              <span>Arena Puanı</span>
+            </div>
+            <div className="stat-item">
+              <strong><Trophy size={14} className="stat-icon" /> 0</strong>
+              <span>Şampiyonluk</span>
+            </div>
           </div>
         </header>
 
-        {/* --- TASARIMLAR --- */}
-        <section className="design-section">
-          <div className="section-header">
-            <h2><Coffee size={20} /> Kahve Tasarımlarım</h2>
-            <button className="view-all">Tümünü Gör</button>
-          </div>
-
-          <div className="design-grid">
-            {designs.map(d => (
-              <div key={d.id} className="design-card">
-                <div className="design-icon-box">☕</div>
-                <h3>{d.name}</h3>
-                <span className="design-rating"><Star size={14} fill="#c58a5c" /> {d.rating}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* --- PAYLAŞIM ALANI --- */}
         <section className="post-section">
-          <h2><Plus size={20} /> Yeni Paylaşım</h2>
+          <div className="section-title-wrapper">
+             <h2><Plus size={22} /> Arenada Paylaş</h2>
+             {!lastDesign && <span className="warning-text">Paylaşmak için önce bir kahve tasarlamalısın!</span>}
+          </div>
           
-          <div className="post-box" style={{ position: 'relative' }}>
-            
+          <div className={`post-box ${!lastDesign ? "locked-box" : ""}`}>
             {showSuggestion && lastDesign && !selectedCoffee && (
               <div className="coffee-suggestion-box">
                 <div className="suggestion-content" onClick={selectSuggestedCoffee}>
-                  <div className="suggestion-icon">☕</div>
+                  <img src={lastDesign.image} alt="Tasarım" className="mini-coffee-preview" />
                   <div className="suggestion-text">
-                    <strong>Son tasarımını paylaşmak ister misin?</strong>
-                    <span>{lastDesign.name} ({lastDesign.totalPrice} TL)</span>
+                    <strong>Son tasarımını arenaya sür!</strong>
+                    <span>{lastDesign.name}</span>
                   </div>
                 </div>
                 <button className="close-suggestion" onClick={() => setShowSuggestion(false)}>
@@ -182,10 +184,13 @@ export default function Profil() {
             )}
 
             {selectedCoffee && (
-              <div className="selected-coffee-tag">
-                <CheckCircle2 size={16} color="#c58a5c" />
-                <span>{selectedCoffee.name} eklendi</span>
-                <button onClick={() => setSelectedCoffee(null)} className="remove-selection">
+              <div className="selected-coffee-preview-container">
+                <img src={selectedCoffee.image} alt="Seçili" className="selected-img" />
+                <div className="selected-info">
+                  <CheckCircle2 size={16} color="#c58a5c" />
+                  <span>{selectedCoffee.name} Arenaya hazır!</span>
+                </div>
+                <button onClick={() => setSelectedCoffee(null)} className="remove-selection-btn">
                   <X size={14} />
                 </button>
               </div>
@@ -193,51 +198,85 @@ export default function Profil() {
 
             <textarea
               className="post-input"
-              placeholder="Bugün nasıl bir kahve tasarladın?"
-              value={post}
+              placeholder={lastDesign ? "Bu kahveyle Arenayı salla..." : "Kahve tasarlamadan paylaşım yapamazsın..."}
+              value={postText}
+              disabled={!lastDesign}
               onFocus={() => setShowSuggestion(true)}
-              onChange={e => setPost(e.target.value)}
+              onChange={e => setPostText(e.target.value)}
             />
             
             <div className="post-actions">
-              <button className="share-btn" onClick={sharePost}>
-                <Share2 size={18} /> Paylaş
+              <button 
+                className={`share-btn ${isShareDisabled ? "disabled" : ""}`} 
+                onClick={sharePost}
+                disabled={isShareDisabled}
+              >
+                <Share2 size={18} /> Arenada Paylaş
               </button>
             </div>
           </div>
 
+          {/* POST FEED */}
           <div className="post-feed">
-            {posts.length === 0 && <p className="empty-state">Henüz bir şey paylaşmadın.</p>}
+            {posts.length === 0 && (
+              <div className="empty-state">
+                <Coffee size={48} opacity={0.2} />
+                <p>Henüz Arenaya çıkmadın. İlk kahveni tasarla ve rekabete katıl!</p>
+              </div>
+            )}
+            
             {posts.map((p) => (
-              <div key={p.id} className="post-card">
-                <p>{p.text}</p>
-                {p.coffee && (
-                  <div className="post-attached-coffee">
-                    <div className="attached-img">☕</div>
-                    <div className="attached-info">
-                      <strong>{p.coffee.name}</strong>
-                      <small>{p.coffee.totalPrice} TL • Özel Tasarım</small>
+              <div key={p.id} className="post-card arena-card">
+                <header className="post-header">
+                  <div className="post-user-info">
+                    <img src={avatar} alt="User" className="post-user-avatar" />
+                    <div>
+                      <span className="post-user-name">{user.name}</span>
+                      <span className="post-date">{p.date}</span>
                     </div>
                   </div>
-                )}
-                <span className="post-date">{p.date}</span>
+                  <button className="delete-post" onClick={() => deletePost(p.id)}><X size={18} /></button>
+                </header>
+
+                <div className="post-content">
+                  <p className="post-text">{p.text}</p>
+                  {p.coffee && (
+                    <div className="post-main-image-wrapper">
+                      <img src={p.coffee.image} alt="Coffee Design" className="post-main-image" />
+                      <div className="image-overlay-info">
+                        <strong>{p.coffee.name}</strong>
+                        <div className="post-score-tag"><Zap size={14} /> {p.arenaScore} Puan</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <footer className="post-footer">
+                  <button className="post-action-btn arena-vote"><Heart size={20} /> <span>{p.likes} Oy</span></button>
+                  <button className="post-action-btn"><MessageCircle size={20} /> <span>Yorum</span></button>
+                </footer>
               </div>
             ))}
           </div>
         </section>
 
         {/* --- ÖNERİLER --- */}
+{/* --- ARENA DEVLERİ (TOP BARISTAS) --- */}
         <section className="follow-section">
-          <h2><Users size={20} /> Önerilen Baristalar</h2>
+          <div className="section-title-wrapper">
+            <h2><Trophy size={20} color="#ffcc00" /> Arena Devleri</h2>
+            <span className="view-all">Tüm Lig Tablosu</span>
+          </div>
           <div className="follow-grid">
-            {suggestedUsers.map(u => (
-              <div key={u.name} className="follow-card">
+            {suggestedUsers.map((u, index) => (
+              <div key={u.name} className={`follow-card ${index === 0 ? "champion-border" : ""}`}>
+                <div className="rank-badge">#{index + 1}</div>
                 <img src={u.img} alt={u.name} className="follow-avatar" />
                 <div className="follow-info">
                   <span className="follow-name">{u.name}</span>
                   <span className="follow-title">{u.title}</span>
                 </div>
-                <button className="follow-btn">Takip Et</button>
+                <button className="follow-btn">Profilini Gör</button>
               </div>
             ))}
           </div>
