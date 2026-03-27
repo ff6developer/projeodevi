@@ -16,30 +16,31 @@ export default function Signin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    try{
-      const res = await fetch("http://localhost:5000/api/auth/register",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
+try {
+      const res = await fetch("http://127.0.0.1:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
         },
-        body:JSON.stringify({name,email,password})
-      })
+        body: JSON.stringify({ name, email, password })
+      });
 
-      const data = await res.json()
+ // Eğer sunucu bir JSON dönmüyorsa hata almamak için kontrol
+      const data = await res.json();
 
-      if(!res.ok){
-        alert(data.message)
-        return
+      if (!res.ok) {
+        alert(data.message || "Bir hata oluştu");
+        return;
       }
 
-      alert("Kayıt başarılı ✔")
-      router.push("/giris")
+      alert("Kayıt başarılı ✔");
+      router.push("/giris");
 
-    }catch(err){
-      console.log(err)
-      alert("Server hatası")
+    } catch (err) {
+      console.error("Bağlantı Hatası:", err);
+      alert("Server'a ulaşılamıyor. Lütfen backend terminalini kontrol edin!");
     }
-  }
+  };
 
   return (
     <div className={`login-container ${blur ? "blur-active" : ""}`}>

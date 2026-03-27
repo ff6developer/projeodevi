@@ -19,6 +19,8 @@ export default function RootLayout({
 
               <nav className="nav">
                 <ul>
+                  
+
                   <li><Link href="/">Kahve Arenası</Link></li>
                   <li><Link href="/menu">Menü</Link></li>
                   <li><Link href="/giris">Giriş Yap</Link></li>
@@ -29,6 +31,14 @@ export default function RootLayout({
           </header>
 
           <aside className="iconbar">
+
+          <div className="icon-item">
+             <Link href="/hakkimizda">
+             <img src="/hakkimizdaikon.png" className="icon" />
+             </Link>
+             <span className="icon-label">Hakkımızda</span>
+          </div>
+
 
             <div className="icon-item">
               <Link href="/">
