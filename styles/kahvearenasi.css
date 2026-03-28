@@ -1,33 +1,37 @@
-/* ===== ELMENES COFFEE ARENA - PREMIUM GLADIATOR THEME ===== */
+/* ===== ELMENES COFFEE ARENA - ULTIMATE COMPETITION THEME ===== */
 
 :root {
   --primary-coffee: #c58a5c;
-  --primary-hover: #a36d45;
+  --primary-hover: #e2a67a;
   --arena-gold: #ffcc00;
-  --arena-silver: #c0c0c0;
-  --arena-bronze: #cd7f32;
-  --dark-bg: #080808;
-  --card-bg: #111111;
-  --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  --arena-gold-glow: rgba(255, 204, 0, 0.4);
+  --arena-silver: #e0e0e0;
+  --arena-bronze: #ff8c42;
+  --dark-bg: #050505;
+  --card-bg: rgba(18, 18, 18, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .arena-page {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   background: var(--dark-bg);
-  padding: 140px 40px 60px 110px; /* Sidebar (100px) + Güvenli alan */
+  padding: 140px 40px 60px 110px;
   position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-x: hidden;
+  /* Arka plan dokusu ve ışık süzmesi */
+  background-image: 
+    radial-gradient(circle at 50% -15%, rgba(197, 138, 92, 0.15) 0%, transparent 60%),
+    url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
 }
 
 .arena-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% -20%, #c58a5c15 0%, transparent 60%);
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
   pointer-events: none;
   z-index: 0;
 }
@@ -44,24 +48,33 @@
 
 .gold-trophy {
   color: var(--arena-gold);
-  filter: drop-shadow(0 0 15px rgba(255, 204, 0, 0.4));
+  filter: drop-shadow(0 0 20px var(--arena-gold-glow));
   margin-bottom: 15px;
 }
 
 .arena-title-area h1 {
-  font-size: clamp(32px, 5vw, 64px);
-  font-weight: 900;
-  letter-spacing: 6px;
-  background: linear-gradient(to bottom, #ffffff 40%, var(--primary-coffee) 100%);
+  font-size: clamp(40px, 7vw, 85px);
+  font-weight: 950;
+  letter-spacing: 10px;
+  /* Metalik Altın/Beyaz Gradyan */
+  background: linear-gradient(180deg, #ffffff 20%, var(--arena-gold) 70%, var(--primary-coffee) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-transform: uppercase;
+  filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8));
+}
+
+.arena-title-area p {
+  color: #888;
+  font-size: 18px;
+  margin-top: 10px;
+  letter-spacing: 2px;
 }
 
 /* --- KÜRSÜ (THE PODIUM) --- */
 .podium-section {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   margin-bottom: 120px;
 }
 
@@ -70,52 +83,76 @@
   align-items: flex-end;
   justify-content: center;
   gap: 30px;
+  perspective: 1200px; /* 3D derinlik hissi */
 }
 
 .podium-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 35px;
-  padding: 30px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 40px 40px 20px 20px;
+  padding: 40px 20px;
   text-align: center;
-  width: 260px;
+  width: 280px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: var(--transition-smooth);
   position: relative;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  will-change: transform;
 }
 
-.podium-card img {
-  width: 130px;
-  height: 130px;
+.podium-img {
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid #1a1a1a;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.5);
 }
 
 .podium-card:hover {
-  transform: translateY(-10px);
-  background: rgba(197, 138, 92, 0.05);
+  transform: translateY(-20px) rotateX(5deg);
+  background: rgba(255, 255, 255, 0.08);
 }
 
-/* Podium Ranks */
-.gold { transform: scale(1.15); z-index: 3; border-color: var(--arena-gold); box-shadow: 0 20px 50px rgba(255, 204, 0, 0.1); }
-.gold img { border-color: var(--arena-gold); }
+/* Kürsü Özel Stilleri */
+.gold { 
+  transform: scale(1.15) translateY(-15px); 
+  z-index: 3; 
+  border-color: var(--arena-gold); 
+  box-shadow: 0 30px 60px rgba(255, 204, 0, 0.15); 
+}
+.gold .podium-img { border-color: var(--arena-gold); }
 .silver { border-color: var(--arena-silver); }
 .bronze { border-color: var(--arena-bronze); }
+
+.winner-crown {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 0 15px var(--arena-gold));
+  animation: float-animation 3s ease-in-out infinite;
+}
+
+@keyframes float-animation {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-15px); }
+}
 
 .rank-label {
   position: absolute;
   top: -15px; left: 50%; transform: translateX(-50%);
-  padding: 6px 18px; border-radius: 50px; font-weight: 900; font-size: 13px;
+  padding: 8px 22px; border-radius: 50px; font-weight: 900; font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.gold .rank-label { background: var(--arena-gold); color: #000; }
+.gold .rank-label { background: var(--arena-gold); color: #000; box-shadow: 0 0 20px var(--arena-gold-glow); }
 .silver .rank-label { background: var(--arena-silver); color: #000; }
 .bronze .rank-label { background: var(--arena-bronze); color: #000; }
 
-/* --- ARENA FEED GRID --- */
+/* --- GLOBAL FEED --- */
 .arena-feed { width: 100%; max-width: 1400px; }
 
 .feed-filter-bar {
@@ -123,106 +160,152 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
-  padding: 0 10px;
+  padding: 0 15px;
 }
 
 .filter-btn {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--glass-border);
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 12px;
-  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  padding: 12px 25px;
+  border-radius: 15px;
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
 }
+
+.filter-btn:hover { background: var(--primary-coffee); border-color: var(--primary-coffee); }
 
 .arena-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 35px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 40px;
 }
 
 .arena-item-card {
   background: var(--card-bg);
   border-radius: 35px;
-  border: 1px solid rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
   overflow: hidden;
-  transition: var(--transition);
+  transition: var(--transition-smooth);
+  position: relative;
 }
 
 .arena-item-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-12px);
   border-color: var(--primary-coffee);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
 }
 
-.card-image-wrapper { position: relative; width: 100%; aspect-ratio: 1; }
-.card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.card-image-wrapper { 
+  position: relative; 
+  width: 100%; 
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.card-main-img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  transition: 0.6s ease;
+}
+
+.arena-item-card:hover .card-main-img {
+  transform: scale(1.1);
+}
+
+.score-badge {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--arena-gold);
+  color: var(--arena-gold);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  display: flex; align-items: center; gap: 8px;
+  backdrop-filter: blur(5px);
+}
 
 .copy-recipe-btn {
   position: absolute;
   bottom: 20px; left: 20px;
   background: var(--primary-coffee);
-  color: white; width: 45px; height: 45px;
+  color: white; width: 50px; height: 50px;
   border-radius: 50%; border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
   transition: 0.3s;
 }
 
-.copy-recipe-btn:hover { transform: rotate(15deg) scale(1.1); background: var(--primary-hover); }
-
 .card-body { padding: 30px; }
-.user-line { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; cursor: pointer; }
-.user-line img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--primary-coffee); }
 
-.recipe-summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
-.recipe-summary span {
-  font-size: 11px; background: rgba(197, 138, 92, 0.1); color: var(--primary-coffee);
-  padding: 6px 12px; border-radius: 8px;
+.user-line { 
+  display: flex; align-items: center; gap: 12px; margin-bottom: 15px; cursor: pointer; 
 }
 
-.card-actions { display: flex; gap: 15px; border-top: 1px solid #222; padding-top: 20px; }
-.vote-btn, .comment-btn {
-  flex: 1; padding: 12px; border-radius: 16px; border: 1px solid #222;
-  background: transparent; color: #fff; cursor: pointer;
+.avatar-round { 
+  border-radius: 50%; 
+  border: 1px solid var(--primary-coffee); 
+}
+
+.card-actions { 
+  display: flex; gap: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; 
+}
+
+.vote-btn {
+  flex: 1; padding: 14px; border-radius: 18px; border: none;
+  background: linear-gradient(135deg, #ff4500, #ff8c00); 
+  color: #fff; cursor: pointer; font-weight: 800;
   display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
 }
 
-.vote-btn:hover { background: rgba(255, 69, 0, 0.1); border-color: #ff4500; color: #ff4500; }
-.comment-btn.active { color: var(--primary-coffee); border-color: var(--primary-coffee); }
+.vote-btn:hover { 
+  transform: scale(1.05); 
+  box-shadow: 0 0 20px rgba(255, 69, 0, 0.4); 
+}
 
 /* --- YORUM ALANI --- */
 .comment-section-mini {
-  margin-top: 20px; padding-top: 15px; border-top: 1px dashed #222;
+  margin-top: 25px;
+  background: rgba(255,255,255,0.02);
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
 }
 
-.mini-comment { font-size: 13px; margin-bottom: 8px; color: #ccc; }
-.comment-author { font-weight: 700; color: var(--primary-coffee); margin-right: 8px; }
+.mini-comment { font-size: 14px; margin-bottom: 12px; color: #ccc; line-height: 1.5; }
+.comment-author { font-weight: 800; color: var(--primary-coffee); margin-right: 8px; }
 
-.comment-input-row { display: flex; gap: 10px; margin-top: 15px; }
+.comment-input-row { display: flex; gap: 12px; margin-top: 20px; }
 .comment-input-row input {
-  flex: 1; background: #1a1a1a; border: 1px solid #333;
-  padding: 10px 15px; border-radius: 12px; color: #fff; outline: none;
+  flex: 1; background: #151515; border: 1px solid #333;
+  padding: 12px 18px; border-radius: 14px; color: #fff; outline: none;
 }
 
 .comment-input-row button {
   background: var(--primary-coffee); color: white; border: none;
-  width: 40px; height: 40px; border-radius: 12px; cursor: pointer;
+  width: 45px; height: 45px; border-radius: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
 }
 
 /* --- USER DRAWER (YAN PANEL) --- */
 .user-drawer-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(8px); z-index: 1000;
-  visibility: hidden; opacity: 0; transition: 0.4s;
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px); z-index: 1000;
+  visibility: hidden; opacity: 0; transition: opacity 0.5s ease;
 }
 
 .user-drawer-overlay.open { visibility: visible; opacity: 1; }
 
 .user-drawer {
-  position: absolute; right: 0; top: 0; width: 420px; height: 100%;
-  background: #111; padding: 60px 40px;
-  transform: translateX(100%); transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+  position: absolute; right: 0; top: 0; width: 450px; height: 100%;
+  background: #0a0a0a; padding: 60px 40px;
+  transform: translateX(100%); 
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -30px 0 70px rgba(0,0,0,0.8);
+  border-left: 1px solid var(--glass-border);
 }
 
 .user-drawer-overlay.open .user-drawer { transform: translateX(0); }
@@ -230,32 +313,52 @@
 .drawer-avatar-bg {
   width: 140px; height: 140px; border-radius: 50%;
   background: linear-gradient(135deg, var(--primary-coffee), #222);
-  padding: 5px; margin: 0 auto 20px;
+  padding: 5px; margin: 0 auto 25px;
 }
-
-.drawer-avatar-bg img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
 
 .drawer-stats-row {
   display: flex; justify-content: space-around;
-  background: #1a1a1a; padding: 25px; border-radius: 25px; margin: 30px 0;
+  background: rgba(255,255,255,0.03); padding: 25px; border-radius: 25px; margin: 35px 0;
+  border: 1px solid var(--glass-border);
 }
 
-.showcase-card {
-  background: #1a1a1a; border-radius: 25px; overflow: hidden; margin-top: 15px;
-}
-.showcase-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
-.showcase-info { padding: 15px; }
+.drawer-stat-item strong { font-size: 32px; color: var(--arena-gold); display: block; }
 
 .full-profile-btn {
-  width: 100%; background: var(--primary-coffee); color: #fff;
-  padding: 18px; border-radius: 18px; border: none; font-weight: 700;
-  margin-top: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px;
+  width: 100%; background: linear-gradient(135deg, var(--primary-coffee), var(--primary-hover));
+  color: #fff; padding: 20px; border-radius: 20px; border: none; font-weight: 800;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px;
+  transition: 0.3s;
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
   .arena-page { padding: 120px 20px 40px 20px; }
-  .podium-container { flex-direction: column; align-items: center; }
-  .podium-card { width: 100%; max-width: 350px; }
-  .user-drawer { width: 100%; }
+  .podium-container { flex-direction: column; align-items: center; gap: 50px; }
+  .podium-card { width: 100%; max-width: 380px; }
+  .gold { order: -1; transform: scale(1.05); }
+}
+
+/* ===== SKELETON LOADING ANIMATION ===== */
+.skeleton {
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite linear;
+  border-radius: 15px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  width: 340px;
+  height: 450px;
+  background: var(--card-bg);
+  border-radius: 35px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }

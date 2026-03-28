@@ -1,14 +1,28 @@
-.order-screen{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#0f0f0f;
+:root {
+  --bg-dark: #080808;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --accent-coffee: #c58a5c;
+  --accent-glow: rgba(197, 138, 92, 0.3);
+  --text-main: #ffffff;
+  --text-dim: #b3b3b3;
+  --radius-main: 28px;
 }
 
-.order-text{
-  font-size:64px;
-  color:white;
-  font-weight:800;
-  letter-spacing:-2px;
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif; /* Eğer yüklü değilse standart sans-serif kullanır */
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Tüm sayfalardaki ortak cam kart yapısı */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-main);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }

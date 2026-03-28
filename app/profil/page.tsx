@@ -1,7 +1,11 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { Camera, Plus, Share2, Coffee, X, CheckCircle2, LogOut, Heart, MessageCircle, Trophy, Zap, Image as ImageIcon } from "lucide-react"
+import Image from "next/image" // Performans için eklendi
+import { 
+  Camera, Plus, Share2, Coffee, X, LogOut, 
+  Heart, MessageCircle, Trophy, Zap, Image as ImageIcon 
+} from "lucide-react"
 import "../../styles/profil.css"
 
 export default function Profil() {
@@ -15,9 +19,6 @@ export default function Profil() {
   const [posts, setPosts] = useState<any[]>([])
   
   const [lastDesign, setLastDesign] = useState<any>(null)
-  const [showSuggestion, setShowSuggestion] = useState(false)
-  
-  // Paylaşım anında eklenecek yeni veriler
   const [arenaCoffeeName, setArenaCoffeeName] = useState("")
   const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
 
@@ -33,7 +34,6 @@ export default function Profil() {
     const savedPosts = localStorage.getItem("userPosts")
     if (savedPosts) setPosts(JSON.parse(savedPosts))
 
-    // Artık sadece reçete/tasarım verisini çekiyoruz
     const savedCoffee = localStorage.getItem("lastCoffeeDesign")
     if (savedCoffee) setLastDesign(JSON.parse(savedCoffee))
 
@@ -79,7 +79,7 @@ export default function Profil() {
 
   const sharePost = () => {
     if (!postText.trim() || !arenaCoffeeImage || !arenaCoffeeName.trim() || !lastDesign) {
-        alert("Lütfen kahve ismini, resmini ve mesajınızı eksiksiz doldurun!")
+        alert("Lütfen tüm alanları doldurun!")
         return
     }
     
@@ -103,25 +103,26 @@ export default function Profil() {
     const allArenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
     localStorage.setItem("arenaPosts", JSON.stringify([{ ...newPost, userName: user?.name, userAvatar: avatar }, ...allArenaPosts]))
 
-    // Reset Form
     setPostText("")
     setArenaCoffeeName("")
     setArenaCoffeeImage(null)
-    setShowSuggestion(false)
   }
 
-  const deletePost = (postId: number) => {
-    const filteredPosts = posts.filter(p => p.id !== postId)
-    setPosts(filteredPosts)
-    localStorage.setItem("userPosts", JSON.stringify(filteredPosts))
-  }
+  const deletePost = useCallback((postId: number) => {
+    setPosts(prev => {
+      const filtered = prev.filter(p => p.id !== postId)
+      localStorage.setItem("userPosts", JSON.stringify(filtered))
+      return filtered
+    })
+  }, [])
 
-  if (!user) return <div className="loading-screen"><h2>ELMENES COFFEE Yükleniyor...</h2></div>
+  if (!user) return <div className="loading-screen"><h2>Yükleniyor...</h2></div>
 
+  // BURASI: İstediğin WebP güncellemelerini buraya yaptım!
   const suggestedUsers = [
-    { name: "Baristanesli", img: "/pp1.jpg", title: "Master Barista" },
-    { name: "CoffeeQueen", img: "/pp2.jpg", title: "Roaster" },
-    { name: "LatteKing", img: "/pp3.jpg", title: "Artiste" }
+    { name: "Baristanesli", img: "/pp1.webp", title: "Master Barista" },
+    { name: "CoffeeQueen", img: "/pp2.webp", title: "Roaster" },
+    { name: "LatteKing", img: "/pp3.webp", title: "Artiste" }
   ]
 
   const isShareDisabled = !postText.trim() || !arenaCoffeeImage || !arenaCoffeeName.trim();
@@ -138,7 +139,14 @@ export default function Profil() {
 
           <div className="avatar-wrapper">
             <label className="avatar-upload">
-              <img src={avatar} alt="Profil" className="profil-avatar" />
+              <Image 
+                src={avatar} 
+                alt="Profil" 
+                width={150} 
+                height={150} 
+                priority // LCP Skoru için en önemli resim
+                className="profil-avatar"
+              />
               <div className="avatar-overlay"><Camera size={24} /></div>
               <input type="file" onChange={handleAvatar} style={{ display: "none" }} accept="image/*" />
             </label>
@@ -166,10 +174,6 @@ export default function Profil() {
               <strong><Zap size={14} className="stat-icon" /> {posts.reduce((acc, p) => acc + (p.arenaScore || 0), 0)}</strong>
               <span>Arena Puanı</span>
             </div>
-            <div className="stat-item">
-              <strong><Trophy size={14} className="stat-icon" /> 0</strong>
-              <span>Şampiyonluk</span>
-            </div>
           </div>
         </header>
 
@@ -177,38 +181,36 @@ export default function Profil() {
         <section className="post-section">
           <div className="section-title-wrapper">
               <h2><Plus size={22} /> Arenada Paylaş</h2>
-              {!lastDesign && <span className="warning-text">Paylaşmak için önce bir kahve tasarlamalısın!</span>}
+              {!lastDesign && <span className="warning-text">Önce bir kahve tasarlamalısın!</span>}
           </div>
           
           <div className={`post-box ${!lastDesign ? "locked-box" : ""}`}>
-            
-            {/* TASARIM SEÇİLDİĞİNDE AÇILAN FORM ALANI */}
             {lastDesign && (
               <div className="arena-preparation-area">
                 <div className="arena-form-row">
                     <input 
                         type="text" 
-                        placeholder="Kahvene bir isim ver..." 
+                        placeholder="Kahve İsmi..." 
                         className="arena-coffee-name-input"
                         value={arenaCoffeeName}
                         onChange={(e) => setArenaCoffeeName(e.target.value)}
                     />
                     
                     <label className={`arena-mini-upload ${arenaCoffeeImage ? 'has-image' : ''}`}>
-                        {arenaCoffeeImage ? <img src={arenaCoffeeImage} alt="Preview" /> : <ImageIcon size={20} />}
+                        {arenaCoffeeImage ? (
+                          <Image src={arenaCoffeeImage} alt="Preview" width={40} height={40} />
+                        ) : (
+                          <ImageIcon size={20} />
+                        )}
                         <input type="file" hidden accept="image/*" onChange={handleCoffeeImageUpload} />
                     </label>
-                </div>
-
-                <div className="recipe-badge">
-                    <Zap size={12} /> Reçete Hazır: {lastDesign.score} Puan
                 </div>
               </div>
             )}
 
             <textarea
               className="post-input"
-              placeholder={lastDesign ? "Bu kahveyle Arenayı salla..." : "Kahve tasarlamadan paylaşım yapamazsın..."}
+              placeholder={lastDesign ? "Arenayı salla..." : "Kilitli..."}
               value={postText}
               disabled={!lastDesign}
               onChange={e => setPostText(e.target.value)}
@@ -220,25 +222,18 @@ export default function Profil() {
                 onClick={sharePost}
                 disabled={isShareDisabled}
               >
-                <Share2 size={18} /> Arenada Paylaş
+                <Share2 size={18} /> Paylaş
               </button>
             </div>
           </div>
 
           {/* POST FEED */}
           <div className="post-feed">
-            {posts.length === 0 && (
-              <div className="empty-state">
-                <Coffee size={48} opacity={0.2} />
-                <p>Henüz Arenaya çıkmadın. İlk kahveni tasarla ve rekabete katıl!</p>
-              </div>
-            )}
-            
             {posts.map((p) => (
               <div key={p.id} className="post-card arena-card">
                 <header className="post-header">
                   <div className="post-user-info">
-                    <img src={avatar} alt="User" className="post-user-avatar" />
+                    <Image src={avatar} alt="User" width={40} height={40} className="post-user-avatar" />
                     <div>
                       <span className="post-user-name">{user.name}</span>
                       <span className="post-date">{p.date}</span>
@@ -251,19 +246,16 @@ export default function Profil() {
                   <p className="post-text">{p.text}</p>
                   {p.coffee && (
                     <div className="post-main-image-wrapper">
-                      <img src={p.coffee.image} alt="Coffee Design" className="post-main-image" />
-                      <div className="image-overlay-info">
-                        <strong>{p.coffee.name}</strong>
-                        <div className="post-score-tag"><Zap size={14} /> {p.arenaScore} Puan</div>
-                      </div>
+                      <Image 
+                        src={p.coffee.image} 
+                        alt={p.coffee.name} 
+                        width={600} 
+                        height={400} 
+                        className="post-main-image" 
+                      />
                     </div>
                   )}
                 </div>
-
-                <footer className="post-footer">
-                  <button className="post-action-btn arena-vote"><Heart size={20} /> <span>{p.likes} Oy</span></button>
-                  <button className="post-action-btn"><MessageCircle size={20} /> <span>Yorum</span></button>
-                </footer>
               </div>
             ))}
           </div>
@@ -273,18 +265,24 @@ export default function Profil() {
         <section className="follow-section">
           <div className="section-title-wrapper">
             <h2><Trophy size={20} color="#ffcc00" /> Arena Devleri</h2>
-            <span className="view-all">Tüm Lig Tablosu</span>
           </div>
           <div className="follow-grid">
             {suggestedUsers.map((u, index) => (
               <div key={u.name} className={`follow-card ${index === 0 ? "champion-border" : ""}`}>
                 <div className="rank-badge">#{index + 1}</div>
-                <img src={u.img} alt={u.name} className="follow-avatar" />
+                {/* BURASI: WebP resimlerin ekrana basıldığı yer */}
+                <Image 
+                  src={u.img} 
+                  alt={u.name} 
+                  width={60} 
+                  height={60} 
+                  className="follow-avatar" 
+                />
                 <div className="follow-info">
                   <span className="follow-name">{u.name}</span>
                   <span className="follow-title">{u.title}</span>
                 </div>
-                <button className="follow-btn">Profilini Gör</button>
+                <button className="follow-btn">Gör</button>
               </div>
             ))}
           </div>

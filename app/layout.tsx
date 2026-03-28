@@ -1,26 +1,43 @@
-import Link from "next/link"
-import "../styles/layout.css"
+"use client"
+
+import Link from "next/link";
+import Image from "next/image";
+import { 
+  Trophy, 
+  Info, 
+  Menu as MenuIcon, 
+  FlaskConical, 
+  LogIn, 
+  UserPlus, 
+  UserCircle 
+} from "lucide-react"; // Modern vektörel ikon kütüphanesi
+import "../styles/layout.css";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="tr">
       <body>
         <div className="layout">
-
+          {/* --- HEADER --- */}
           <header className="header">
-            <img src="/logo.png" alt="logo" className="logo" />
+            <Image 
+              src="/logo.png" 
+              alt="Elmenes Coffee Logo" 
+              width={50} 
+              height={50} 
+              priority 
+              className="logo"
+            />
 
             <div className="header-container">
               <h1 className="logo-text">ELMENES COFFEE</h1>
 
               <nav className="nav">
                 <ul>
-                  
-
                   <li><Link href="/kahvearenasii">Kahve Arenası</Link></li>
                   <li><Link href="/menu">Menü</Link></li>
                   <li><Link href="/giris">Giriş Yap</Link></li>
@@ -30,58 +47,24 @@ export default function RootLayout({
             </div>
           </header>
 
+          {/* --- SIDEBAR (ICONBAR) --- */}
           <aside className="iconbar">
-
-
-            <div className="icon-item">
-              <Link href="/kahvearenasii">
-                <img src="/kahvearenasiikon.png" className="icon" />
-              </Link>
-              <span className="icon-label">Kahve Arenası</span>
-            </div>
-
-            <div className="icon-item">
-              <Link href="/hakkimizda">
-                <img src="/hakkimizdaikon.png" className="icon" />
-              </Link>
-              <span className="icon-label">Hakkımızda</span>
-            </div>
-
-            <div className="icon-item">
-              <Link href="/menu">
-                <img src="/menuikon.png" className="icon" />
-              </Link>
-              <span className="icon-label">Menü</span>
-            </div>
-
-            <div className="icon-item">
-              <Link href="/kahveniolustur">
-                <img src="/kahveniolusturikon.png" className="icon" />
-              </Link>
-              <span className="icon-label">Kahveni Oluştur</span>
-            </div>
-
-            <div className="icon-item">
-              <Link href="/giris">
-                <img src="/loginikon.png" className="icon" />
-              </Link>
-              <span className="icon-label">Giriş Yap</span>
-            </div>
-
-            <div className="icon-item">
-              <Link href="/kayit">
-                <img src="/kayitikon.png" className="icon" />
-              </Link>
-              <span className="icon-label">Kayıt Ol</span>
-            </div>
-
-            <div className="icon-item">
-              <Link href="/profil">
-                <img src="/profilikon.png" className="icon" />
-              </Link>
-              <span className="icon-label">Profil</span>
-            </div>
-
+            {[
+              { href: "/kahvearenasii", icon: <Trophy size={28} />, label: "Kahve Arenası" },
+              { href: "/hakkimizda", icon: <Info size={28} />, label: "Hakkımızda" },
+              { href: "/menu", icon: <MenuIcon size={28} />, label: "Menü" },
+              { href: "/kahveniolustur", icon: <FlaskConical size={28} />, label: "Kahveni Oluştur" },
+              { href: "/giris", icon: <LogIn size={28} />, label: "Giriş Yap" },
+              { href: "/kayit", icon: <UserPlus size={28} />, label: "Kayıt Ol" },
+              { href: "/profil", icon: <UserCircle size={28} />, label: "Profil" },
+            ].map((item) => (
+              <div className="icon-item" key={item.href}>
+                <Link href={item.href} className="icon-wrapper">
+                  {item.icon}
+                </Link>
+                <span className="icon-label">{item.label}</span>
+              </div>
+            ))}
           </aside>
 
           <main className="main">
@@ -91,9 +74,8 @@ export default function RootLayout({
           <footer className="footer">
             © 2026 ELMENES COFFEE
           </footer>
-
         </div>
       </body>
     </html>
-  )
+  );
 }
