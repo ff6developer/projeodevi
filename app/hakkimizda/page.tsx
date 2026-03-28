@@ -11,7 +11,7 @@ const About = () => {
       
         <div className="about-images-wrapper">
           <img 
-            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085" 
+            src="hakkimizdagorsel2.jpg" 
             alt="Elmenes Coffee Sanatı" 
             className="about-img first-img"
           />

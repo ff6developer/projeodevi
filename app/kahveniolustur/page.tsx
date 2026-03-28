@@ -2,13 +2,11 @@
 import { useState, useEffect } from "react"
 import "../../styles/kahveniolustur.css"
 import { useRouter } from "next/navigation"
-import { Camera, Beaker, Zap, Trophy, Info, X, CheckCircle2 } from "lucide-react"
+import { Beaker, Zap, Trophy } from "lucide-react"
 
 export default function KahveniOlustur() {
   const router = useRouter()
   const [started, setStarted] = useState(false)
-  const [coffeeImage, setCoffeeImage] = useState<string | null>(null)
-  const [coffeeName, setCoffeeName] = useState("")
 
   // Form State
   const [form, setForm] = useState({
@@ -22,6 +20,7 @@ export default function KahveniOlustur() {
     technique: null as any
   })
 
+  // Tüm seçeneklerin seçilip seçilmediğini kontrol eder
   const allSelected =
     form.milkType && form.beanType && form.foam && form.cupType && 
     form.syrup && form.spice && form.sweetener && form.technique
@@ -71,68 +70,61 @@ export default function KahveniOlustur() {
     { name: "Latte Art", price: 15, power: 30 }, { name: "Değişiklik Yok", price: 0, power: 0 }
   ]
 
-  // Yaratıcılık Puanı Hesaplama (Arena İçin)
+  // Yaratıcılık Puanı Hesaplama
   const creativityScore = 
     (form.milkType?.power || 0) + (form.beanType?.power || 0) + 
     (form.syrup?.power || 0) + (form.technique?.power || 0) + 
     (form.spice?.power || 0);
 
+  // Toplam Fiyat Hesaplama (Baz Fiyat 100 TL)
   const total = 100 + (form.milkType?.price || 0) + (form.beanType?.price || 0) + 
     (form.foam?.price || 0) + (form.cupType?.price || 0) + (form.syrup?.price || 0) + 
     (form.spice?.price || 0) + (form.sweetener?.price || 0) + (form.technique?.price || 0)
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => setCoffeeImage(reader.result as string)
-      reader.readAsDataURL(file)
-    }
-  }
-
   const handleSiparis = () => {
     if (!allSelected) return;
+
     const loggedInUser = localStorage.getItem("user");
     if (!loggedInUser) {
-      alert("Arenada yarışmak için önce giriş yapmalısın!");
+      alert("Sipariş vermek için önce giriş yapmalısın!");
       router.push("/giris");
       return;
     }
 
-    if (!coffeeImage || !coffeeName.trim()) {
-      alert("Arenaya çıkmadan önce kahvene bir isim ver ve fotoğrafını yükle!");
-      return;
-    }
-
-    const arenaDesign = {
+    const orderData = {
       id: Date.now(),
-      name: coffeeName,
       details: form,
       totalPrice: total,
       score: creativityScore,
-      image: coffeeImage,
-      date: new Date().toLocaleDateString('tr-TR')
+      status: "Hazırlanıyor",
+      date: new Date().toLocaleString('tr-TR')
     }
 
-    localStorage.setItem("lastCoffeeDesign", JSON.stringify(arenaDesign));
-    alert("Kahven Arenaya gönderilmeye hazır! Profilinde paylaşarak oyları toplamaya başlayabilirsin. 🔥");
+    // Siparişleri kaydet
+    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+    localStorage.setItem("orders", JSON.stringify([...existingOrders, orderData]));
+    
+    alert("Siparişin alındı! Kahven hazır olduğunda resmini çekip paylaşabileceksin. ☕");
     router.push("/siparis");
   }
 
-  // Smooth Scroll
+  // Smooth Scroll Efekti
   useEffect(() => {
     if (!started) return
     const container = document.querySelector(".coffee-right") as HTMLElement
     const sections = document.querySelectorAll(".config-section")
     if (!container) return
+    
     let index = 0
     let animating = false
+
     const smoothScroll = (targetY: number) => {
       const startY = container.scrollTop
       const distance = targetY - startY
       const duration = 700
       let startTime: number | null = null
       const ease = (t: number) => 1 - Math.pow(1 - t, 4)
+      
       const animate = (time: number) => {
         if (!startTime) startTime = time
         const progress = time - startTime
@@ -143,6 +135,7 @@ export default function KahveniOlustur() {
       }
       requestAnimationFrame(animate)
     }
+
     const wheelHandler = (e: WheelEvent) => {
       if (animating) return
       animating = true
@@ -151,6 +144,7 @@ export default function KahveniOlustur() {
       const targetSection = sections[index] as HTMLElement
       if(targetSection) smoothScroll(targetSection.offsetTop)
     }
+
     container.addEventListener("wheel", wheelHandler)
     return () => container.removeEventListener("wheel", wheelHandler)
   }, [started])
@@ -159,7 +153,7 @@ export default function KahveniOlustur() {
     <div className="coffee-layout">
       <div className="coffee-bg"></div>
 
-      {/* SOL PANEL: STATS & ACTION */}
+      {/* SOL PANEL: STATLAR VE BUTONLAR */}
       <div className="coffee-left">
         <div className="lab-badge"><Beaker size={16} /> THE COFFEE LAB</div>
         <h1 className="hero-title">Şampiyonu Tasarla.</h1>
@@ -185,35 +179,15 @@ export default function KahveniOlustur() {
         ) : (
           allSelected && (
             <div className="final-arena-step">
-              <input 
-                type="text" 
-                placeholder="Kahvene bir isim ver..." 
-                className="arena-name-input"
-                value={coffeeName}
-                onChange={(e) => setCoffeeName(e.target.value)}
-              />
-              
-              <label className={`arena-photo-upload ${coffeeImage ? 'has-img' : ''}`}>
-                {coffeeImage ? (
-                  <img src={coffeeImage} alt="Önizleme" />
-                ) : (
-                  <>
-                    <Camera size={24} />
-                    <span>Arena Görseli Ekle</span>
-                  </>
-                )}
-                <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
-              </label>
-
-              <button className="ready-btn arena-btn" onClick={handleSiparis}>
-                <Trophy size={18} /> Arenaya Gönder
+              <button className="arena-btn" onClick={handleSiparis}>
+                <Trophy size={18} /> Siparişi Tamamla
               </button>
             </div>
           )
         )}
       </div>
 
-      {/* SAĞ PANEL: SEÇENEKLER */}
+      {/* SAĞ PANEL: KONFİGÜRASYON SEÇENEKLERİ */}
       <div className="coffee-right">
         {started && (
           <>

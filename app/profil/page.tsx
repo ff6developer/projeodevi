@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Camera, Plus, Share2, Coffee, Users, X, CheckCircle2, Star, LogOut, Heart, MessageCircle, Trophy, Zap } from "lucide-react"
+import { Camera, Plus, Share2, Coffee, X, CheckCircle2, LogOut, Heart, MessageCircle, Trophy, Zap, Image as ImageIcon } from "lucide-react"
 import "../../styles/profil.css"
 
 export default function Profil() {
@@ -16,7 +16,10 @@ export default function Profil() {
   
   const [lastDesign, setLastDesign] = useState<any>(null)
   const [showSuggestion, setShowSuggestion] = useState(false)
-  const [selectedCoffee, setSelectedCoffee] = useState<any>(null)
+  
+  // Paylaşım anında eklenecek yeni veriler
+  const [arenaCoffeeName, setArenaCoffeeName] = useState("")
+  const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
 
   // --- GİRİŞ KONTROLÜ VE VERİ YÜKLEME ---
   useEffect(() => {
@@ -30,6 +33,7 @@ export default function Profil() {
     const savedPosts = localStorage.getItem("userPosts")
     if (savedPosts) setPosts(JSON.parse(savedPosts))
 
+    // Artık sadece reçete/tasarım verisini çekiyoruz
     const savedCoffee = localStorage.getItem("lastCoffeeDesign")
     if (savedCoffee) setLastDesign(JSON.parse(savedCoffee))
 
@@ -58,41 +62,51 @@ export default function Profil() {
     reader.readAsDataURL(file)
   }
 
+  const handleCoffeeImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setArenaCoffeeImage(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+  }
+
   const handleBioChange = (val: string) => {
     setBio(val)
     localStorage.setItem("userBio", val)
   }
 
-  const selectSuggestedCoffee = () => {
-    if (!lastDesign) return
-    setSelectedCoffee(lastDesign)
-    setPostText(`${lastDesign.name} hazırladım, Arenada oylarınızı bekliyorum! ☕🔥`)
-    setShowSuggestion(false)
-  }
-
   const sharePost = () => {
-    // KONTROL: Metin boşsa VEYA kahve seçilmediyse paylaşma
-    if (!postText.trim() || !selectedCoffee) return
+    if (!postText.trim() || !arenaCoffeeImage || !arenaCoffeeName.trim() || !lastDesign) {
+        alert("Lütfen kahve ismini, resmini ve mesajınızı eksiksiz doldurun!")
+        return
+    }
     
     const newPost = {
       id: Date.now(),
       text: postText,
-      coffee: selectedCoffee, 
+      coffee: {
+          ...lastDesign,
+          name: arenaCoffeeName,
+          image: arenaCoffeeImage
+      }, 
       date: new Date().toLocaleString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
       likes: 0,
-      arenaScore: selectedCoffee.score || 0 // Tasarımdan gelen yaratıcılık puanı
+      arenaScore: lastDesign.score || 0 
     }
 
     const updatedPosts = [newPost, ...posts]
     setPosts(updatedPosts)
     localStorage.setItem("userPosts", JSON.stringify(updatedPosts))
     
-    // Arena Sayfası için genel bir "Arena Posts" listesi oluştur/güncelle
     const allArenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
     localStorage.setItem("arenaPosts", JSON.stringify([{ ...newPost, userName: user?.name, userAvatar: avatar }, ...allArenaPosts]))
 
+    // Reset Form
     setPostText("")
-    setSelectedCoffee(null) 
+    setArenaCoffeeName("")
+    setArenaCoffeeImage(null)
     setShowSuggestion(false)
   }
 
@@ -110,8 +124,7 @@ export default function Profil() {
     { name: "LatteKing", img: "/pp3.jpg", title: "Artiste" }
   ]
 
-  // BUTON AKTİFLİK KONTROLÜ
-  const isShareDisabled = !postText.trim() || !selectedCoffee;
+  const isShareDisabled = !postText.trim() || !arenaCoffeeImage || !arenaCoffeeName.trim();
 
   return (
     <div className="profil-page">
@@ -163,36 +176,33 @@ export default function Profil() {
         {/* --- PAYLAŞIM ALANI --- */}
         <section className="post-section">
           <div className="section-title-wrapper">
-             <h2><Plus size={22} /> Arenada Paylaş</h2>
-             {!lastDesign && <span className="warning-text">Paylaşmak için önce bir kahve tasarlamalısın!</span>}
+              <h2><Plus size={22} /> Arenada Paylaş</h2>
+              {!lastDesign && <span className="warning-text">Paylaşmak için önce bir kahve tasarlamalısın!</span>}
           </div>
           
           <div className={`post-box ${!lastDesign ? "locked-box" : ""}`}>
-            {showSuggestion && lastDesign && !selectedCoffee && (
-              <div className="coffee-suggestion-box">
-                <div className="suggestion-content" onClick={selectSuggestedCoffee}>
-                  <img src={lastDesign.image} alt="Tasarım" className="mini-coffee-preview" />
-                  <div className="suggestion-text">
-                    <strong>Son tasarımını arenaya sür!</strong>
-                    <span>{lastDesign.name}</span>
-                  </div>
+            
+            {/* TASARIM SEÇİLDİĞİNDE AÇILAN FORM ALANI */}
+            {lastDesign && (
+              <div className="arena-preparation-area">
+                <div className="arena-form-row">
+                    <input 
+                        type="text" 
+                        placeholder="Kahvene bir isim ver..." 
+                        className="arena-coffee-name-input"
+                        value={arenaCoffeeName}
+                        onChange={(e) => setArenaCoffeeName(e.target.value)}
+                    />
+                    
+                    <label className={`arena-mini-upload ${arenaCoffeeImage ? 'has-image' : ''}`}>
+                        {arenaCoffeeImage ? <img src={arenaCoffeeImage} alt="Preview" /> : <ImageIcon size={20} />}
+                        <input type="file" hidden accept="image/*" onChange={handleCoffeeImageUpload} />
+                    </label>
                 </div>
-                <button className="close-suggestion" onClick={() => setShowSuggestion(false)}>
-                  <X size={16} />
-                </button>
-              </div>
-            )}
 
-            {selectedCoffee && (
-              <div className="selected-coffee-preview-container">
-                <img src={selectedCoffee.image} alt="Seçili" className="selected-img" />
-                <div className="selected-info">
-                  <CheckCircle2 size={16} color="#c58a5c" />
-                  <span>{selectedCoffee.name} Arenaya hazır!</span>
+                <div className="recipe-badge">
+                    <Zap size={12} /> Reçete Hazır: {lastDesign.score} Puan
                 </div>
-                <button onClick={() => setSelectedCoffee(null)} className="remove-selection-btn">
-                  <X size={14} />
-                </button>
               </div>
             )}
 
@@ -201,7 +211,6 @@ export default function Profil() {
               placeholder={lastDesign ? "Bu kahveyle Arenayı salla..." : "Kahve tasarlamadan paylaşım yapamazsın..."}
               value={postText}
               disabled={!lastDesign}
-              onFocus={() => setShowSuggestion(true)}
               onChange={e => setPostText(e.target.value)}
             />
             
@@ -260,8 +269,7 @@ export default function Profil() {
           </div>
         </section>
 
-        {/* --- ÖNERİLER --- */}
-{/* --- ARENA DEVLERİ (TOP BARISTAS) --- */}
+        {/* --- ARENA DEVLERİ --- */}
         <section className="follow-section">
           <div className="section-title-wrapper">
             <h2><Trophy size={20} color="#ffcc00" /> Arena Devleri</h2>

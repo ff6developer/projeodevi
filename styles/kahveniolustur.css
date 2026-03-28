@@ -1,31 +1,31 @@
-/* ===== GENEL LAYOUT (Mevcut) ===== */
-.coffee-layout{
-  display:flex;
-  min-height:100vh;
+/* ===== GENEL LAYOUT ===== */
+.coffee-layout {
+  display: flex;
+  min-height: 100vh;
   font-family: 'Inter', system-ui, sans-serif;
-  position:relative;
-  width:100%;
+  position: relative;
+  width: 100%;
 }
 
-/* ===== BACKGROUND (Mevcut) ===== */
-.coffee-bg{
-  position:fixed;
-  inset:0;
-  background-image:url("/coffee-bg.jpg"); 
-  background-size:cover;
-  background-position:center;
-  z-index:0;
+/* ===== BACKGROUND & OVERLAY ===== */
+.coffee-bg {
+  position: fixed;
+  inset: 0;
+  background-image: url("/coffee-bg.jpg"); 
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
 }
 
-.coffee-layout::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.65); /* Biraz daha kararttık ki statlar parlasın */
-  z-index:1;
+.coffee-layout::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 1;
 }
 
-/* ===== LAB BADGE (YENİ) ===== */
+/* ===== LABORATUVAR ROZETİ ===== */
 .lab-badge {
   position: fixed;
   left: 120px;
@@ -44,34 +44,34 @@
   z-index: 3;
 }
 
-/* ===== HERO (Mevcut düzen korundu) ===== */
-.coffee-left{
+/* ===== SOL PANEL (STATLAR VE TANITIM) ===== */
+.coffee-left {
   width: 45%;
   position: relative;
   z-index: 3;
 }
 
-.hero-title{
-  position:fixed;
-  left:120px;
-  top:22vh;
-  font-size:82px; /* Biraz küçülttük yer açmak için */
-  font-weight:800;
-  color:white;
-  margin:0;
+.hero-title {
+  position: fixed;
+  left: 120px;
+  top: 22vh;
+  font-size: 82px;
+  font-weight: 800;
+  color: white;
+  margin: 0;
   line-height: 1;
 }
 
-.hero-sub{
-  position:fixed;
-  left:120px;
-  top:42vh; /* Yukarı çektik */
-  width:480px;
-  font-size:18px;
-  color:rgba(255,255,255,0.7);
+.hero-sub {
+  position: fixed;
+  left: 120px;
+  top: 42vh;
+  width: 480px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-/* ===== ARENA STATS (YENİ) ===== */
+/* ===== ARENA STAT KUTULARI ===== */
 .arena-stats-container {
   position: fixed;
   left: 120px;
@@ -107,7 +107,7 @@
   margin-top: 5px;
 }
 
-/* ===== FINAL ARENA STEP (YENİ - İSİM VE FOTO) ===== */
+/* ===== FİNAL ADIMI (SİPARİŞ BUTONU KONUMU) ===== */
 .final-arena-step {
   position: fixed;
   left: 120px;
@@ -117,108 +117,71 @@
   animation: readyPop 0.5s ease;
 }
 
-.arena-name-input {
-  width: 100%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 15px 20px;
-  border-radius: 15px;
-  color: white;
-  margin-bottom: 15px;
-  outline: none;
-  transition: 0.3s;
-}
-
-.arena-name-input:focus { border-color: #c58a5c; background: rgba(255,255,255,0.1); }
-
-.arena-photo-upload {
-  width: 100%;
-  height: 120px;
-  border: 2px dashed rgba(255,255,255,0.2);
-  border-radius: 15px;
+/* ===== SAĞ PANEL (SEÇENEK KAYDIRMA ALANI) ===== */
+.coffee-right {
+  width: 55%;
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.coffee-right::-webkit-scrollbar {
+  width: 0;
+}
+
+.config-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  cursor: pointer;
-  margin-bottom: 20px;
-  overflow: hidden;
-  color: #666;
-  transition: 0.3s;
-}
-
-.arena-photo-upload:hover { border-color: #c58a5c; color: #fff; }
-
-.arena-photo-upload img {
+  align-items: center;
+  padding: 120px 0 80px;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-.arena-photo-upload.has-img { border-style: solid; border-color: #c58a5c; }
-
-/* ===== RIGHT PANEL (Mevcut) ===== */
-.coffee-right{
-  width:55%;
-  position:relative;
-  z-index:2;
-  height:100vh;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+.section-title {
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-.coffee-right::-webkit-scrollbar { width: 0; } /* Temiz görünüm */
-
-.config-section{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:120px 0 80px;
-  width:100%;
-}
-
-.section-title{
-  color:white;
-  font-size:32px;
-  font-weight:700;
-  margin-bottom:32px;
-  text-shadow: 0 10px 20px rgba(0,0,0,0.5);
-}
-
-.option-group{
-  backdrop-filter:blur(20px);
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.15);
-  border-radius:22px;
-  padding:26px;
-  color:white;
-  width:100%;
+.option-group {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 22px;
+  padding: 26px;
+  color: white;
+  width: 100%;
   max-width: 500px;
 }
 
-.milk-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:16px 20px;
-  border-radius:14px;
-  cursor:pointer;
-  transition:all .3s ease;
-  margin-bottom:12px;
-  background:rgba(255,255,255,0.03);
+/* ===== SEÇENEK ÖĞELERİ (ITEMS) ===== */
+.milk-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid transparent;
 }
 
-.milk-item:hover{
-  background:rgba(255,255,255,0.1);
+.milk-item:hover {
+  background: rgba(255, 255, 255, 0.1);
   transform: translateX(5px);
 }
 
-.milk-item.active{
+.milk-item.active {
   background: rgba(197, 138, 92, 0.25);
   border-color: #c58a5c;
   box-shadow: 0 0 20px rgba(197, 138, 92, 0.2);
@@ -230,40 +193,71 @@
   font-weight: 600;
 }
 
-/* ===== BUTTONS (Mevcut) ===== */
-.hero-btn{
-  position:fixed;
-  left:120px;
-  top:65vh;
-  padding:20px 50px;
-  border-radius:60px;
-  border:none;
-  cursor:pointer;
-  background:linear-gradient(135deg,#c58a5c,#8b5e3c);
-  color:white;
+/* ===== BUTONLAR ===== */
+.hero-btn {
+  position: fixed;
+  left: 120px;
+  top: 65vh;
+  padding: 20px 50px;
+  border-radius: 60px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #c58a5c, #8b5e3c);
+  color: white;
   font-weight: 700;
   box-shadow: 0 10px 30px rgba(197, 138, 92, 0.3);
+  transition: 0.3s;
+}
+
+.hero-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(197, 138, 92, 0.4);
 }
 
 .arena-btn {
-  position: relative; /* Fixed değil çünkü container içinde */
-  left: 0;
-  top: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: linear-gradient(135deg,#663224,#c58a5c);
+  padding: 20px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  background: linear-gradient(135deg, #663224, #c58a5c);
+  transition: 0.3s;
 }
 
-@keyframes readyPop{
-  from{ transform:translateY(20px); opacity:0; }
-  to{ transform:translateY(0); opacity:1; }
+.arena-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(102, 50, 36, 0.4);
 }
 
-/* Mobil Uyumluluk */
+/* ===== ANİMASYONLAR ===== */
+@keyframes readyPop {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===== MOBİL UYUMLULUK ===== */
 @media (max-width: 1024px) {
-  .hero-title { left: 40px; font-size: 50px; }
-  .hero-sub, .arena-stats-container, .final-arena-step, .lab-badge { left: 40px; width: 300px; }
+  .hero-title {
+    left: 40px;
+    font-size: 50px;
+  }
+  .hero-sub,
+  .arena-stats-container,
+  .final-arena-step,
+  .lab-badge {
+    left: 40px;
+    width: 320px;
+  }
 }

@@ -134,13 +134,7 @@
   transition: var(--transition);
 }
 
-.profil-bio:focus {
-  border-color: var(--primary-coffee);
-  color: #fff;
-  background: rgba(255,255,255,0.05);
-}
-
-/* --- STATS (Arena Gücü) --- */
+/* --- STATS --- */
 .profil-stats {
   display: flex;
   gap: 50px;
@@ -159,7 +153,6 @@
 }
 
 .stat-icon { color: var(--arena-gold); }
-
 .stat-item span {
   font-size: 11px;
   text-transform: uppercase;
@@ -169,7 +162,82 @@
   display: block;
 }
 
-/* --- PAYLAŞIM ALANI (POST BOX) --- */
+/* --- ARENA HAZIRLIK ALANI (YENİ EKLENEN KISIM) --- */
+.arena-preparation-area {
+  background: rgba(197, 138, 92, 0.05);
+  border: 1px solid rgba(197, 138, 92, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.arena-form-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.arena-coffee-name-input {
+  flex: 1;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 18px;
+  border-radius: 12px;
+  color: #fff;
+  outline: none;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.arena-coffee-name-input:focus {
+  border-color: var(--primary-coffee);
+}
+
+.arena-mini-upload {
+  width: 50px;
+  height: 50px;
+  background: rgba(255,255,255,0.05);
+  border: 1px dashed rgba(255,255,255,0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: 0.3s;
+  flex-shrink: 0;
+}
+
+.arena-mini-upload:hover {
+  border-color: var(--primary-coffee);
+  background: rgba(255,255,255,0.1);
+}
+
+.arena-mini-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.arena-mini-upload.has-image {
+  border-style: solid;
+  border-color: var(--primary-coffee);
+}
+
+.recipe-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-coffee);
+  margin-top: 12px;
+  background: rgba(197, 138, 92, 0.1);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+/* --- PAYLAŞIM ALANI --- */
 .post-section { margin-top: 60px; }
 
 .section-title-wrapper {
@@ -177,22 +245,6 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
-}
-
-.section-title-wrapper h2 {
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.warning-text {
-  font-size: 12px;
-  color: #ff6b6b;
-  font-style: italic;
-  background: rgba(255, 107, 107, 0.1);
-  padding: 4px 12px;
-  border-radius: 10px;
 }
 
 .post-box {
@@ -208,11 +260,11 @@
 
 .post-input {
   width: 100%;
-  min-height: 100px;
+  min-height: 80px;
   background: transparent;
   border: none;
   color: #fff;
-  font-size: 18px;
+  font-size: 17px;
   resize: none;
   outline: none;
   padding: 10px 0;
@@ -225,7 +277,6 @@
   padding-top: 20px;
 }
 
-/* PAYLAŞ BUTONU (AKTİF/PASİF) */
 .share-btn {
   background: var(--primary-coffee);
   color: white;
@@ -244,17 +295,9 @@
   background: #222;
   color: #444;
   cursor: not-allowed;
-  box-shadow: none;
-  transform: none !important;
 }
 
-.share-btn:not(.disabled):hover {
-  background: var(--primary-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(197, 138, 92, 0.4);
-}
-
-/* --- POST FEED (ARENA CARDS) --- */
+/* --- ARENA FEED CARDS --- */
 .post-card {
   background: var(--card-bg);
   border: 1px solid var(--border-light);
@@ -274,10 +317,6 @@
 .post-user-info { display: flex; align-items: center; gap: 15px; }
 .post-user-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-coffee); }
 .post-user-name { font-weight: 700; font-size: 16px; }
-.post-date { font-size: 12px; color: #555; }
-
-.post-content { padding: 0; }
-.post-text { padding: 0 25px 20px; font-size: 16px; line-height: 1.6; color: #ccc; }
 
 .post-main-image-wrapper {
   position: relative;
@@ -309,66 +348,19 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
 }
 
-.post-footer {
-  padding: 20px 25px;
-  display: flex;
-  gap: 30px;
-}
-
-.post-action-btn {
+.delete-post {
   background: transparent;
   border: none;
-  color: #555;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  color: #444;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
 }
 
-.post-action-btn:hover { color: var(--primary-coffee); }
-.arena-vote:hover { color: var(--arena-gold) !important; }
+.delete-post:hover { color: #ff4d4d; }
 
-/* --- SUGGESTION BOX --- */
-.coffee-suggestion-box {
-  background: rgba(197, 138, 92, 0.05);
-  border: 1px solid var(--primary-coffee);
-  border-radius: 20px;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.mini-coffee-preview { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; }
-
-/* --- DİĞER --- */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.loading-screen {
-  background: #000;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary-coffee);
-  font-weight: 900;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 80px 0;
-  color: #333;
-}
-
-/* --- ARENA DEVLERİ (TOP BARISTAS) --- */
+/* --- ARENA DEVLERİ --- */
 .follow-section {
   margin-top: 80px;
   padding-top: 40px;
@@ -383,68 +375,23 @@
 }
 
 .follow-card {
-  background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  background: rgba(255,255,255,0.02);
   border: 1px solid var(--border-light);
   padding: 30px 20px;
   border-radius: 25px;
   text-align: center;
-  position: relative;
   transition: var(--transition);
 }
 
-.follow-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--primary-coffee);
-  background: rgba(197, 138, 92, 0.05);
-}
-
-/* Şampiyonluk Parlaması */
-.champion-border {
-  border: 1px solid var(--arena-gold) !important;
-  box-shadow: 0 0 20px rgba(255, 204, 0, 0.1);
-}
-
-.rank-badge {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: var(--primary-coffee);
-  color: #000;
-  font-size: 10px;
-  font-weight: 900;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
-.champion-border .rank-badge {
-  background: var(--arena-gold);
-}
+.champion-border { border: 1px solid var(--arena-gold) !important; }
 
 .follow-avatar {
   width: 85px;
   height: 85px;
   border-radius: 50%;
   object-fit: cover;
-  margin: 0 auto 15px;
+  margin-bottom: 15px;
   border: 3px solid #1a1a1a;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-}
-
-.follow-name {
-  display: block;
-  font-weight: 700;
-  font-size: 15px;
-  color: #fff;
-  margin-bottom: 4px;
-}
-
-.follow-title {
-  display: block;
-  font-size: 11px;
-  color: var(--primary-coffee);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
 }
 
 .follow-btn {
@@ -454,14 +401,20 @@
   color: #fff;
   padding: 10px;
   border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
 }
 
-.follow-btn:hover {
-  background: var(--primary-coffee);
-  border-color: var(--primary-coffee);
-  color: #000;
+/* --- ANİMASYONLAR --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loading-screen {
+  background: #000;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-coffee);
 }
