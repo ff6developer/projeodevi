@@ -190,8 +190,6 @@ html, body {
 .main {
   flex: 1;
   width: 100%;
-  padding-left: 90px; /* Sidebar genişliğine göre içerik hizalama */
-  padding-top: 100px; /* Header yüksekliğine göre içerik hizalama */
   background: #080808;
   display: flex;
 }
