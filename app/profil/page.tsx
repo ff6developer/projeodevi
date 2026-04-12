@@ -13,7 +13,7 @@ export default function Profil() {
 
   // --- STATE YÖNETİMİ ---
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
-  const [bio, setBio] = useState("Kahve tasarlamayı seviyorum ☕")
+  const [bio, setBio] = useState("")
   const [avatar, setAvatar] = useState("/profilikon.png")
   const [postText, setPostText] = useState("")
   const [posts, setPosts] = useState<any[]>([])
@@ -120,9 +120,9 @@ export default function Profil() {
 
   // BURASI: İstediğin WebP güncellemelerini buraya yaptım!
   const suggestedUsers = [
-    { name: "Baristanesli", img: "/pp1.webp", title: "Master Barista" },
-    { name: "CoffeeQueen", img: "/pp2.webp", title: "Roaster" },
-    { name: "LatteKing", img: "/pp3.webp", title: "Artiste" }
+    { name: "Arenadevi#1", img: "/pp1.webp" },
+    { name: "Arenadevi#2", img: "/pp2.webp" },
+    { name: "Arenadevi#3", img: "/pp3.webp" }
   ]
 
   const isShareDisabled = !postText.trim() || !arenaCoffeeImage || !arenaCoffeeName.trim();

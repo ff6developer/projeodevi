@@ -29,16 +29,6 @@ export default function KahveArenasi() {
     return () => clearTimeout(timer)
   }, [])
 
-  // --- AI: Tat Profili Tahminleyicisi ---
-  const getFlavorNotes = (details: any) => {
-    const notes = []
-    if (details?.beanType?.name === "Ethiopia") notes.push("🍓 Meyvemsi", "🌸 Yasemin")
-    if (details?.technique?.name === "V60") notes.push("✨ Berrak", "🍋 Sitrik")
-    if (details?.milkType?.name === "Yulaf Sütü") notes.push("🌾 Tatlımsı")
-    if (notes.length === 0) notes.push("☕ Dengeli", "🍫 Çikolamsı")
-    return notes.slice(0, 2)
-  }
-
   // --- STORY OLARAK İNDİRME FONKSİYONU ---
   const downloadStory = async (postId: number) => {
     const element = document.getElementById(`post-card-${postId}`);
@@ -182,11 +172,7 @@ export default function KahveArenasi() {
                   </div>
                   <h3>{post.coffee.name}</h3>
                   
-                  {/* AI TAT NOTALARI */}
-                  <div className="flavor-tags">
-                    {getFlavorNotes(post.coffee.details).map((note, i) => (
-                      <span key={i} className="flavor-tag">{note}</span>
-                    ))}
+                  
                   </div>
 
                   <div className="card-actions">
@@ -218,7 +204,6 @@ export default function KahveArenasi() {
                     </div>
                   )}
                 </div>
-              </div>
             ))
           )}
         </div>
