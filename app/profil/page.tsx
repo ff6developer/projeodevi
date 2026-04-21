@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import Image from "next/image" // Performans için eklendi
+import Image from "next/image"
 import { 
   Camera, Plus, Share2, Coffee, X, LogOut, 
   Heart, MessageCircle, Trophy, Zap, Image as ImageIcon 
@@ -11,7 +11,6 @@ import "../../styles/profil.css"
 export default function Profil() {
   const router = useRouter()
 
-  // --- STATE YÖNETİMİ ---
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
   const [bio, setBio] = useState("")
   const [avatar, setAvatar] = useState("/profilikon.png")
@@ -22,7 +21,6 @@ export default function Profil() {
   const [arenaCoffeeName, setArenaCoffeeName] = useState("")
   const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
 
-  // --- GİRİŞ KONTROLÜ VE VERİ YÜKLEME ---
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user")
     if (!loggedInUser) {
@@ -44,9 +42,13 @@ export default function Profil() {
     if (savedBio) setBio(savedBio)
   }, [router])
 
-  // --- FONKSİYONLAR ---
   const handleLogout = () => {
-    localStorage.removeItem("user") 
+    localStorage.removeItem("user")
+    localStorage.removeItem("isLoggedIn")
+
+    // 🔥 layout güncelle
+    window.dispatchEvent(new Event("authChanged"))
+
     router.push("/giris")
   }
 
@@ -79,17 +81,17 @@ export default function Profil() {
 
   const sharePost = () => {
     if (!postText.trim() || !arenaCoffeeImage || !arenaCoffeeName.trim() || !lastDesign) {
-        alert("Lütfen tüm alanları doldurun!")
-        return
+      alert("Lütfen tüm alanları doldurun!")
+      return
     }
     
     const newPost = {
       id: Date.now(),
       text: postText,
       coffee: {
-          ...lastDesign,
-          name: arenaCoffeeName,
-          image: arenaCoffeeImage
+        ...lastDesign,
+        name: arenaCoffeeName,
+        image: arenaCoffeeImage
       }, 
       date: new Date().toLocaleString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
       likes: 0,
@@ -101,7 +103,10 @@ export default function Profil() {
     localStorage.setItem("userPosts", JSON.stringify(updatedPosts))
     
     const allArenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
-    localStorage.setItem("arenaPosts", JSON.stringify([{ ...newPost, userName: user?.name, userAvatar: avatar }, ...allArenaPosts]))
+    localStorage.setItem("arenaPosts", JSON.stringify([
+      { ...newPost, userName: user?.name, userAvatar: avatar },
+      ...allArenaPosts
+    ]))
 
     setPostText("")
     setArenaCoffeeName("")
@@ -118,7 +123,6 @@ export default function Profil() {
 
   if (!user) return <div className="loading-screen"><h2>Yükleniyor...</h2></div>
 
-  // BURASI: İstediğin WebP güncellemelerini buraya yaptım!
   const suggestedUsers = [
     { name: "Arenadevi#1", img: "/pp1.webp" },
     { name: "Arenadevi#2", img: "/pp2.webp" },
@@ -131,7 +135,6 @@ export default function Profil() {
     <div className="profil-page">
       <div className="profil-container">
 
-        {/* --- HERO SECTION --- */}
         <header className="profil-hero">
           <button className="logout-button" onClick={handleLogout} title="Çıkış Yap">
             <LogOut size={20} />
@@ -144,7 +147,7 @@ export default function Profil() {
                 alt="Profil" 
                 width={150} 
                 height={150} 
-                priority // LCP Skoru için en önemli resim
+                priority
                 className="profil-avatar"
               />
               <div className="avatar-overlay"><Camera size={24} /></div>
@@ -177,7 +180,6 @@ export default function Profil() {
           </div>
         </header>
 
-        {/* --- PAYLAŞIM ALANI --- */}
         <section className="post-section">
           <div className="section-title-wrapper">
               <h2><Plus size={22} /> Arenada Paylaş</h2>
@@ -227,7 +229,6 @@ export default function Profil() {
             </div>
           </div>
 
-          {/* POST FEED */}
           <div className="post-feed">
             {posts.map((p) => (
               <div key={p.id} className="post-card arena-card">
@@ -261,7 +262,6 @@ export default function Profil() {
           </div>
         </section>
 
-        {/* --- ARENA DEVLERİ --- */}
         <section className="follow-section">
           <div className="section-title-wrapper">
             <h2><Trophy size={20} color="#ffcc00" /> Arena Devleri</h2>
@@ -270,7 +270,6 @@ export default function Profil() {
             {suggestedUsers.map((u, index) => (
               <div key={u.name} className={`follow-card ${index === 0 ? "champion-border" : ""}`}>
                 <div className="rank-badge">#{index + 1}</div>
-                {/* BURASI: WebP resimlerin ekrana basıldığı yer */}
                 <Image 
                   src={u.img} 
                   alt={u.name} 
@@ -280,13 +279,13 @@ export default function Profil() {
                 />
                 <div className="follow-info">
                   <span className="follow-name">{u.name}</span>
-                  <span className="follow-title">{u.title}</span>
                 </div>
                 <button className="follow-btn">Gör</button>
               </div>
             ))}
           </div>
         </section>
+
       </div>
     </div>
   )
