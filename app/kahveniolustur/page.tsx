@@ -40,7 +40,7 @@ export default function KahveniOlustur() {
   ]
 
   const foamOptions = [{ name: "Köpük Var", price: 5, power: 10 }, { name: "Köpük Yok", price: 0, power: 0 }]
-
+  
   const cupOptions = [
     { name: "Karton Bardak", price: 0, power: 0 }, { name: "Cam Bardak", price: 8, power: 10 },
     { name: "Termos Bardak", price: 20, power: 15 }, { name: "Büyük Boy Bardak", price: 12, power: 5 }
@@ -70,27 +70,24 @@ export default function KahveniOlustur() {
     { name: "Latte Art", price: 15, power: 30 }, { name: "Değişiklik Yok", price: 0, power: 0 }
   ]
 
-  // Yaratıcılık Puanı Hesaplama
+  // Hesaplamalar
   const creativityScore = 
     (form.milkType?.power || 0) + (form.beanType?.power || 0) + 
     (form.syrup?.power || 0) + (form.technique?.power || 0) + 
     (form.spice?.power || 0);
 
-  // Toplam Fiyat Hesaplama (Baz Fiyat 100 TL)
   const total = 100 + (form.milkType?.price || 0) + (form.beanType?.price || 0) + 
     (form.foam?.price || 0) + (form.cupType?.price || 0) + (form.syrup?.price || 0) + 
     (form.spice?.price || 0) + (form.sweetener?.price || 0) + (form.technique?.price || 0)
 
   const handleSiparis = () => {
     if (!allSelected) return;
-
     const loggedInUser = localStorage.getItem("user");
     if (!loggedInUser) {
       alert("Sipariş vermek için önce giriş yapmalısın!");
       router.push("/giris");
       return;
     }
-
     const orderData = {
       id: Date.now(),
       details: form,
@@ -99,12 +96,9 @@ export default function KahveniOlustur() {
       status: "Hazırlanıyor",
       date: new Date().toLocaleString('tr-TR')
     }
-
-    // Siparişleri kaydet
     const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
     localStorage.setItem("orders", JSON.stringify([...existingOrders, orderData]));
-    
-    alert("Siparişin alındı! Kahven hazır olduğunda resmini çekip paylaşabileceksin. ☕");
+    alert("Siparişin alındı! ☕");
     router.push("/siparis");
   }
 
@@ -124,7 +118,6 @@ export default function KahveniOlustur() {
       const duration = 700
       let startTime: number | null = null
       const ease = (t: number) => 1 - Math.pow(1 - t, 4)
-      
       const animate = (time: number) => {
         if (!startTime) startTime = time
         const progress = time - startTime
@@ -153,7 +146,7 @@ export default function KahveniOlustur() {
     <div className="coffee-layout">
       <div className="coffee-bg"></div>
 
-      {/* SOL PANEL: STATLAR VE BUTONLAR */}
+      {/* SOL PANEL */}
       <div className="coffee-left">
         <div className="lab-badge"><Beaker size={16} /> THE COFFEE LAB</div>
         <h1 className="hero-title">Şampiyonu Tasarla.</h1>
@@ -178,16 +171,14 @@ export default function KahveniOlustur() {
           <button className="hero-btn" onClick={() => setStarted(true)}>Laboratuvarı Aç</button>
         ) : (
           allSelected && (
-            <div className="final-arena-step">
-              <button className="arena-btn" onClick={handleSiparis}>
-                <Trophy size={18} /> Siparişi Tamamla
-              </button>
-            </div>
+            <button className="arena-btn" onClick={handleSiparis} style={{width: 'fit-content'}}>
+              <Trophy size={18} /> Siparişi Tamamla
+            </button>
           )
         )}
       </div>
 
-      {/* SAĞ PANEL: KONFİGÜRASYON SEÇENEKLERİ */}
+      {/* SAĞ PANEL */}
       <div className="coffee-right">
         {started && (
           <>
