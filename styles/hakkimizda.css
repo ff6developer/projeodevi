@@ -6,6 +6,8 @@
     box-sizing: border-box;
 }
 
+
+
 .about-content {
     display: grid;
     /* Görseller 2 birim, Metinler 3 birim genişlik alacak */
@@ -68,7 +70,7 @@
 .brand-title {
     font-size: 80px; /* 100px çok büyük geldiyse 80px idealdir */
     font-weight: 800;
-    color: #1a1a1a;
+    color: #0e0202;
     margin-top: 0 !important; /* Negatif değerleri ( -150px gibi ) tamamen siliyoruz */
     margin-bottom: 20px;
     line-height: 1.1;
@@ -90,7 +92,7 @@
 
 .feature-item h5 {
     font-size: 16px;
-    color: #1a1a1a;
+    color: #170101;
     margin-bottom: 10px;
 }
 
@@ -134,6 +136,20 @@
     max-width: 1000px;
 }
 
+.text-wrapper {
+    /* Mevcut padding ve flex ayarların kalsın, sadece bunları ekle/değiştir */
+    background-color: #e1c275df !important; /* Çok koyu kahve */
+    color: #ffffff !important;
+}
+
+/* Hikayemiz başlığı ve altındaki çizgi */
+.subtitle {
+    color: #d4a373 !important; /* Karamel rengi */
+}
+
+.divider {
+    background-color: #d4a373 !important;
+}
 .amac-kart {
     flex: 1;
     min-width: 200px; /* Biraz daha dar */
@@ -330,3 +346,9 @@
     text-transform: uppercase;
 }
 
+.about-container {
+    width: 100%;
+    background-color: #070110; /* İstediğiniz yeni renk (Örn: Soft Gri) */
+    padding: 0;
+    box-sizing: border-box;
+}
