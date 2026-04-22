@@ -26,11 +26,15 @@ export default function Login() {
         return;
       }
 
-      // BAŞARILI GİRİŞ: Kullanıcı bilgilerini sakla
-      localStorage.setItem("user", JSON.stringify(data.user)); 
-      // data.user içinde { name, email, id } olduğunu varsayıyoruz.
-      
+      // ✅ KULLANICIYI KAYDET
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // ✅ LOGIN FLAG (NAVBAR İÇİN)
+      localStorage.setItem("isLoggedIn", "true");
+
       alert(`Hoş geldin, ${data.user.name}!`);
+
+      // ✅ PROFİLE GİT
       router.push("/profil");
 
     } catch (err) {
@@ -70,6 +74,7 @@ export default function Login() {
               required
             />
           </div>
+
           <button type="submit" className="login-button">Giriş Yap</button>
 
           <div className="login-links">

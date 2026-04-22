@@ -70,14 +70,19 @@ html, body {
 .logo-text {
   font-size: 20px;
   font-weight: 900;
-  color: #ffffff;
+  color: #ffffff; /* Standart renk */
   letter-spacing: 2px;
   text-transform: uppercase;
   background: linear-gradient(to right, #fff, #c58a5c);
+  
+  /* Düzenlenen Kısım: Her iki versiyonu da ekle */
+  background-clip: text;
   -webkit-background-clip: text;
+  
+  /* Metin rengini transparan yapma */
+  color: transparent; 
   -webkit-text-fill-color: transparent;
 }
-
 /* ===== NAV ===== */
 .nav ul {
   display: flex;
