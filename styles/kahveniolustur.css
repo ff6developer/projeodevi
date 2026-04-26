@@ -160,6 +160,7 @@
   color: white;
   width: 100%;
   max-width: 500px;
+  margin-top: 20px;
 }
 
 /* ===== SEÇENEK ÖĞELERİ (ITEMS) ===== */
@@ -215,19 +216,25 @@
 }
 
 .arena-btn {
-  width: 100%;
+  /* Butonu sol alt köşeye sabitliyoruz */
+  position: fixed; 
+  bottom:130px;
+  left: 130px;
+  
+  /* Diğer elemanların (sol panel metinlerinin) üzerine binmemesi için */
+  z-index: 999; 
+  
+  /* Mevcut tasarım özelliklerin (renk, padding vs.) kalsın */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 20px;
-  border-radius: 15px;
+  padding: 15px 25px;
+  background: linear-gradient(90deg, #783c12, #714614);
+  border-radius: 12px;
+  color: white;
   border: none;
   cursor: pointer;
-  color: white;
-  font-weight: 700;
-  background: linear-gradient(135deg, #663224, #c58a5c);
-  transition: 0.3s;
 }
 
 .arena-btn:hover {
@@ -261,4 +268,65 @@
     width: 320px;
   }
 }
+
+/* Bu kısmı CSS dosyanızdaki .section-header ile değiştirin */
+.section-header {
+  display: flex;             /* Grid yerine Flex kullanıyoruz */
+  justify-content: center;   /* Yatayda tam merkeze alır */
+  align-items: baseline;     /* Yazıların alt çizgisini hizalar (daha düzgün durur) */
+  gap: 8px;
+  margin-bottom: 25px;       /* Biraz daha nefes alması için artırıldı */
+  width: 100%;
+  text-align: center;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 32px;           /* Mevcut boyutunuz kalsın */
+  color: white;
+  /* white-space: nowrap; (Zaten eklemişsiniz, kalsın) */
+}
+
+.required-star {
+  color: #ff4d4d;
+  font-weight: bold;
+}
+
+.required-text {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+  font-style: italic;
+  white-space: nowrap; /* Yazının her zaman tek satır kalmasını sağlar */
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column; /* İçindekileri alt alta dizer */
+  align-items: center;    /* Her şeyi yatayda ortalar */
+  gap: 4px;               /* Başlık ile alt yazı arasındaki boşluk */
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.section-title {
+  font-size: 32px;
+  color: white;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Yazı ile yıldız arasındaki boşluk */
+}
+
+.required-star {
+  color: #ff4d4d;
+  font-size: 24px; /* Yıldızı biraz belirginleştirebilirsin */
+}
+
+.required-text {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  font-style: italic;
+  display: block; /* Tam satır kaplamasını sağlar */
+}
+
 

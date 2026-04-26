@@ -183,7 +183,8 @@ export default function KahveniOlustur() {
         {started && (
           <>
             <section className="config-section">
-              <h2 className="section-title">Süt Tipi</h2>
+              <h2 className="section-title">Süt Tipi <span className="required-star">*</span></h2>
+               <span className="required-text">(Bu kısım zorunludur)</span>
               <div className="option-group">
                 {milkOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, milkType: item })} className={`milk-item ${form.milkType?.name === item.name ? "active" : ""}`}>
@@ -195,7 +196,8 @@ export default function KahveniOlustur() {
             </section>
 
             <section className="config-section">
-              <h2 className="section-title">Kahve Çekirdeği</h2>
+              <h2 className="section-title">Kahve Çekirdeği <span className="required-star">*</span></h2>
+               <span className="required-text">(Bu kısım zorunludur)</span>
               <div className="option-group">
                 {beanOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, beanType: item })} className={`milk-item ${form.beanType?.name === item.name ? "active" : ""}`}>
@@ -206,20 +208,26 @@ export default function KahveniOlustur() {
               </div>
             </section>
 
-            <section className="config-section">
-              <h2 className="section-title">Süt Köpüğü</h2>
-              <div className="option-group">
-                {foamOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, foam: item })} className={`milk-item ${form.foam?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
-                  </div>
-                ))}
-              </div>
-            </section>
+           {/* Süt Köpüğü */}
+      <section className="config-section">
+        <div className="section-header">
+          <h2 className="section-title">Süt Köpüğü <span className="required-star">*</span></h2>
+          <span className="required-text">(Bu kısım zorunludur)</span>
+        </div>
+        <div className="option-group">
+          {foamOptions.map(item => (
+            <div key={item.name} onClick={() => setForm({ ...form, foam: item })} className={`milk-item ${form.foam?.name === item.name ? "active" : ""}`}>
+              <span>{item.name}</span>
+              <span>+{item.power} Puan</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
             <section className="config-section">
-              <h2 className="section-title">Bardak Tipi</h2>
+              <div className="section-header"></div>
+              <h2 className="section-title">Bardak Tipi<span className="required-star">*</span></h2>
+               <span className="required-text">(Bu kısım zorunludur)</span>
               <div className="option-group">
                 {cupOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, cupType: item })} className={`milk-item ${form.cupType?.name === item.name ? "active" : ""}`}>
@@ -231,7 +239,8 @@ export default function KahveniOlustur() {
             </section>
 
             <section className="config-section">
-              <h2 className="section-title">Şurup</h2>
+              <h2 className="section-title">Şurup <span className="required-star">*</span></h2>
+               <span className="required-text">(Bu kısım zorunludur)</span>
               <div className="option-group">
                 {syrupOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, syrup: item })} className={`milk-item ${form.syrup?.name === item.name ? "active" : ""}`}>
@@ -243,7 +252,8 @@ export default function KahveniOlustur() {
             </section>
 
             <section className="config-section">
-              <h2 className="section-title">Baharatlar</h2>
+              <h2 className="section-title">Baharatlar <span className="required-star">*</span></h2>
+               <span className="required-text">(Bu kısım zorunludur)</span>
               <div className="option-group">
                 {spiceOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, spice: item })} className={`milk-item ${form.spice?.name === item.name ? "active" : ""}`}>
@@ -255,7 +265,8 @@ export default function KahveniOlustur() {
             </section>
 
             <section className="config-section">
-              <h2 className="section-title">Tatlandırıcı</h2>
+              <h2 className="section-title">Tatlandırıcı <span className="required-star">*</span></h2>
+               <span className="required-text">(Bu kısım zorunludur)</span>
               <div className="option-group">
                 {sweetenerOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, sweetener: item })} className={`milk-item ${form.sweetener?.name === item.name ? "active" : ""}`}>
@@ -267,7 +278,8 @@ export default function KahveniOlustur() {
             </section>
 
             <section className="config-section">
-              <h2 className="section-title">Özel Teknik</h2>
+              <h2 className="section-title">Özel Teknik <span className="required-star">*</span></h2>
+               <span className="required-text">(Bu kısım zorunludur)</span>
               <div className="option-group">
                 {techniqueOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, technique: item })} className={`milk-item ${form.technique?.name === item.name ? "active" : ""}`}>
