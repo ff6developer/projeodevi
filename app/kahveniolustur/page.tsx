@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation"
 import { Beaker, Zap, Trophy } from "lucide-react"
 
 export default function KahveniOlustur() {
+  const [arenaCoffeeName, setArenaCoffeeName] = useState("")
+const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
   const router = useRouter()
   const [started, setStarted] = useState(false)
 
@@ -80,27 +82,46 @@ export default function KahveniOlustur() {
     (form.foam?.price || 0) + (form.cupType?.price || 0) + (form.syrup?.price || 0) + 
     (form.spice?.price || 0) + (form.sweetener?.price || 0) + (form.technique?.price || 0)
 
-  const handleSiparis = () => {
-    if (!allSelected) return;
-    const loggedInUser = localStorage.getItem("user");
-    if (!loggedInUser) {
-      alert("Sipariş vermek için önce giriş yapmalısın!");
-      router.push("/giris");
-      return;
-    }
-    const orderData = {
-      id: Date.now(),
-      details: form,
-      totalPrice: total,
-      score: creativityScore,
-      status: "Hazırlanıyor",
-      date: new Date().toLocaleString('tr-TR')
-    }
-    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    localStorage.setItem("orders", JSON.stringify([...existingOrders, orderData]));
-    alert("Siparişin alındı! ☕");
-    router.push("/siparis");
+const handleSiparis = () => {
+  if (!allSelected) return;
+
+  const loggedInUser = localStorage.getItem("user");
+  if (!loggedInUser) {
+    alert("Sipariş vermek için önce giriş yapmalısın!");
+    router.push("/giris");
+    return;
   }
+
+  const orderData = {
+    id: Date.now(),
+    details: form,
+    totalPrice: total,
+    score: creativityScore,
+    status: "Hazırlanıyor",
+    date: new Date().toLocaleString('tr-TR')
+  }
+
+  const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+  localStorage.setItem("orders", JSON.stringify([...existingOrders, orderData]));
+
+  // ✅ EKLEDİĞİM KISIM (kahveyi ayrıca kaydet)
+  const coffeeData = {
+    id: Date.now(),
+name: arenaCoffeeName || "İsimsiz Kahve",
+image: arenaCoffeeImage,
+    details: form,
+    score: creativityScore,
+    total: total,
+    date: new Date().toISOString()
+  }
+
+  const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]");
+  localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]));
+  // ✅ EKLEME BİTTİ
+
+  alert("Siparişin alındı! ☕");
+  router.push("./siparis");
+}
 
   // Smooth Scroll Efekti
   useEffect(() => {
@@ -189,7 +210,6 @@ export default function KahveniOlustur() {
                 {milkOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, milkType: item })} className={`milk-item ${form.milkType?.name === item.name ? "active" : ""}`}>
                     <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
                   </div>
                 ))}
               </div>
@@ -202,7 +222,6 @@ export default function KahveniOlustur() {
                 {beanOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, beanType: item })} className={`milk-item ${form.beanType?.name === item.name ? "active" : ""}`}>
                     <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
                   </div>
                 ))}
               </div>
@@ -218,7 +237,6 @@ export default function KahveniOlustur() {
           {foamOptions.map(item => (
             <div key={item.name} onClick={() => setForm({ ...form, foam: item })} className={`milk-item ${form.foam?.name === item.name ? "active" : ""}`}>
               <span>{item.name}</span>
-              <span>+{item.power} Puan</span>
             </div>
           ))}
         </div>
@@ -232,7 +250,6 @@ export default function KahveniOlustur() {
                 {cupOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, cupType: item })} className={`milk-item ${form.cupType?.name === item.name ? "active" : ""}`}>
                     <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
                   </div>
                 ))}
               </div>
@@ -245,7 +262,6 @@ export default function KahveniOlustur() {
                 {syrupOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, syrup: item })} className={`milk-item ${form.syrup?.name === item.name ? "active" : ""}`}>
                     <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
                   </div>
                 ))}
               </div>
@@ -258,7 +274,6 @@ export default function KahveniOlustur() {
                 {spiceOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, spice: item })} className={`milk-item ${form.spice?.name === item.name ? "active" : ""}`}>
                     <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
                   </div>
                 ))}
               </div>
@@ -271,7 +286,6 @@ export default function KahveniOlustur() {
                 {sweetenerOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, sweetener: item })} className={`milk-item ${form.sweetener?.name === item.name ? "active" : ""}`}>
                     <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
                   </div>
                 ))}
               </div>
@@ -284,7 +298,6 @@ export default function KahveniOlustur() {
                 {techniqueOptions.map(item => (
                   <div key={item.name} onClick={() => setForm({ ...form, technique: item })} className={`milk-item ${form.technique?.name === item.name ? "active" : ""}`}>
                     <span>{item.name}</span>
-                    <span>+{item.power} Puan</span>
                   </div>
                 ))}
               </div>
