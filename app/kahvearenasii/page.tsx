@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { 
   Trophy, MessageCircle, Zap, Award, 
-  Flame, X, User, ShoppingCart, Send, Star, Trash2 
+  Flame, X, User, ShoppingCart, Send, Star, Trash2,
+  Sparkles, Coffee, Heart, TrendingUp, Gift, Users
 } from "lucide-react"
 import "../../styles/kahvearenasi.css"
 
@@ -34,7 +35,11 @@ export default function KahveArenasi() {
     if (diff > ONE_MONTH) {
       if (posts.length > 0) {
         const winner = [...posts].sort((a, b) => (b.likes || 0) - (a.likes || 0))[0]
-        localStorage.setItem("championCoffee", JSON.stringify(winner))
+        localStorage.setItem("arenaChampion", JSON.stringify({
+          name: winner.coffee.name,
+          creator: winner.userName,
+          image: winner.coffee.image
+        }))
       }
       localStorage.setItem("arenaPosts", JSON.stringify([]))
       localStorage.setItem("tournamentStart", Date.now().toString())
@@ -49,7 +54,7 @@ export default function KahveArenasi() {
       const rawPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
       const checkedPosts = checkTournament(rawPosts)
       const savedVotes = JSON.parse(localStorage.getItem("userVotes") || "[]")
-      
+
       setPosts(checkedPosts)
       setVotedPosts(savedVotes)
       setIsLoading(false)
@@ -102,27 +107,20 @@ export default function KahveArenasi() {
 
   const handleDeletePost = (postId: number) => {
     if (window.confirm("Bu kahve tasarımını arenadan hem listeden hem de podyumdan kaldırmak istediğine emin misin?")) {
-      // 1. Mevcut postları al
       const currentPosts = [...posts];
-      
-      // 2. Silinecek postu listeden çıkar
       const updatedPosts = currentPosts.filter(p => p.id !== postId);
-      
-      // 3. State'i güncelle (React bunu gördüğü an podyumu/topThree'yi baştan hesaplar)
+
       setPosts(updatedPosts);
-      
-      // 4. Kalıcı olması için LocalStorage'a yaz
       localStorage.setItem("arenaPosts", JSON.stringify(updatedPosts));
-      
-      // 5. Eğer silinen kahvenin detay penceresi (drawer) açıksa onu kapat
+
       if (selectedUser?.id === postId) {
         setSelectedUser(null);
       }
-      
-      // Bilgi mesajı (opsiyonel)
+
       console.log("Post silindi, podyum güncellendi.");
     }
   };
+
   // 6. YORUM EKLEME
   const handleAddComment = (postId: number) => {
     if (!commentText.trim()) return
@@ -138,9 +136,28 @@ export default function KahveArenasi() {
     setCommentText("")
   }
 
-  const copyRecipe = (details: any) => {
-    localStorage.setItem("copiedRecipe", JSON.stringify(details))
-    alert("Tarif laboratuvara aktarıldı!")
+  const copyRecipe = (post: any) => {
+    const coffeeDetails = post.coffee?.details || post.details || {}
+
+    localStorage.setItem("copiedRecipe", JSON.stringify({
+      milkType: coffeeDetails.milkType || null,
+      beanType: coffeeDetails.beanType || null,
+      foam: coffeeDetails.foam || null,
+      cupType: coffeeDetails.cupType || null,
+      syrup: coffeeDetails.syrup || null,
+      spice: coffeeDetails.spice || null,
+      sweetener: coffeeDetails.sweetener || null,
+      technique: coffeeDetails.technique || null,
+      fromArena: true,
+      locked: true,
+      name: post.coffee?.name || "Arena Kahvesi",
+      image: post.coffee?.image || null,
+      arenaPostId: post.id,
+      arenaCreator: post.userName,
+      arenaScore: post.arenaScore || 0
+    }))
+
+    alert("Tarif laboratuvara aktarıldı! %15 indirim kazandın! 🎉")
     router.push("/kahveniolustur")
   }
 
@@ -149,9 +166,78 @@ export default function KahveArenasi() {
     .sort((a, b) => (b.likes || 0) - (a.likes || 0))
     .slice(0, 3)
 
+  // ÖDÜLLER VERİSİ
+  const rewards = [
+    {
+      id: 1,
+      icon: "/arena-gift.png", // Hediye kutusu görseli
+      title: "Özel Hediye Kutusu",
+      desc: "Kazanan kullanıcılara özel hazırlanmış premium hediye koleksiyonu"
+    },
+    {
+      id: 2,
+      icon: "/kupon.png", // İndirim kartı görseli
+      title: "%20 İndirim Kuponu",
+      desc: "Tüm kahve çeşitlerinde ve ekipmanlarda geçerli özel indirim fırsatı"
+    },
+    {
+      id: 3,
+      icon: "/bardak.png", // Özel kupa görseli
+      title: "Elmenes Coffee Özel Kupa",
+      desc: "Sadece şampiyonlara özel, isim yazılı limited edition seramik kupa"
+    }
+  ]
+
+  // TURNUVA SÜRECİ VERİSİ
+  const processSteps = [
+    {
+      id: 1,
+      icon: <Coffee size={28} />,
+      number: "1. ADIM",
+      title: "Katıl",
+      desc: "Kahveni oluştur ve Arena'da paylaş"
+    },
+    {
+      id: 2,
+      icon: <Heart size={28} />,
+      number: "2. ADIM",
+      title: "Oy Topla",
+      desc: "Diğer kullanıcılar oy versin"
+    },
+    {
+      id: 3,
+      icon: <TrendingUp size={28} />,
+      number: "3. ADIM",
+      title: "Sıralamada Yüksel",
+      desc: "Puanın artsın, liderliğe oyna"
+    },
+    {
+      id: 4,
+      icon: <Trophy size={28} />,
+      number: "4. ADIM",
+      title: "Şampiyon Ol",
+      desc: "Ay sonunda en yüksek puanı topla"
+    },
+    {
+      id: 5,
+      icon: <Gift size={28} />,
+      number: "5. ADIM",
+      title: "Ödül Kazan",
+      desc: "Sürpriz ödüller seni bekliyor!"
+    }
+  ]
+
+  // KATILIMCI AVATARLARI (Örnek)
+  const participants = [
+    "/avatar1.jpg",
+    "/avatar2.jpg", 
+    "/avatar3.jpg"
+  ]
+
   return (
     <div className="arena-page">
       <div className="arena-overlay"></div>
+
       <header className="arena-header">
         <div className="arena-title-area">
           <Trophy className="gold-trophy" size={40} />
@@ -161,21 +247,129 @@ export default function KahveArenasi() {
         </div>
       </header>
 
-      {/* PODYUM (ORTADAKİ GÖRSEL BURADAN GELİYOR) */}
+      {/* ÖDÜLLER BÖLÜMÜ */}
+      <section className="rewards-section">
+        <div className="rewards-header">
+          <h2>
+            <Sparkles className="sparkle-icon" size={28} />
+            ÖDÜLLER
+            <Sparkles className="sparkle-icon" size={28} />
+          </h2>
+        </div>
+
+        <div className="rewards-grid">
+          {rewards.map((reward) => (
+            <div key={reward.id} className="reward-card">
+              <div className="reward-icon-wrapper">
+                <Image 
+                  src={reward.icon} 
+                  alt={reward.title}
+                  width={120}
+                  height={120}
+                />
+              </div>
+              <h3>{reward.title}</h3>
+              <p>{reward.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="rewards-footer">ve daha fazlası...</p>
+      </section>
+
+      {/* TURNUVA SÜRECİ BÖLÜMÜ */}
+      <section className="process-section">
+        <div className="process-header">
+          <h2>TURNUVA SÜRECİ</h2>
+        </div>
+
+        <div className="process-timeline">
+          {processSteps.map((step) => (
+            <div key={step.id} className="process-step">
+              <div className="step-icon-wrapper">
+                {step.icon}
+              </div>
+              <span className="step-number">{step.number}</span>
+              <span className="step-title">{step.title}</span>
+              <p className="step-desc">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* KATILIM ÇAĞRISI BÖLÜMÜ */}
+      <section className="join-section">
+        <div className="join-card">
+          <div className="join-left">
+            <div className="join-icon-wrapper">
+              <Users size={32} />
+            </div>
+            <div className="join-text">
+              <h3>SEN DE ARENADA YERİNİ AL!</h3>
+              <p>Oyla, yorum yap, destekle ve kazananlar arasında sen de ol!</p>
+            </div>
+          </div>
+
+          <div className="join-right">
+            <div className="join-avatars">
+              {participants.map((avatar, idx) => (
+                <Image 
+                  key={idx}
+                  src={avatar}
+                  alt="Participant"
+                  width={45}
+                  height={45}
+                  className="join-avatar"
+                />
+              ))}
+              <div className="join-count">+124</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PODYUM (ANLIK SIRALAMA) */}
       {!isLoading && topThree.length > 0 && (
         <section className="podium-section">
+          <div className="podium-header">
+            <strong>🏆 Anlık Sıralama</strong>
+            <p>Oy sayısına göre anlık olarak değişir</p>
+          </div>
+
           <div className="podium-container">
             {[topThree[1], topThree[0], topThree[2]].map((item, idx) => {
               if (!item) return null
               const isGold = item.id === topThree[0].id
+
               return (
-                <div key={item.id} className={`podium-card ${isGold ? 'gold' : idx === 0 ? 'silver' : 'bronze'}`} onClick={() => setSelectedUser(item)}>
+                <div 
+                  key={item.id} 
+                  className={`podium-card ${isGold ? 'gold' : idx === 0 ? 'silver' : 'bronze'}`} 
+                  onClick={() => setSelectedUser(item)}
+                >
                   {isGold && <div className="winner-crown"><Award size={40} /></div>}
-                  <div className="rank-label">#{isGold ? '1' : idx === 0 ? '2' : '3'}</div>
-                  <Image src={item.coffee.image} alt="Winner" width={isGold ? 160 : 120} height={isGold ? 160 : 120} className="podium-img" />
+
+                  <div className="rank-label">
+                    #{isGold ? '1' : idx === 0 ? '2' : '3'}
+                  </div>
+
+                  <Image 
+                    src={item.coffee.image} 
+                    alt="Winner" 
+                    width={isGold ? 160 : 120} 
+                    height={isGold ? 160 : 120} 
+                    className="podium-img" 
+                  />
+
                   <div className="podium-info">
                     <strong>{item.coffee.name}</strong>
                     <span>@{item.userName}</span>
+
+                    {isGold && (
+                      <div style={{ fontSize: "0.8rem", color: "#ffcc00", marginTop: "4px" }}>
+                        Şu an lider
+                      </div>
+                    )}
                   </div>
                 </div>
               )
@@ -195,19 +389,17 @@ export default function KahveArenasi() {
             ))
           ) : (
             posts.map((post) => (
-              
+
               <div key={post.id} className="arena-item-card">
                 <div className="card-image-wrapper">
                   <Image src={post.coffee.image} alt={post.coffee.name} width={400} height={300} className="card-main-img" />
-                  
-                  {/* SİLME BUTONU EKLEDİM */}
+
                   <button className="delete-arena-post" onClick={(e) => { e.stopPropagation(); handleDeletePost(post.id); }}>
                     <Trash2 size={18} />
                   </button>
-                  
 
                   <div className="score-badge"><Zap size={14} /> {post.arenaScore} Puan</div>
-                  <button className="copy-recipe-btn" onClick={(e) => { e.stopPropagation(); copyRecipe(post.coffee.details) }}>
+                  <button className="copy-recipe-btn" onClick={(e) => { e.stopPropagation(); copyRecipe(post) }}>
                     <ShoppingCart size={18} />
                   </button>
                 </div>
@@ -265,7 +457,12 @@ export default function KahveArenasi() {
             <div className="drawer-content">
               <div className="drawer-header">
                 <div className="drawer-avatar-bg">
-                  <Image src={selectedUser.userAvatar || "/profilikon.png"} alt="User" width={80} height={80} />
+                  <Image 
+                    src={selectedUser.userAvatar || "/profilikon.png"} 
+                    alt="User" 
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
                 </div>
                 <h2>@{selectedUser.userName}</h2>
                 <div className="barista-rank"><Star size={14} fill="#ffcc00" color="#ffcc00" /> Master Barista</div>

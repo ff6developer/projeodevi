@@ -49,6 +49,13 @@
   width: 45%;
   position: relative;
   z-index: 3;
+  display: flex;
+  irection: column;
+  align-items: flex-start;
+  padding: 60px 50px;
+  overflow: visible;
+  height: auto;
+  min-height: 100vh;
 }
 
 .hero-title {
@@ -107,6 +114,84 @@
   margin-top: 5px;
 }
 
+/* ===== KAHVE İSMİ INPUT - POZİSYON AYARI ===== */
+.coffee-name-input-wrapper {
+  position: fixed;
+  left: 120px;
+  top: 65vh;
+  width: 400px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+  z-index: 3;
+}
+
+.coffee-name-input-wrapper:focus-within {
+  border-color: rgba(255, 213, 158, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.coffee-name-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8em;
+  color: #ffd59e;
+  margin-bottom: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.coffee-name-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1em;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.coffee-name-input:focus {
+  border-color: #ffd59e;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 213, 158, 0.1);
+}
+
+.coffee-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.coffee-name-hint {
+  display: block;
+  text-align: right;
+  font-size: 0.7em;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 6px;
+}
+
+/* Kilitli isim gösterimi */
+.locked-name {
+  opacity: 0.8;
+  border-color: rgba(255, 215, 0, 0.15);
+  background: rgba(255, 215, 0, 0.03);
+}
+
+.locked-coffee-name {
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  color: #ffd59e;
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
 /* ===== FİNAL ADIMI (SİPARİŞ BUTONU KONUMU) ===== */
 .final-arena-step {
   position: fixed;
@@ -127,10 +212,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .coffee-right::-webkit-scrollbar {
-  width: 0;
+  display: none;
 }
 
 .config-section {
@@ -218,7 +305,7 @@
 .arena-btn {
   /* Butonu sol alt köşeye sabitliyoruz */
   position: fixed; 
-  bottom:130px;
+  bottom: 80px;
   left: 130px;
   
   /* Diğer elemanların (sol panel metinlerinin) üzerine binmemesi için */
@@ -263,47 +350,23 @@
   .hero-sub,
   .arena-stats-container,
   .final-arena-step,
-  .lab-badge {
+  .lab-badge,
+  .coffee-name-input-wrapper {
     left: 40px;
     width: 320px;
   }
+  .arena-btn {
+    left: 50px;
+    bottom: 60px;
+  }
 }
 
-/* Bu kısmı CSS dosyanızdaki .section-header ile değiştirin */
-.section-header {
-  display: flex;             /* Grid yerine Flex kullanıyoruz */
-  justify-content: center;   /* Yatayda tam merkeze alır */
-  align-items: baseline;     /* Yazıların alt çizgisini hizalar (daha düzgün durur) */
-  gap: 8px;
-  margin-bottom: 25px;       /* Biraz daha nefes alması için artırıldı */
-  width: 100%;
-  text-align: center;
-}
-
-.section-title {
-  margin: 0;
-  font-size: 32px;           /* Mevcut boyutunuz kalsın */
-  color: white;
-  /* white-space: nowrap; (Zaten eklemişsiniz, kalsın) */
-}
-
-.required-star {
-  color: #ff4d4d;
-  font-weight: bold;
-}
-
-.required-text {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.8rem;
-  font-style: italic;
-  white-space: nowrap; /* Yazının her zaman tek satır kalmasını sağlar */
-}
-
+/* ===== SECTION HEADER ===== */
 .section-header {
   display: flex;
-  flex-direction: column; /* İçindekileri alt alta dizer */
-  align-items: center;    /* Her şeyi yatayda ortalar */
-  gap: 4px;               /* Başlık ile alt yazı arasındaki boşluk */
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   margin-bottom: 25px;
   width: 100%;
 }
@@ -314,19 +377,71 @@
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 8px; /* Yazı ile yıldız arasındaki boşluk */
+  gap: 8px;
 }
 
 .required-star {
   color: #ff4d4d;
-  font-size: 24px; /* Yıldızı biraz belirginleştirebilirsin */
+  font-weight: bold;
+  font-size: 24px;
 }
 
 .required-text {
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.85rem;
   font-style: italic;
-  display: block; /* Tam satır kaplamasını sağlar */
+  display: block;
 }
 
+/* 🔒 KİLİTLİ TARİF STİLLERİ */
+.milk-item.locked {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
 
+.milk-item.locked.active {
+  opacity: 1;
+  background: rgba(255, 213, 158, 0.12) !important;
+  border: 2px solid #ffd59e !important;
+  pointer-events: none;
+}
+
+.milk-item.locked.active svg {
+  margin-left: 8px;
+  color: #ffd59e;
+}
+
+.locked-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 213, 158, 0.12);
+  border: 1px solid rgba(255, 213, 158, 0.25);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  color: #ffd59e;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.locked-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 213, 158, 0.08);
+  border-left: 3px solid #ffd59e;
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  margin: 15px 0;
+  color: #ffd59e;
+  font-size: 0.85rem;
+}
+
+.arena-stat-box.discount-box {
+  background: rgba(74, 222, 128, 0.08) !important;
+  border: 1px solid rgba(74, 222, 128, 0.25) !important;
+}

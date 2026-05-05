@@ -1,16 +1,17 @@
 "use client"
 
+import PostCard from "@/components/PostCards"
 import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import {
-  Camera, Plus, Share2, Trophy, Zap, X, LogOut, Image as ImageIcon
+  Camera, Plus, Share2, Trophy, Zap, X, LogOut, Image as ImageIcon, Trash2
 } from "lucide-react"
 
 import "../../styles/profil.css"
 
-export default function Page() {
 
+export default function Page() {
   const router = useRouter()
 
   const [user, setUser] = useState<{name: string; email: string} | null>(null)
@@ -120,7 +121,10 @@ export default function Page() {
     const newPost = {
       id: Date.now(),
       text: postText,
-      date: new Date().toLocaleString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+      date: new Date().toLocaleString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit"
+      }),
       coffee: {
         ...selectedCoffee,
         name: arenaCoffeeName,
@@ -133,18 +137,45 @@ export default function Page() {
     setPosts(updated)
     localStorage.setItem("userPosts", JSON.stringify(updated))
 
+    const arenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
+    const updatedArena = [newPost, ...arenaPosts]
+    localStorage.setItem("arenaPosts", JSON.stringify(updatedArena))
+
     setPostText("")
     setArenaCoffeeName("")
     setArenaCoffeeImage(null)
   }
 
   const deletePost = useCallback((id: number) => {
+    const confirmDelete = window.confirm("Bu kahveyi silmek istediğine emin misin?")
+    if (!confirmDelete) return
+
+    // PROFİLDEN SİL
     setPosts(prev => {
       const filtered = prev.filter(p => p.id !== id)
       localStorage.setItem("userPosts", JSON.stringify(filtered))
       return filtered
     })
+
+    // ARENADAN DA SİL
+    const arenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
+    const updatedArena = arenaPosts.filter((p: any) => p.id !== id)
+    localStorage.setItem("arenaPosts", JSON.stringify(updatedArena))
   }, [])
+
+  // ☕ KAHVE SİLME FONKSİYONU
+  const deleteCoffee = useCallback((coffeeId: number, e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!confirm("Bu kahveyi silmek istediğine emin misin?")) return
+
+    const updatedCoffees = coffees.filter(c => c.id !== coffeeId)
+    localStorage.setItem("coffees", JSON.stringify(updatedCoffees))
+    setCoffees(updatedCoffees)
+
+    if (selectedCoffee?.id === coffeeId) {
+      setSelectedCoffee(null)
+    }
+  }, [coffees, selectedCoffee])
 
   if (!user) return (
     <div className="loading-screen"><h2>Yükleniyor...</h2></div>
@@ -260,19 +291,46 @@ export default function Page() {
           </div>
 
           <div className={`post-box ${!lastDesign ? "locked-box" : ""}`}>
-            
+
             <p>Kahve Seç:</p>
 
             <div className="coffee-select-list">
               {coffees.map((coffee) => (
-                <button
+                <div
                   key={coffee.id}
-                  className={`coffee-select-btn ${selectedCoffee?.id === coffee.id ? "selected" : ""}`}
-                  onClick={() => setSelectedCoffee(coffee)}
+                  className={`coffee-select-wrapper ${selectedCoffee?.id === coffee.id ? "selected" : ""}`}
                 >
-                  <div className="coffee-select-name">{coffee.name}</div>
-                  <div className="coffee-select-score">{coffee.score} puan</div>
-                </button>
+                  <button
+                    className="coffee-select-btn"
+                    onClick={() => setSelectedCoffee(coffee)}
+                  >
+                    <div className="coffee-select-header">
+                      <div className="coffee-select-name">{coffee.name}</div>
+                      <div className="coffee-select-score">{coffee.score} puan</div>
+                    </div>
+                    <div className="coffee-select-details">
+                      <span className="detail-tag">{coffee.details?.milkType?.name || "Süt yok"}</span>
+                      <span className="detail-tag">{coffee.details?.beanType?.name || "Çekirdek yok"}</span>
+                      <span className="detail-tag">{coffee.details?.foam?.name || "Köpük yok"}</span>
+                      <span className="detail-tag">{coffee.details?.cupType?.name || "Bardak yok"}</span>
+                      <span className="detail-tag">{coffee.details?.syrup?.name || "Şurup yok"}</span>
+                      <span className="detail-tag">{coffee.details?.spice?.name || "Baharat yok"}</span>
+                      <span className="detail-tag">{coffee.details?.sweetener?.name || "Tatlandırıcı yok"}</span>
+                      <span className="detail-tag">{coffee.details?.technique?.name || "Teknik yok"}</span>
+                    </div>
+                    <div className="coffee-select-footer">
+                      <span className="coffee-price">{coffee.total} TL</span>
+                      {coffee.isFromArena && <span className="arena-badge">🏆 Arena</span>}
+                    </div>
+                  </button>
+                  <button 
+                    className="delete-coffee-btn"
+                    onClick={(e) => deleteCoffee(coffee.id, e)}
+                    title="Kahveyi Sil"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               ))}
             </div>
 
@@ -323,45 +381,15 @@ export default function Page() {
           {/* POST FEED */}
           <div className="post-feed">
             {posts.map((p) => (
-              <div key={p.id} className="post-card arena-card">
-
-                <header className="post-header">
-                  <div className="post-user-info">
-                    <Image
-                      src={avatar}
-                      width={45}
-                      height={45}
-                      className="post-user-avatar"
-                      alt="avatar"
-                    />
-                    <div>
-                      <span className="post-user-name">{user.name}</span>
-                      <span className="post-date">{p.date}</span>
-                    </div>
-                  </div>
-
-                  <button className="delete-post" onClick={() => deletePost(p.id)}>
-                    <X size={18} />
-                  </button>
-                </header>
-
-                <p className="post-text">{p.text}</p>
-
-                {p.coffee && (
-                  <div className="post-main-image-wrapper">
-                    <Image
-                      src={p.coffee.image}
-                      alt={p.coffee.name}
-                      width={600}
-                      height={400}
-                      className="post-main-image"
-                    />
-                  </div>
-                )}
-
-              </div>
+              <PostCard
+                key={p.id}
+                post={p}
+                user={user}
+                avatar={avatar}
+                onDelete={deletePost}
+              />
             ))}
-          </div> 
+          </div>
 
         </section>
 
@@ -369,4 +397,3 @@ export default function Page() {
     </div>
   )
 }
-//deneme

@@ -53,6 +53,9 @@
   border-radius: 50%;
   cursor: pointer;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logout-button:hover {
@@ -76,6 +79,7 @@
   cursor: pointer;
   transition: var(--transition);
   box-shadow: 0 15px 35px rgba(197, 138, 92, 0.3);
+  position: relative;
 }
 
 .profil-avatar {
@@ -88,7 +92,7 @@
 
 .avatar-overlay {
   position: absolute;
-  inset: 10px;
+  inset: 6px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
   display: flex;
@@ -96,6 +100,7 @@
   justify-content: center;
   opacity: 0;
   transition: var(--transition);
+  border: 4px solid #000;
 }
 
 .avatar-upload:hover { transform: scale(1.03); }
@@ -132,6 +137,7 @@
   cursor: pointer;
   font-weight: 700;
   transition: var(--transition);
+  font-size: 14px;
 }
 
 .edit-profile-btn:hover {
@@ -174,6 +180,14 @@
   font-weight: 800;
 }
 
+.edit-modal label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+
 .edit-modal input {
   width: 100%;
   padding: 12px;
@@ -184,6 +198,7 @@
   margin-bottom: 12px;
   outline: none;
   transition: 0.25s;
+  font-size: 14px;
 }
 
 .edit-modal input:focus {
@@ -193,6 +208,7 @@
 .edit-buttons {
   display: flex;
   gap: 12px;
+  margin-top: 10px;
 }
 
 .save-edit-btn {
@@ -204,6 +220,8 @@
   border: none;
   cursor: pointer;
   transition: var(--transition);
+  color: #000;
+  font-size: 14px;
 }
 
 .save-edit-btn:hover {
@@ -220,122 +238,760 @@
   cursor: pointer;
   color: #aaa;
   transition: var(--transition);
+  font-size: 14px;
 }
 
 .cancel-edit-btn:hover {
   background: #333;
 }
 
-/* ============================ */
-/* ⭐ KAHVE SEÇME YENİ BUTONLAR ⭐ */
-/* ============================ */
+/* ===================== */
+/*   ⭐ PROFİL BİO ⭐   */
+/* ===================== */
 
-.coffee-select-list {
+.profil-bio {
+  width: 100%;
+  max-width: 400px;
+  min-height: 110px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(145deg, #000000, #161414);
+  color: #e2e8f0;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  transition: all 0.25s ease;
+  margin-top: 20px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.profil-bio::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+.profil-bio:focus {
+  border-color: #c08457;
+  box-shadow: 0 0 0 1px rgba(192,132,87,0.4),
+              0 0 20px rgba(192,132,87,0.15);
+}
+
+/* ===================== */
+/*   ⭐ PROFİL İSTATİSTİKLER ⭐   */
+/* ===================== */
+
+.profil-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid var(--border-light);
+}
+
+.stat-item {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.coffee-select-btn {
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: 18px;
-  border: 1px solid var(--border-light);
-  background: rgba(255,255,255,0.02);
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  transition: var(--transition);
-  font-size: 16px;
-  font-weight: 600;
+  gap: 6px;
 }
 
-.coffee-select-btn:hover {
-  background: rgba(197,138,92,0.08);
-  border-color: var(--primary-coffee);
-  transform: translateY(-3px);
-}
-
-.coffee-select-btn.selected {
-  background: rgba(197,138,92,0.2);
-  border-color: var(--primary-coffee);
-  box-shadow: 0 8px 25px rgba(197,138,92,0.25);
-}
-
-.coffee-select-name { color: #fff; }
-.coffee-select-score { color: var(--primary-coffee); font-weight: 700; }
-
-/* ===================== */
-/* ⭐ PAYLAŞ BUTONU YENİ ⭐ */
-/* ===================== */
-
-.share-btn {
-  background: linear-gradient(135deg, #c58a5c, #8b5d39);
-  color: white;
-  padding: 14px 40px;
-  border-radius: 50px;
-  border: none;
-  cursor: pointer;
+.stat-item strong {
+  font-size: 24px;
   font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-icon {
+  color: var(--arena-gold);
+}
+
+.stat-item span {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ============================ */
+/* ⭐ POST / ARENA BÖLÜMÜ ⭐ */
+/* ============================ */
+
+.post-section {
+  margin-top: 40px;
+}
+
+.section-title-wrapper h2 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 16px;
+}
+
+/* ===== POST BOX ===== */
+.post-box {
+  background: linear-gradient(145deg, #0f0f0f, #050505);
+  border: 1px solid var(--border-light);
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
   transition: var(--transition);
 }
 
-.share-btn:hover {
+.post-box:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(197, 138, 92, 0.4);
 }
 
-.share-btn.disabled {
-  background: #333 !important;
-  color: #666;
-  cursor: not-allowed;
-  box-shadow: none !important;
+.post-box > p {
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #aaa;
+  font-size: 14px;
 }
 
-/* --- ARENA HAZIRLIK (mevcut kod) --- */
+.locked-box {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+
+/* ===== COFFEE SEÇİM LİSTESİ ===== */
+.coffee-select-list {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.coffee-select-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.coffee-select-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.coffee-select-list::-webkit-scrollbar-thumb {
+  background: var(--primary-coffee);
+  border-radius: 10px;
+}
+
+/* ===== COFFEE SEÇİM WRAPPER ===== */
+.coffee-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.coffee-select-wrapper.selected .coffee-select-btn {
+  border: 2px solid var(--primary-coffee);
+  background: linear-gradient(135deg, rgba(197,138,92,0.18), rgba(0,0,0,0.4));
+  box-shadow: 0 8px 25px rgba(197,138,92,0.25);
+}
+
+/* ===== COFFEE SEÇİM BUTONU ===== */
+.coffee-select-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  position: relative;
+  transition: 0.2s;
+  color: #fff;
+}
+
+.coffee-select-btn:hover {
+  border-color: var(--primary-coffee);
+  background: rgba(197,138,92,0.08);
+  transform: translateY(-2px);
+}
+
+/* SEÇİLİ DURUM - İÇERİK */
+.coffee-select-btn.selected::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15%;
+  height: 70%;
+  width: 3px;
+  background: var(--primary-coffee);
+  border-radius: 10px;
+}
+
+/* ===== KAHVE İSİM & SKOR ===== */
+.coffee-select-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.coffee-select-name {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #fff;
+}
+
+.coffee-select-score {
+  color: var(--primary-coffee);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.coffee-select-wrapper.selected .coffee-select-score {
+  color: var(--arena-gold);
+}
+
+/* ===== KAHVE DETAY TAGLERİ ===== */
+.coffee-select-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+}
+
+.detail-tag {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.72em;
+  color: #aaa;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: 0.2s;
+}
+
+.coffee-select-btn:hover .detail-tag {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ===== KAHVE FİYAT & ARENA BADGE ===== */
+.coffee-select-footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.coffee-price {
+  font-weight: 700;
+  color: #4ade80;
+  font-size: 0.95em;
+}
+
+.arena-badge {
+  font-size: 0.78em;
+  background: rgba(255, 215, 0, 0.15);
+  color: var(--arena-gold);
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+/* ===== KAHVE SİLME BUTONU ===== */
+.delete-coffee-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 14px;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.delete-coffee-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+  transform: scale(1.05);
+}
+
+/* ===== ARENA HAZIRLIK ALANI ===== */
 .arena-preparation-area {
-  background: rgba(197, 138, 92, 0.05);
-  border: 1px solid rgba(197, 138, 92, 0.2);
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 18px;
+  padding: 14px;
 }
 
 .arena-form-row {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
 }
 
+/* KAHVE İSMİ INPUT */
 .arena-coffee-name-input {
   flex: 1;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 12px 18px;
+  background: #0a0a0a;
+  border: 1px solid var(--border-light);
   border-radius: 12px;
+  padding: 12px;
   color: #fff;
+  transition: 0.2s;
+  font-size: 14px;
+  outline: none;
+}
+
+.arena-coffee-name-input:focus {
+  border-color: var(--primary-coffee);
+}
+
+.arena-coffee-name-input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+
+/* GÖRSEL YÜKLEME BUTONU */
+.arena-mini-upload {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px dashed var(--border-light);
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.arena-mini-upload:hover {
+  border-color: var(--primary-coffee);
+  background: rgba(197,138,92,0.1);
+}
+
+.arena-mini-upload.has-image {
+  border: 1px solid var(--primary-coffee);
+  border-style: solid;
+}
+
+.arena-mini-upload img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* ===== POST TEXTAREA ===== */
+.post-input {
+  width: 100%;
+  margin-top: 14px;
+  background: #0a0a0a;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 14px;
+  color: #fff;
+  resize: none;
+  min-height: 90px;
+  transition: 0.2s;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.post-input:focus {
+  border-color: var(--primary-coffee);
+}
+
+.post-input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+
+.post-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== PAYLAŞ BUTONU ===== */
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 14px;
+  background: var(--primary-coffee);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.share-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(197,138,92,0.3);
+}
+
+.share-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ============================ */
+/* ⭐ POST FEED / GÖNDERİ AKIŞI ⭐ */
+/* ============================ */
+
+.post-feed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.post-card {
+  width: 100%;
+  max-width: 650px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 25px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  transition: var(--transition);
+  animation: fadeIn 0.6s ease-out;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-user-avatar {
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+}
+
+.post-user-name {
+  font-weight: 700;
+  display: block;
   font-size: 15px;
 }
 
-/* --- POST FEED, HERO, DEVLER vb. TÜM ORİJİNAL KODUN AYNEN KALMASI --- */
-/* (Tamamını gönderdin, yukarıdaki eklemelerle tamamen uyumludur.) */
+.post-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.post-text {
+  margin: 14px 0;
+  line-height: 1.6;
+  color: #e2e8f0;
+  font-size: 14px;
+}
+
+/* Kahve Görseli */
+.post-main-image-wrapper {
+  margin-top: 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+.post-main-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* Kahve Bilgisi Kartı */
+.post-coffee-info {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(197,138,92,0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(197,138,92,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-coffee-name {
+  font-weight: 700;
+  color: var(--primary-coffee);
+  font-size: 15px;
+}
+
+.post-arena-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--arena-gold);
+  font-size: 14px;
+}
+
+/* Silme Butonu */
+.delete-post {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-post:hover {
+  color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+}
+
+/* ============================ */
+/* ⭐ ÖNERİLEN KULLANICILAR ⭐ */
+/* ============================ */
+
+.suggested-users {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+}
+
+.suggested-users h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #aaa;
+}
+
+.suggested-list {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.suggested-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.suggested-user:hover {
+  transform: translateY(-3px);
+}
+
+.suggested-user img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+  object-fit: cover;
+  transition: 0.2s;
+}
+
+.suggested-user:hover img {
+  border-color: var(--primary-coffee);
+}
+
+.suggested-user span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #aaa;
+}
+
+/* ============================ */
+/* ⭐ YÜKLENİYOR EKRANI ⭐ */
+/* ============================ */
+
+.loading-screen {
+  background: radial-gradient(circle at top, #1a1a1a 0%, #050505 100%);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-coffee);
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.loading-screen h2 {
+  font-size: 24px;
+  font-weight: 700;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ============================ */
+/* ⭐ ANİMASYONLAR ⭐ */
+/* ============================ */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.loading-screen {
-  background: #000;
-  height: 100vh;
+/* ============================ */
+/* ⭐ RESPONSIVE TASARIM ⭐ */
+/* ============================ */
+
+@media (max-width: 768px) {
+  .profil-page {
+    padding: 30px 15px;
+  }
+
+  .profil-hero {
+    padding: 40px 20px;
+    border-radius: 28px;
+  }
+
+  .profil-name {
+    font-size: 32px;
+  }
+
+  .avatar-upload {
+    width: 140px;
+    height: 140px;
+  }
+
+  .profil-stats {
+    gap: 30px;
+  }
+
+  .stat-item strong {
+    font-size: 20px;
+  }
+
+  .post-box {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .edit-modal {
+    width: 90%;
+    max-width: 340px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profil-name {
+    font-size: 28px;
+  }
+
+  .profil-hero {
+    padding: 30px 15px;
+  }
+
+  .logout-button {
+    top: 15px;
+    right: 15px;
+    padding: 10px;
+  }
+
+  .arena-form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .arena-mini-upload {
+    align-self: flex-end;
+  }
+}
+
+/* ===== POST KART İÇERİKLERİ ===== */
+.post-coffee-details {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.post-ingredients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.post-ingredient-tag {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 0.72em;
+  color: #aaa;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.post-ingredient-tag:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.post-coffee-info {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: rgba(197,138,92,0.08);
+  border-radius: 14px;
+  border: 1px solid rgba(197,138,92,0.15);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.post-coffee-name {
+  font-weight: 700;
   color: var(--primary-coffee);
+  font-size: 15px;
+  display: block;
+  margin-bottom: 4px;
 }

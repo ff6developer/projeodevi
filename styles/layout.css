@@ -192,12 +192,7 @@ html, body {
 }
 
 /* ===== MAIN ===== */
-.main {
-  flex: 1;
-  width: 100%;
-  background: #080808;
-  display: flex;
-}
+
 
 /* ===== FOOTER ===== */
 .footer {
