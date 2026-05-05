@@ -3,9 +3,11 @@
 import { useRouter } from "next/navigation"
 import AuthForm from "../../components/AuthForm"
 import "../../styles/login.css"
+import { useToast } from "../../components/ToastProvider"
 
 export default function Login() {
   const router = useRouter()
+  const toast = useToast()
 
   return (
     <AuthForm
@@ -43,7 +45,7 @@ export default function Login() {
       onSuccess={(data) => {
         localStorage.setItem("user", JSON.stringify(data.user))
         localStorage.setItem("isLoggedIn", "true")
-        alert(`Hoş geldin, ${data.user.name}!`)
+        toast.success(`Hoş geldin, ${data.user.name}!`)
         router.push("/profil")
       }}
       onError={(data) => data.message || "Giriş başarısız"}

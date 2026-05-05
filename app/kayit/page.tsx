@@ -3,9 +3,11 @@
 import { useRouter } from "next/navigation"
 import AuthForm from "../../components/AuthForm"
 import "../../styles/login.css"
+import { useToast } from "../../components/ToastProvider"
 
 export default function Signin() {
   const router = useRouter()
+  const toast = useToast()
 
   return (
     <AuthForm
@@ -42,7 +44,7 @@ export default function Signin() {
       submitButtonText="Kayıt Ol"
       noValidate={true}
       onSuccess={() => {
-        alert("Kayıt başarılı ✔")
+        toast.success("Kayıt başarılı ✔")
         router.push("/giris")
       }}
       onError={(data) => data.message || "Bir hata oluştu"}

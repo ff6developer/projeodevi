@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import "../../styles/menu.css"
+import { useToast } from "../../components/ToastProvider";
 
 type KategoriTipi = 'sicak' | 'soguk' | 'tatli';
 
@@ -51,6 +52,7 @@ function StarRating({ rating, onRatingChange, saltOkunur = false }: {
 
 export default function MenuPage() {
   const router = useRouter();
+  const toast = useToast();
   const [kategori, setKategori] = useState<KategoriTipi>('sicak');
   const [tumYorumlar, setTumYorumlar] = useState<Record<number, Yorum[]>>({});
   const [yeniYorum, setYeniYorum] = useState("");
@@ -108,7 +110,7 @@ export default function MenuPage() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      alert("Görsel boyutu 2MB'dan küçük olmalıdır.");
+      toast.warning("Görsel boyutu 2MB'dan küçük olmalıdır.");
       return;
     }
 

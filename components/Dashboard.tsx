@@ -25,18 +25,18 @@ export default function Dashboard({
       )}
 
       {/* CLOCK */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        marginBottom: '16px'
-      }}>
-        <span>
-          {currentTime.toLocaleString('tr-TR')}
-        </span>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "16px"
+        }}
+      >
+        <span>{currentTime.toLocaleString("tr-TR")}</span>
       </div>
 
       {/* STATS */}
-      <div className={`stats-grid ${isMobile ? 'mobile' : ''}`}>
+      <div className={`stats-grid ${isMobile ? "mobile" : ""}`}>
         {[
           { label: "Günlük Gelir", value: `₺${stats.dailyRevenue}`, icon: "💰" },
           { label: "Toplam Gelir", value: `₺${stats.totalRevenue}`, icon: "📈" },
@@ -57,7 +57,10 @@ export default function Dashboard({
       <div className="recent-orders">
         <div className="recent-orders-header">
           <h3>Son Siparişler</h3>
-          <button onClick={() => setActiveTab("orders")}>
+          <button
+            onClick={() => setActiveTab("orders")}
+            className="view-all-btn"
+          >
             Tümü →
           </button>
         </div>

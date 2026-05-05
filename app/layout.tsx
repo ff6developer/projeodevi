@@ -13,6 +13,7 @@ import {
   UserCircle 
 } from "lucide-react";
 import "../styles/layout.css";
+import { ToastProvider } from "../components/ToastProvider";
 
 export default function RootLayout({
   children,
@@ -60,7 +61,8 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <body>
-        <div className="layout">
+        <ToastProvider>
+          <div className="layout">
 
           <header className="header">
             <Image 
@@ -154,7 +156,8 @@ export default function RootLayout({
   </div>
 </footer>
 
-        </div>
+          </div>
+        </ToastProvider>
       </body>
     </html>
   );

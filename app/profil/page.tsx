@@ -9,10 +9,12 @@ import {
 } from "lucide-react"
 
 import "../../styles/profil.css"
+import { useToast } from "../../components/ToastProvider"
 
 
 export default function Page() {
   const router = useRouter()
+  const toast = useToast()
 
   const [user, setUser] = useState<{name: string; email: string} | null>(null)
   const [bio, setBio] = useState("")
@@ -114,7 +116,7 @@ export default function Page() {
 
   const sharePost = () => {
     if (!postText || !selectedCoffee || !arenaCoffeeName || !arenaCoffeeImage) {
-      alert("Tüm alanları doldurun!")
+      toast.warning("Tüm alanları doldurun!")
       return
     }
 

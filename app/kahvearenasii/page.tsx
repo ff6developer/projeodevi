@@ -9,9 +9,11 @@ import {
   Sparkles, Coffee, Heart, TrendingUp, Gift, Users
 } from "lucide-react"
 import "../../styles/kahvearenasi.css"
+import { useToast } from "../../components/ToastProvider"
 
 export default function KahveArenasi() {
   const router = useRouter()
+  const toast = useToast()
 
   const [posts, setPosts] = useState<any[]>([])
   const [votedPosts, setVotedPosts] = useState<number[]>([]) 
@@ -157,7 +159,7 @@ export default function KahveArenasi() {
       arenaScore: post.arenaScore || 0
     }))
 
-    alert("Tarif laboratuvara aktarıldı! %15 indirim kazandın! 🎉")
+    toast.success("Tarif laboratuvara aktarıldı! %15 indirim kazandın!")
     router.push("/kahveniolustur")
   }
 

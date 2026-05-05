@@ -4,12 +4,14 @@ import "../../styles/kahveniolustur.css"
 import { useRouter } from "next/navigation"
 import { Beaker, Zap, Trophy, Lock, Unlock } from "lucide-react"
 import CoffeeRight from "../../components/CoffeeRight"
+import { useToast } from "../../components/ToastProvider"
 
 export default function KahveniOlustur() {
   const [arenaCoffeeName, setArenaCoffeeName] = useState("")
   const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
   const [customCoffeeName, setCustomCoffeeName] = useState("")
   const router = useRouter()
+  const toast = useToast()
   const [started, setStarted] = useState(false)
 
   // 🔒 YENİ: Kilit ve indirim state'leri
@@ -130,7 +132,7 @@ export default function KahveniOlustur() {
     if (!allSelected) return;
     const loggedInUser = localStorage.getItem("user");
     if (!loggedInUser) {
-      alert("Sipariş vermek için önce giriş yapmalısın!");
+      toast.warning("Sipariş vermek için önce giriş yapmalısın!")
       router.push("/giris");
       return;
     }
@@ -169,7 +171,7 @@ export default function KahveniOlustur() {
     const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]");
     localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]));
 
-    alert(isLocked ? "Siparişin alındı! %15 Arena İndirimi uygulandı ☕" : "Siparişin alındı! ☕");
+    toast.success(isLocked ? "Siparişin alındı! %15 Arena İndirimi uygulandı" : "Siparişin alındı!")
     
     // Input'u temizle
     setCustomCoffeeName("")

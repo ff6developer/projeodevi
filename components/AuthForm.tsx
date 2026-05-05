@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { useToast } from "./ToastProvider"
 
 interface Field {
   id: string
@@ -53,8 +54,10 @@ export default function AuthForm({
   noValidate = false
 }: AuthFormProps) {
   const router = useRouter()
+  const toast = useToast()
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [blur, setBlur] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const handleChange = (id: string, value: string) => {
     setFormData(prev => ({ ...prev, [id]: value }))
@@ -63,10 +66,22 @@ export default function AuthForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    const nextErrors: Record<string, string> = {}
+    for (const field of fields) {
+      if (field.required && !String(formData[field.id] ?? "").trim()) {
+        nextErrors[field.id] = `${field.label} zorunludur`
+      }
+    }
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) {
+      toast.warning("Lütfen zorunlu alanları doldurun.")
+      return
+    }
+
     if (adminCheck) {
       if (formData.email === adminCheck.email && formData.password === adminCheck.password) {
         localStorage.setItem(adminCheck.storageKey, adminCheck.storageValue)
-        alert(adminCheck.alertMessage)
+        toast.success(adminCheck.alertMessage)
         router.push(adminCheck.redirect)
         return
       }
@@ -82,7 +97,7 @@ export default function AuthForm({
       const data = await res.json()
 
       if (!res.ok) {
-        alert(onError ? onError(data) : (data.message || "Bir hata oluştu"))
+        toast.error(onError ? onError(data) : (data.message || "Bir hata oluştu"))
         return
       }
 
@@ -90,7 +105,7 @@ export default function AuthForm({
 
     } catch (err) {
       console.error("Bağlantı Hatası:", err)
-      alert("Server'a ulaşılamıyor. Lütfen backend terminalini kontrol edin!")
+      toast.error("Server'a ulaşılamıyor. Lütfen backend terminalini kontrol edin!")
     }
   }
 
@@ -117,7 +132,17 @@ export default function AuthForm({
                 onFocus={() => setBlur(true)}
                 onBlur={() => setBlur(false)}
                 required={field.required}
+                aria-invalid={Boolean(errors[field.id])}
+                aria-describedby={errors[field.id] ? `${field.id}-error` : undefined}
               />
+              {errors[field.id] && (
+                <div
+                  id={`${field.id}-error`}
+                  style={{ marginTop: 6, fontSize: 12, color: "rgba(239, 68, 68, 0.95)" }}
+                >
+                  {errors[field.id]}
+                </div>
+              )}
             </div>
           ))}
 

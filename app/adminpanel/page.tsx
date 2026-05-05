@@ -4,6 +4,8 @@ import { useEffect, useState, useMemo } from "react"
 import "../../styles/adminpanel.css"
 import AdminSidebar from "../../components/AdminSidebar"
 import Dashboard from "../../components/Dashboard"
+import OrdersPanel from "../../components/OrdersPanel"
+import ProductsPanel from "../../components/ProductsPanel"
 
 
 type OrderDetails = {
@@ -277,13 +279,6 @@ export default function AdminPanel() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleTabChange = (tab: Tab) => {
-    setActiveTab(tab)
-    if (isMobile) {
-      setSidebarOpen(false)
-    }
-  }
-
   const openOrderDetail = (order: Order) => {
     setSelectedOrder(order)
     setOrderDetailOpen(true)
@@ -347,207 +342,33 @@ export default function AdminPanel() {
             />
           )}
 
-          {/* Orders Tab */}
           {activeTab === "orders" && (
-            <div>
-              {isMobile && (
-                <h2 className="page-title-mobile">Siparişler</h2>
-              )}
-
-              {/* Filters */}
-              <div className={`filters-row ${isMobile ? 'mobile' : ''}`}>
-                <div className="search-box">
-                  <span className="search-icon">🔍</span>
-                  <input
-                    type="text"
-                    placeholder="Sipariş numarası ara..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="search-input"
-                  />
-                </div>
-
-                <div className="filter-tabs">
-                  {["all", "Bekliyor", "Hazırlanıyor", "Hazır"].map(status => (
-                    <button
-                      key={status}
-                      onClick={() => setStatusFilter(status)}
-                      className={`filter-tab ${statusFilter === status ? 'active' : ''}`}
-                    >
-                      {status === "all" ? "Tümü" : status}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Orders List */}
-              <div className="orders-list">
-                {filteredOrders.map(order => {
-                  const statusConfig = getStatusConfig(order.status)
-                  return (
-                    <div key={order.id} className="order-card">
-                      {/* Order Header */}
-                      <div className="order-card-header">
-                        <div className="order-card-info">
-                          <div className="order-card-icon" style={{ background: statusConfig.bg }}>
-                            {statusConfig.icon}
-                          </div>
-                          <div>
-                            <h3 className="order-card-id">
-                              {order.coffeeName || `Sipariş #${order.id.toString().slice(-4)}`}
-                            </h3>
-                            <p className="order-card-date">{formatDate(order.date)}</p>
-                          </div>
-                        </div>
-
-                        <div className="order-card-meta">
-                          <div className="order-card-price">
-                            <p className="order-price-value">₺{order.totalPrice}</p>
-                            {order.originalPrice && order.originalPrice !== order.totalPrice && (
-                              <p className="order-price-original">₺{order.originalPrice}</p>
-                            )}
-                          </div>
-
-                          <div className="order-status-pill" style={{ background: statusConfig.bg }}>
-                            <span>{order.status}</span>
-                          </div>
-                          {order.isFromArena && (
-                            <span className="arena-badge-large">🏆 Arena %{order.discountApplied || 15} İndirim</span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Order Details */}
-                      <div className="order-card-details">
-                        {renderOrderDetails(order.details)}
-                      </div>
-
-                      {/* Order Score */}
-                      <div className="order-card-score">
-                        <div className="score-badge">
-                          <span>⭐</span>
-                          <span className="score-value">{order.score} Yaratıcılık</span>
-                        </div>
-                      </div>
-
-                      {/* Order Actions */}
-                      <div className="order-card-actions">
-                        <button
-                          onClick={() => updateStatus(order.id, "Hazırlanıyor")}
-                          disabled={order.status === "Hazırlanıyor"}
-                          className={`action-btn preparing ${order.status === "Hazırlanıyor" ? 'disabled' : ''}`}
-                        >
-                          <span>◐</span> {isMobile ? "Hazırla" : "Hazırlanıyor"}
-                        </button>
-
-                        <button
-                          onClick={() => updateStatus(order.id, "Hazır")}
-                          disabled={order.status === "Hazır"}
-                          className={`action-btn ready ${order.status === "Hazır" ? 'disabled' : ''}`}
-                        >
-                          <span>✓</span> Hazır
-                        </button>
-
-                        <button
-                          onClick={() => deleteOrder(order.id)}
-                          className="action-btn delete"
-                        >
-                          <span>🗑️</span> Sil
-                        </button>
-                      </div>
-                    </div>
-                  )
-                })}
-
-                {filteredOrders.length === 0 && (
-                  <div className="empty-state large">
-                    <p className="empty-icon">🔍</p>
-                    <p>
-                      {searchTerm || statusFilter !== "all" 
-                        ? "Sonuç bulunamadı"
-                        : "Henüz sipariş yok"}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
+            <OrdersPanel
+              filteredOrders={filteredOrders}
+              isMobile={isMobile}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              updateStatus={updateStatus}
+              deleteOrder={deleteOrder}
+              getStatusConfig={getStatusConfig}
+              formatDate={formatDate}
+              renderOrderDetails={renderOrderDetails}
+            />
           )}
 
-          {/* Products Tab */}
           {activeTab === "products" && (
-            <div>
-              {isMobile && (
-                <h2 className="page-title-mobile">Ürünler</h2>
-              )}
-
-              {/* Add Product Form */}
-              <div className="add-product-form">
-                <h3 className="form-heading">
-                  <span>➕</span> Yeni Ürün Ekle
-                </h3>
-
-                <div className={`form-row ${isMobile ? 'mobile' : ''}`}>
-                  <input
-                    type="text"
-                    placeholder="Ürün adı..."
-                    value={newProduct}
-                    onChange={(e) => setNewProduct(e.target.value)}
-                    className="product-name-input"
-                  />
-
-                  <div className="price-add-row">
-                    <div className="price-input-wrapper">
-                      <span className="price-symbol">₺</span>
-                      <input
-                        type="number"
-                        placeholder="Fiyat"
-                        value={newPrice}
-                        onChange={(e) => setNewPrice(e.target.value)}
-                        className="price-input"
-                      />
-                    </div>
-
-                    <button
-                      onClick={addProduct}
-                      disabled={!newProduct.trim() || !newPrice}
-                      className={`add-btn ${(!newProduct.trim() || !newPrice) ? 'disabled' : ''}`}
-                    >
-                      {isMobile ? "+" : "+ Ekle"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Products Grid */}
-              <div className={`products-grid ${isMobile ? 'mobile' : ''}`}>
-                {products.map(product => (
-                  <div key={product.id} className="product-card">
-                    <div className="product-info">
-                      <div className="product-icon">☕</div>
-                      <div>
-                        <p className="product-name">{product.name}</p>
-                        <p className="product-price">₺{product.price}</p>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => deleteProduct(product.id)}
-                      className="delete-product-btn"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                ))}
-
-                {products.length === 0 && (
-                  <div className="empty-state large">
-                    <p className="empty-icon">📦</p>
-                    <p>Henüz ürün eklenmemiş</p>
-                    <p className="empty-hint">Yukarıdan ilk ürününüzü ekleyin</p>
-                  </div>
-                )}
-              </div>
-            </div>
+            <ProductsPanel
+              products={products}
+              isMobile={isMobile}
+              newProduct={newProduct}
+              setNewProduct={setNewProduct}
+              newPrice={newPrice}
+              setNewPrice={setNewPrice}
+              addProduct={addProduct}
+              deleteProduct={deleteProduct}
+            />
           )}
 
           {/* Coffees Tab */}
