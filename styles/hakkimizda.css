@@ -6,8 +6,6 @@
     box-sizing: border-box;
 }
 
-
-
 .about-content {
     display: grid;
     /* Görseller 2 birim, Metinler 3 birim genişlik alacak */
@@ -15,7 +13,6 @@
     width: 100%;
     min-height: 100vh; /* Ekranın tam yüksekliğini kaplasın (opsiyonel) */
 }
-
 
 .about-images-wrapper {
     display: flex;
@@ -43,7 +40,6 @@
     gap: 60px; /* Hikayemiz ve Amacımız arası boşluk */
     background-color: #fdfaf7; /* Hafif kremsi arka plan */
 }
-
 
 .about-text-content {
     text-align: left;
@@ -107,7 +103,6 @@
     color: #8d6e63;
     margin-bottom: 30px;
 }
-
 
 .amacimiz-konteyner {
     text-align: left; /* Sola yasla */
@@ -245,8 +240,6 @@
         height: 400px;
     }
 }
-
-
 
 .brand-title {
     font-size: 100px; /* Yazı boyutunu önemli ölçüde büyüttük (eski hali muhtemelen 42px veya 54px idi) */

@@ -12,18 +12,14 @@ import "../../styles/profil.css"
 export default function Page() {
 
   const router = useRouter()
-
   const [user, setUser] = useState<{name: string; email: string} | null>(null)
   const [bio, setBio] = useState("")
   const [avatar, setAvatar] = useState("/profilikon.png")
-
   const [posts, setPosts] = useState<any[]>([])
   const [postText, setPostText] = useState("")
-
   const [lastDesign, setLastDesign] = useState<any>(null)
   const [coffees, setCoffees] = useState<any[]>([])
   const [selectedCoffee, setSelectedCoffee] = useState<any>(null)
-
   const [arenaCoffeeName, setArenaCoffeeName] = useState("")
   const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
 
@@ -49,7 +45,7 @@ export default function Page() {
 
     const savedAvatar = localStorage.getItem("userAvatar")
     if (savedAvatar) setAvatar(savedAvatar)
-
+      
     const savedBio = localStorage.getItem("userBio")
     if (savedBio) setBio(savedBio)
 

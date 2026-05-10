@@ -1,14 +1,11 @@
 "use client";
 import React from 'react';
-
 import '../../styles/hakkimizda.css';
 
 const About = () => {
   return (
     <section className="about-container">
       <div className="about-content">
-        
-      
         <div className="about-images-wrapper">
           <img 
             src="hakkimizdagorsel2.jpg" 
@@ -24,20 +21,15 @@ const About = () => {
 
        
         <div className="text-wrapper">
-          
-         
-          <div className="about-text-content">
+            <div className="about-text-content">
             <h4 className="subtitle">HİKAYEMİZ</h4>
             <div className="divider"></div>
             <h2 className="brand-title">Elmenes Coffee</h2>
-            
-            
             <p className="description">
               Elmenes Coffee olarak yolculuğumuz, sadece bir fincan kahve sunma isteğiyle değil, 
               kahvenin birleştirici gücüne ve sunduğu eşsiz deneyime olan tutkumuzla başladı. 
               Bizim için kahve; topraktan fincana uzanan emek dolu bir hikâye ve bir sanattır.
             </p>
-
             <div className="features-grid">
               <div className="feature-item">
                 <h5>Nitelikli Çekirdek</h5>
@@ -48,7 +40,6 @@ const About = () => {
                 <p>Her çekirdeğin kendi karakterini ortaya çıkaran özel kavurma teknikleri.</p>
               </div>
             </div>
-
             <p className="tagline">"Kahvenin En Samimi Hali"</p>
           </div>
 

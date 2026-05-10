@@ -10,14 +10,12 @@ interface Yorum {
   puan: number;
   metin: string;
 }
-
 interface MenuItem {
   id: number;
   name: string;
   price: string;
   image: string;
 }
-
 // 2. YILDIZ BİLEŞENİ
 function StarRating({ rating, onRatingChange, saltOkunur = false }: { 
   rating: number; 
