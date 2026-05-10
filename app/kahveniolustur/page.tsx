@@ -2,15 +2,21 @@
 import { useState, useEffect } from "react"
 import "../../styles/kahveniolustur.css"
 import { useRouter } from "next/navigation"
-import { Beaker, Zap, Trophy } from "lucide-react"
+import { Beaker, Zap, Trophy, Lock, Unlock } from "lucide-react"
+import CoffeeRight from "../../components/CoffeeRight"
+import { useToast } from "../../components/ToastProvider"
 
 export default function KahveniOlustur() {
   const [arenaCoffeeName, setArenaCoffeeName] = useState("")
-const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
+  const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
+  const [customCoffeeName, setCustomCoffeeName] = useState("")
   const router = useRouter()
+  const toast = useToast()
   const [started, setStarted] = useState(false)
 
-  // Form State
+  // 🔒 YENİ: Kilit ve indirim state'leri
+  const [isLocked, setIsLocked] = useState(false)
+
   const [form, setForm] = useState({
     milkType: null as any,
     beanType: null as any,
@@ -22,12 +28,39 @@ const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
     technique: null as any
   })
 
-  // Tüm seçeneklerin seçilip seçilmediğini kontrol eder
+  useEffect(() => {
+    const copied = localStorage.getItem("copiedRecipe")
+    if (copied) {
+      const parsed = JSON.parse(copied)
+      
+      // Form verilerini yükle
+      setForm({
+        milkType: parsed.milkType || null,
+        beanType: parsed.beanType || null,
+        foam: parsed.foam || null,
+        cupType: parsed.cupType || null,
+        syrup: parsed.syrup || null,
+        spice: parsed.spice || null,
+        sweetener: parsed.sweetener || null,
+        technique: parsed.technique || null
+      })
+
+      // 🔒 ARENA KONTROLÜ: Eğer arena'dan geliyorsa kilitle
+      if (parsed.fromArena === true && parsed.locked === true) {
+        setIsLocked(true)
+        if (parsed.name) setArenaCoffeeName(parsed.name)
+        if (parsed.image) setArenaCoffeeImage(parsed.image)
+      }
+
+      setStarted(true)
+      localStorage.removeItem("copiedRecipe")
+    }
+  }, [])
+
   const allSelected =
     form.milkType && form.beanType && form.foam && form.cupType && 
     form.syrup && form.spice && form.sweetener && form.technique
 
-  // --- SEÇENEK LİSTELERİ ---
   const milkOptions = [
     { name: "Laktozlu Süt", price: 10, power: 5 }, { name: "Laktozsuz Süt", price: 15, power: 7 },
     { name: "Yulaf Sütü", price: 18, power: 12 }, { name: "Badem Sütü", price: 18, power: 12 },
@@ -72,102 +105,85 @@ const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
     { name: "Latte Art", price: 15, power: 30 }, { name: "Değişiklik Yok", price: 0, power: 0 }
   ]
 
-  // Hesaplamalar
   const creativityScore = 
     (form.milkType?.power || 0) + (form.beanType?.power || 0) + 
     (form.syrup?.power || 0) + (form.technique?.power || 0) + 
     (form.spice?.power || 0);
 
-  const total = 100 + (form.milkType?.price || 0) + (form.beanType?.price || 0) + 
-    (form.foam?.price || 0) + (form.cupType?.price || 0) + (form.syrup?.price || 0) + 
-    (form.spice?.price || 0) + (form.sweetener?.price || 0) + (form.technique?.price || 0)
+  // 🔒 YENİ: İndirimli fiyat hesaplama
+  const subtotal = 
+    (form.milkType?.price || 0) + (form.beanType?.price || 0) + 
+    (form.foam?.price || 0) + (form.cupType?.price || 0) + 
+    (form.syrup?.price || 0) + (form.spice?.price || 0) + 
+    (form.sweetener?.price || 0) + (form.technique?.price || 0)
 
-const handleSiparis = () => {
-  if (!allSelected) return;
+  const basePrice = 100
+  const discountAmount = isLocked ? Math.round(subtotal * 0.15) : 0
+  const total = basePrice + subtotal - discountAmount
+  const originalTotal = basePrice + subtotal
 
-  const loggedInUser = localStorage.getItem("user");
-  if (!loggedInUser) {
-    alert("Sipariş vermek için önce giriş yapmalısın!");
-    router.push("/giris");
-    return;
+  // 🔒 YENİ: Kilit kontrollü seçim
+  const handleOptionSelect = (field: string, item: any) => {
+    if (isLocked) return
+    setForm({ ...form, [field]: item })
   }
 
-  const orderData = {
-    id: Date.now(),
-    details: form,
-    totalPrice: total,
-    score: creativityScore,
-    status: "Hazırlanıyor",
-    date: new Date().toLocaleString('tr-TR')
-  }
+  const handleSiparis = () => {
+    if (!allSelected) return;
+    const loggedInUser = localStorage.getItem("user");
+    if (!loggedInUser) {
+      toast.warning("Sipariş vermek için önce giriş yapmalısın!")
+      router.push("/giris");
+      return;
+    }
 
-  const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-  localStorage.setItem("orders", JSON.stringify([...existingOrders, orderData]));
+    // ☕ KAHVE İSMİ: Kullanıcı girdiyse onu, arena'dan geldiyse onu, yoksa İsimsiz
+    const finalCoffeeName = customCoffeeName.trim() || arenaCoffeeName || "İsimsiz Kahve"
 
-  // ✅ EKLEDİĞİM KISIM (kahveyi ayrıca kaydet)
-  const coffeeData = {
-    id: Date.now(),
-name: arenaCoffeeName || "İsimsiz Kahve",
-image: arenaCoffeeImage,
-    details: form,
-    score: creativityScore,
-    total: total,
-    date: new Date().toISOString()
-  }
+    const orderData = {
+      id: Date.now(),
+      coffeeName: finalCoffeeName,
+      details: form,
+      totalPrice: total,
+      originalPrice: originalTotal,
+      discountApplied: isLocked ? 15 : 0,
+      isFromArena: isLocked,
+      score: creativityScore,
+      status: "Hazırlanıyor",
+      date: new Date().toLocaleString('tr-TR')
+    }
 
-  const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]");
-  localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]));
-  // ✅ EKLEME BİTTİ
+    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+    localStorage.setItem("orders", JSON.stringify([...existingOrders, orderData]));
 
-  alert("Siparişin alındı! ☕");
-  router.push("./siparis");
-}
+    const coffeeData = {
+      id: Date.now(),
+      name: finalCoffeeName,
+      image: arenaCoffeeImage,
+      details: form,
+      score: creativityScore,
+      total: total,
+      originalTotal: originalTotal,
+      isFromArena: isLocked,
+      date: new Date().toISOString()
+    }
 
-  // Smooth Scroll Efekti
-  useEffect(() => {
-    if (!started) return
-    const container = document.querySelector(".coffee-right") as HTMLElement
-    const sections = document.querySelectorAll(".config-section")
-    if (!container) return
+    const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]");
+    localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]));
+
+    toast.success(isLocked ? "Siparişin alındı! %15 Arena İndirimi uygulandı" : "Siparişin alındı!")
     
-    let index = 0
-    let animating = false
+    // Input'u temizle
+    setCustomCoffeeName("")
+    
+    router.push("./siparis");
+  }
 
-    const smoothScroll = (targetY: number) => {
-      const startY = container.scrollTop
-      const distance = targetY - startY
-      const duration = 700
-      let startTime: number | null = null
-      const ease = (t: number) => 1 - Math.pow(1 - t, 4)
-      const animate = (time: number) => {
-        if (!startTime) startTime = time
-        const progress = time - startTime
-        const percent = Math.min(progress / duration, 1)
-        container.scrollTop = startY + distance * ease(percent)
-        if (percent < 1) requestAnimationFrame(animate)
-        else animating = false
-      }
-      requestAnimationFrame(animate)
-    }
-
-    const wheelHandler = (e: WheelEvent) => {
-      if (animating) return
-      animating = true
-      if (e.deltaY > 0) index = Math.min(index + 1, sections.length - 1)
-      else index = Math.max(index - 1, 0)
-      const targetSection = sections[index] as HTMLElement
-      if(targetSection) smoothScroll(targetSection.offsetTop)
-    }
-
-    container.addEventListener("wheel", wheelHandler)
-    return () => container.removeEventListener("wheel", wheelHandler)
-  }, [started])
+  
 
   return (
     <div className="coffee-layout">
       <div className="coffee-bg"></div>
-
-      {/* SOL PANEL */}
       <div className="coffee-left">
         <div className="lab-badge"><Beaker size={16} /> THE COFFEE LAB</div>
         <h1 className="hero-title">Şampiyonu Tasarla.</h1>
@@ -176,15 +192,66 @@ image: arenaCoffeeImage,
         </p>
 
         {started && (
-          <div className="arena-stats-container">
-            <div className="arena-stat-box">
-              <span className="stat-label"><Zap size={14} color="#ffd59e"/> Yaratıcılık Puanı</span>
-              <span className="stat-value">{creativityScore}</span>
+          <>
+            <div className="arena-stats-container">
+              <div className="arena-stat-box">
+                <span className="stat-label"><Zap size={14} color="#ffd59e"/> Yaratıcılık Puanı</span>
+                <span className="stat-value">{creativityScore}</span>
+              </div>
+              <div className="arena-stat-box">
+                <span className="stat-label">Toplam Fiyat</span>
+                <span className="stat-value">
+                  {total} TL
+                  {isLocked && (
+                    <span style={{ textDecoration: 'line-through', opacity: 0.6, fontSize: '0.8em', marginLeft: '8px' }}>
+                      {originalTotal} TL
+                    </span>
+                  )}
+                </span>
+              </div>
+              {isLocked && (
+                <div className="arena-stat-box discount-box">
+                  <span className="stat-label"><Unlock size={14} color="#4ade80"/> Arena İndirimi</span>
+                  <span className="stat-value" style={{ color: '#4ade80' }}>-%15</span>
+                </div>
+              )}
             </div>
-            <div className="arena-stat-box">
-              <span className="stat-label">Toplam Fiyat</span>
-              <span className="stat-value">{total} TL</span>
-            </div>
+
+            {/* ☕ KAHVE İSMİ INPUT'U - EN ALTA TAŞINDI */}
+            {!isLocked && (
+              <div className="coffee-name-input-wrapper">
+                <label className="coffee-name-label">
+                  <Beaker size={14} /> Kahvenin Adı
+                </label>
+                <input
+                  type="text"
+                  className="coffee-name-input"
+                  placeholder="Kahvene bir isim ver (opsiyonel)..."
+                  value={customCoffeeName}
+                  onChange={(e) => setCustomCoffeeName(e.target.value)}
+                  maxLength={30}
+                />
+                <span className="coffee-name-hint">
+                  {customCoffeeName.length}/30 karakter
+                </span>
+              </div>
+            )}
+
+            {isLocked && arenaCoffeeName && (
+              <div className="coffee-name-input-wrapper locked-name">
+                <label className="coffee-name-label">
+                  <Beaker size={14} /> Arena Kahvesi
+                </label>
+                <div className="locked-coffee-name">{arenaCoffeeName}</div>
+              </div>
+            )}
+          </>
+        )}
+
+        {isLocked && (
+          <div className="locked-warning">
+            <Lock size={16} />
+            <span>Bu tarif Arenadan geldiği için içeriği değiştiremezsiniz.</span>
           </div>
         )}
 
@@ -194,117 +261,26 @@ image: arenaCoffeeImage,
           allSelected && (
             <button className="arena-btn" onClick={handleSiparis} style={{width: 'fit-content'}}>
               <Trophy size={18} /> Siparişi Tamamla
+              {isLocked && <span style={{marginLeft: '8px', fontSize: '0.8em'}}>(%15 İndirim)</span>}
             </button>
           )
         )}
       </div>
+        <CoffeeRight
+  started={started}
+  isLocked={isLocked}
+  form={form}
+  handleOptionSelect={handleOptionSelect}
+  milkOptions={milkOptions}
+  beanOptions={beanOptions}
+  foamOptions={foamOptions}
+  cupOptions={cupOptions}
+  syrupOptions={syrupOptions}
+  spiceOptions={spiceOptions}
+  sweetenerOptions={sweetenerOptions}
+  techniqueOptions={techniqueOptions}
+/>
 
-      {/* SAĞ PANEL */}
-      <div className="coffee-right">
-        {started && (
-          <>
-            <section className="config-section">
-              <h2 className="section-title">Süt Tipi <span className="required-star">*</span></h2>
-               <span className="required-text">(Bu kısım zorunludur)</span>
-              <div className="option-group">
-                {milkOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, milkType: item })} className={`milk-item ${form.milkType?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="config-section">
-              <h2 className="section-title">Kahve Çekirdeği <span className="required-star">*</span></h2>
-               <span className="required-text">(Bu kısım zorunludur)</span>
-              <div className="option-group">
-                {beanOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, beanType: item })} className={`milk-item ${form.beanType?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-           {/* Süt Köpüğü */}
-      <section className="config-section">
-        <div className="section-header">
-          <h2 className="section-title">Süt Köpüğü <span className="required-star">*</span></h2>
-          <span className="required-text">(Bu kısım zorunludur)</span>
-        </div>
-        <div className="option-group">
-          {foamOptions.map(item => (
-            <div key={item.name} onClick={() => setForm({ ...form, foam: item })} className={`milk-item ${form.foam?.name === item.name ? "active" : ""}`}>
-              <span>{item.name}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-            <section className="config-section">
-              <div className="section-header"></div>
-              <h2 className="section-title">Bardak Tipi<span className="required-star">*</span></h2>
-               <span className="required-text">(Bu kısım zorunludur)</span>
-              <div className="option-group">
-                {cupOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, cupType: item })} className={`milk-item ${form.cupType?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="config-section">
-              <h2 className="section-title">Şurup <span className="required-star">*</span></h2>
-               <span className="required-text">(Bu kısım zorunludur)</span>
-              <div className="option-group">
-                {syrupOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, syrup: item })} className={`milk-item ${form.syrup?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="config-section">
-              <h2 className="section-title">Baharatlar <span className="required-star">*</span></h2>
-               <span className="required-text">(Bu kısım zorunludur)</span>
-              <div className="option-group">
-                {spiceOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, spice: item })} className={`milk-item ${form.spice?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="config-section">
-              <h2 className="section-title">Tatlandırıcı <span className="required-star">*</span></h2>
-               <span className="required-text">(Bu kısım zorunludur)</span>
-              <div className="option-group">
-                {sweetenerOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, sweetener: item })} className={`milk-item ${form.sweetener?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="config-section">
-              <h2 className="section-title">Özel Teknik <span className="required-star">*</span></h2>
-               <span className="required-text">(Bu kısım zorunludur)</span>
-              <div className="option-group">
-                {techniqueOptions.map(item => (
-                  <div key={item.name} onClick={() => setForm({ ...form, technique: item })} className={`milk-item ${form.technique?.name === item.name ? "active" : ""}`}>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </>
-        )}
-      </div>
     </div>
   )
 }
