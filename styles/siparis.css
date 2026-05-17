@@ -4,11 +4,9 @@
   inset:0;
   height:100dvh;
   width:100%;
-
   background-image:url("/siparis.jpg");
   background-size:cover;
   background-position:center;
-
   display:flex;
   justify-content:center;
   align-items:center;
@@ -18,8 +16,7 @@
   background:#0f0f0f;
   color:white;
   font-family:system-ui;
-}
-}
+}}
 
 /* DARK CINEMATIC OVERLAY */
 .siparis-overlay{
@@ -45,9 +42,7 @@
   font-weight:900;
   letter-spacing:-2px;
   margin-bottom:30px;
-
   text-shadow:0 30px 90px rgba(0,0,0,0.9);
-
   animation:heroFade 1.2s ease;
 }
 

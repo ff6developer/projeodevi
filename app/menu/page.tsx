@@ -21,7 +21,6 @@ interface Yorum {
   metin: string;
   gorsel?: string;
 }
-
 interface MenuItem {
   id: number;
   name: string;

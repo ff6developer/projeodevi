@@ -39,7 +39,6 @@
     background-color: #fdfaf7; /* Hafif kremsi arka plan */
 }
 
-
 .about-text-content {
     text-align: left;
 }
@@ -102,7 +101,6 @@
     color: #8d6e63;
     margin-bottom: 30px;
 }
-
 
 .amacimiz-konteyner {
     text-align: left; /* Sola yasla */
@@ -218,6 +216,19 @@
     background-color: #fff; /* Arka planı bembeyaz yapar */
 }
 
+<<<<<<< HEAD
+=======
+/* Mobil için görsellerin kaybolmaması için: */
+@media (max-width: 768px) {
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+    .about-images-wrapper {
+        height: 400px;
+    }
+}
+
+>>>>>>> 7435b9c2501a802eb2d22081304d8b199654e0fb
 .brand-title {
     font-size: 100px; /* Yazı boyutunu önemli ölçüde büyüttük (eski hali muhtemelen 42px veya 54px idi) */
     font-weight: 800; /* Daha kalın ve belirgin olması için */

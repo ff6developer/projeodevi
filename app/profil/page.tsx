@@ -19,14 +19,16 @@ export default function Page() {
   const [user, setUser] = useState<{name: string; email: string} | null>(null)
   const [bio, setBio] = useState("")
   const [avatar, setAvatar] = useState("/profilikon.png")
-
   const [posts, setPosts] = useState<any[]>([])
   const [postText, setPostText] = useState("")
+<<<<<<< HEAD
 
  const [lastDesign, setLastDesign] = useState<any>(false)
+=======
+  const [lastDesign, setLastDesign] = useState<any>(null)
+>>>>>>> 7435b9c2501a802eb2d22081304d8b199654e0fb
   const [coffees, setCoffees] = useState<any[]>([])
   const [selectedCoffee, setSelectedCoffee] = useState<any>(null)
-
   const [arenaCoffeeName, setArenaCoffeeName] = useState("")
   const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
 
@@ -52,7 +54,7 @@ export default function Page() {
 
     const savedAvatar = localStorage.getItem("userAvatar")
     if (savedAvatar) setAvatar(savedAvatar)
-
+      
     const savedBio = localStorage.getItem("userBio")
     if (savedBio) setBio(savedBio)
 
@@ -468,3 +470,4 @@ export default function Page() {
     </div>
   )
 }
+
