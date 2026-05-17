@@ -1,12 +1,9 @@
-
 .about-container {
     width: 100%;
     background-color: #fff;
     padding: 0; /* Boşlukları Grid yönetmeli */
     box-sizing: border-box;
 }
-
-
 
 .about-content {
     display: grid;
@@ -15,7 +12,6 @@
     width: 100%;
     min-height: 100vh; /* Ekranın tam yüksekliğini kaplasın (opsiyonel) */
 }
-
 
 .about-images-wrapper {
     display: flex;
@@ -33,7 +29,6 @@
     object-position: center; /* Merkeze odaklan */
     filter: brightness(0.9); /* Metinlerin öne çıkması için hafif karartma */
 }
-
 
 .text-wrapper {
     padding: 80px 10% 80px 8%; /* İç boşluklar */
@@ -171,19 +166,6 @@
     line-height: 1.6;
 }
 
-
-@media (max-width: 992px) {
-    .about-content {
-        grid-template-columns: 1fr; /* Üst üste diz */
-    }
-    .about-images-wrapper {
-        height: 300px; /* Mobil için yükseklik sınırı */
-    }
-    .text-wrapper {
-        padding: 40px 5%;
-    }
-}
-
 .about-content {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Sol ve Sağ eşit genişlikte */
@@ -235,18 +217,6 @@
     
     background-color: #fff; /* Arka planı bembeyaz yapar */
 }
-
-/* Mobil için görsellerin kaybolmaması için: */
-@media (max-width: 768px) {
-    .about-content {
-        grid-template-columns: 1fr;
-    }
-    .about-images-wrapper {
-        height: 400px;
-    }
-}
-
-
 
 .brand-title {
     font-size: 100px; /* Yazı boyutunu önemli ölçüde büyüttük (eski hali muhtemelen 42px veya 54px idi) */
@@ -351,4 +321,558 @@
     background-color: #0b0b0b; /* İstediğiniz yeni renk (Örn: Soft Gri) */
     padding: 0;
     box-sizing: border-box;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN - Modern Mobile-First Approach
+   ========================================================================== */
+
+/* --- BASE RESPONSIVE VARIABLES --- */
+:root {
+  --spacing-xs: clamp(8px, 2vw, 12px);
+  --spacing-sm: clamp(12px, 3vw, 20px);
+  --spacing-md: clamp(20px, 5vw, 40px);
+  --spacing-lg: clamp(40px, 8vw, 80px);
+  
+  --font-xs: clamp(12px, 2.5vw, 14px);
+  --font-sm: clamp(14px, 3vw, 16px);
+  --font-md: clamp(16px, 3.5vw, 20px);
+  --font-lg: clamp(24px, 5vw, 40px);
+  --font-xl: clamp(38px, 8vw, 80px);
+  --font-hero: clamp(48px, 12vw, 100px);
+}
+
+/* --- LARGE TABLETS & SMALL LAPTOPS (max-width: 1200px) --- */
+@media (max-width: 1200px) {
+  .about-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .text-wrapper {
+    padding: var(--spacing-lg) 6%;
+    gap: var(--spacing-md);
+  }
+
+  .brand-title {
+    font-size: var(--font-xl);
+    margin-top: 0 !important;
+  }
+
+  .description {
+    font-size: var(--font-md);
+  }
+
+  .amacimiz-kartlar {
+    gap: 15px;
+  }
+
+  .amac-kart {
+    padding: 25px;
+  }
+}
+
+/* --- TABLETS (max-width: 1024px) --- */
+@media (max-width: 1024px) {
+  .about-content {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  /* Görseller: Yatay düzen, sabit oran */
+  .about-images-wrapper {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    height: auto;
+    aspect-ratio: 2 / 1;
+    max-height: 45vh;
+  }
+
+  .about-img {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: 1 / 1.2;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .first-img,
+  .second-img {
+    margin: 0;
+    flex-grow: unset;
+    min-height: unset;
+  }
+
+  .text-wrapper {
+    padding: var(--spacing-md) 5%;
+    gap: var(--spacing-md);
+    background-color: #fff !important;
+  }
+
+  .brand-title {
+    font-size: var(--font-xl);
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    font-size: var(--font-sm);
+    letter-spacing: 3px;
+  }
+
+  .divider {
+    width: 50px;
+    height: 2px;
+    margin-bottom: 15px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .feature-item h5 {
+    font-size: var(--font-md);
+  }
+
+  .feature-item p {
+    font-size: var(--font-xs);
+  }
+
+  .amacimiz-baslik h2 {
+    font-size: var(--font-lg);
+  }
+
+  .amacimiz-kartlar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
+
+  .amac-kart {
+    padding: var(--spacing-sm);
+  }
+
+  .amac-kart h3 {
+    font-size: 18px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .amac-kart p {
+    font-size: var(--font-xs);
+  }
+
+  .tagline {
+    font-size: 18px;
+  }
+}
+
+/* --- LARGE PHONES / SMALL TABLETS (max-width: 768px) --- */
+@media (max-width: 768px) {
+  /* Header */
+  .header-container {
+    width: 100%;
+    padding: 0 var(--spacing-sm);
+    height: 56px;
+  }
+
+  .logo {
+    width: 44px;
+    height: 44px;
+    left: var(--spacing-sm);
+    top: 6px;
+  }
+
+  .logo-text {
+    font-size: 14px;
+  }
+
+  .nav ul {
+    gap: var(--spacing-xs);
+  }
+
+  .nav a {
+    font-size: 11px;
+    padding: 8px 10px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Görseller: Tek sütun, geniş oran */
+  .about-images-wrapper {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    aspect-ratio: 16 / 10;
+    max-height: 35vh;
+  }
+
+  .about-img {
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+  }
+
+  .about-img:nth-child(2) {
+    display: none; /* Mobilde tek görsel */
+  }
+
+  /* Metin alanı */
+  .text-wrapper {
+    padding: var(--spacing-md) var(--spacing-sm);
+    gap: var(--spacing-md);
+  }
+
+  .brand-title {
+    font-size: clamp(32px, 10vw, 48px);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
+
+  .divider {
+    width: 40px;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .description {
+    font-size: var(--font-sm);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .feature-item {
+    padding: var(--spacing-sm);
+    background: rgba(141, 110, 99, 0.05);
+    border-radius: 10px;
+  }
+
+  .feature-item h5 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .feature-item p {
+    font-size: 14px;
+  }
+
+  .tagline {
+    font-size: 16px;
+    margin-top: var(--spacing-sm);
+  }
+
+  /* Amacımız bölümü */
+  .amacimiz-baslik h2 {
+    font-size: 24px;
+  }
+
+  .amacimiz-cizgi {
+    width: 40px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .amacimiz-kartlar {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+  }
+
+  .amac-kart {
+    padding: var(--spacing-sm);
+    border-radius: 12px;
+    /* Touch feedback */
+    -webkit-tap-highlight-color: rgba(141, 110, 99, 0.1);
+  }
+
+  .amac-kart h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .amac-kart p {
+    font-size: 14px;
+  }
+
+  /* Mobilde hover yerine active state */
+  .amac-kart:active {
+    transform: scale(0.98);
+    background-color: #8d6e63;
+  }
+
+  .amac-kart:active h3,
+  .amac-kart:active p {
+    color: #ffffff !important;
+  }
+
+  /* Hover efektlerini kaldır (mobilde sorunlu) */
+  .amac-kart:hover {
+    transform: none;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  }
+
+  /* ==========================================================================
+     BOTTOM NAVIGATION BAR
+     ========================================================================== */
+  .iconbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 64px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 20px 20px 0 0;
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    padding: 0 var(--spacing-xs);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .icon-label {
+    display: none !important;
+  }
+
+  .icon-wrapper {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-item {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .icon-item:active .icon-wrapper {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+
+  /* Safe area padding */
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0));
+  }
+
+  .about-container {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 20px));
+  }
+}
+
+/* --- SMALL PHONES (max-width: 480px) --- */
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0 12px;
+    height: 52px;
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav a {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+
+  .about-images-wrapper {
+    padding: 12px;
+    aspect-ratio: 16 / 9;
+    max-height: 30vh;
+  }
+
+  .about-img {
+    border-radius: 8px;
+  }
+
+  .text-wrapper {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  .brand-title {
+    font-size: clamp(28px, 9vw, 38px);
+  }
+
+  .subtitle {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+
+  .description {
+    font-size: 15px;
+  }
+
+  .features-grid {
+    gap: 12px;
+  }
+
+  .feature-item {
+    padding: 14px;
+  }
+
+  .feature-item h5 {
+    font-size: 16px;
+  }
+
+  .feature-item p {
+    font-size: 13px;
+  }
+
+  .amacimiz-baslik h2 {
+    font-size: 20px;
+  }
+
+  .amac-kart {
+    padding: 16px;
+  }
+
+  .amac-kart h3 {
+    font-size: 15px;
+  }
+
+  .amac-kart p {
+    font-size: 13px;
+  }
+
+  .iconbar {
+    height: 58px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  body {
+    padding-bottom: calc(58px + env(safe-area-inset-bottom, 0));
+  }
+}
+
+/* --- LANDSCAPE MODE ON PHONES --- */
+@media (max-width: 896px) and (orientation: landscape) {
+  .about-content {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about-images-wrapper {
+    grid-template-columns: 1fr;
+    max-height: 100%;
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  .about-img:nth-child(2) {
+    display: block;
+  }
+
+  .about-img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .text-wrapper {
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .iconbar {
+    width: 60px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0 16px 16px 0;
+    left: 0;
+    bottom: auto;
+    top: 0;
+    padding: var(--spacing-sm) 0;
+    padding-left: env(safe-area-inset-left, 0);
+  }
+
+  body {
+    padding-bottom: 0;
+    padding-left: calc(60px + env(safe-area-inset-left, 0));
+  }
+}
+
+/* --- ACCESSIBILITY: Reduced Motion --- */
+@media (prefers-reduced-motion: reduce) {
+  .amac-kart,
+  .icon-wrapper,
+  .icon-item {
+    transition: none !important;
+  }
+
+  .amac-kart:hover,
+  .amac-kart:active {
+    transform: none !important;
+  }
+}
+
+/* --- HIGH CONTRAST MODE SUPPORT --- */
+@media (prefers-contrast: high) {
+  .amac-kart {
+    border: 2px solid #3e2723;
+  }
+
+  .divider,
+  .amacimiz-cizgi {
+    height: 4px;
+  }
+
+  .description,
+  .feature-item p,
+  .amac-kart p {
+    color: #333;
+  }
+}
+
+/* --- DARK MODE SUPPORT (Bonus) --- */
+@media (prefers-color-scheme: dark) {
+  .about-container {
+    background-color: #1a1a1a;
+  }
+
+  .text-wrapper {
+    background-color: #1a1a1a !important;
+  }
+
+  .brand-title {
+    color: #f5f5f5;
+  }
+
+  .description,
+  .feature-item p {
+    color: #b0b0b0;
+  }
+
+  .feature-item {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .amac-kart {
+    background: #2a2a2a;
+    border-color: #333;
+  }
+
+  .amac-kart p {
+    color: #ccc;
+  }
 }

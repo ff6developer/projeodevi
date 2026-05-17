@@ -23,7 +23,7 @@ export default function Page() {
   const [posts, setPosts] = useState<any[]>([])
   const [postText, setPostText] = useState("")
 
-  const [lastDesign, setLastDesign] = useState<any>(null)
+ const [lastDesign, setLastDesign] = useState<any>(false)
   const [coffees, setCoffees] = useState<any[]>([])
   const [selectedCoffee, setSelectedCoffee] = useState<any>(null)
 
@@ -292,7 +292,15 @@ export default function Page() {
             <h2><Plus size={22} /> Arenada Paylaş</h2>
           </div>
 
-          <div className={`post-box ${!lastDesign ? "locked-box" : ""}`}>
+        
+
+            {/* DEBUG */}
+            {console.log("lastDesign:", lastDesign)}
+            {console.log("selectedCoffee:", selectedCoffee)}
+            {console.log("postText:", postText)}
+            {console.log("arenaCoffeeName:", arenaCoffeeName)}
+            {console.log("arenaCoffeeImage:", arenaCoffeeImage)}
+            {console.log("isShareDisabled:", isShareDisabled)}
 
             <p>Kahve Seç:</p>
 
@@ -300,16 +308,25 @@ export default function Page() {
               {coffees.map((coffee) => (
                 <div
                   key={coffee.id}
-                  className={`coffee-select-wrapper ${selectedCoffee?.id === coffee.id ? "selected" : ""}`}
+                  className={`coffee-select-wrapper ${
+                    selectedCoffee?.id === coffee.id ? "selected" : ""
+                  }`}
+                  style={{ cursor: "pointer", position: "relative" }}
                 >
-                  <button
-                    className="coffee-select-btn"
-                    onClick={() => setSelectedCoffee(coffee)}
+                  <div
+                    className="coffee-select-content"
+                    onClick={() => {
+                      console.log("KAHVE SEÇİLDİ:", coffee)
+                      setSelectedCoffee(coffee)
+                    }}
                   >
                     <div className="coffee-select-header">
                       <div className="coffee-select-name">{coffee.name}</div>
-                      <div className="coffee-select-score">{coffee.score} puan</div>
+                      <div className="coffee-select-score">
+                        {coffee.score} puan
+                      </div>
                     </div>
+
                     <div className="coffee-select-details">
                       <span className="detail-tag">{coffee.details?.milkType?.name || "Süt yok"}</span>
                       <span className="detail-tag">{coffee.details?.beanType?.name || "Çekirdek yok"}</span>
@@ -320,65 +337,118 @@ export default function Page() {
                       <span className="detail-tag">{coffee.details?.sweetener?.name || "Tatlandırıcı yok"}</span>
                       <span className="detail-tag">{coffee.details?.technique?.name || "Teknik yok"}</span>
                     </div>
+
                     <div className="coffee-select-footer">
                       <span className="coffee-price">{coffee.total} TL</span>
                       {coffee.isFromArena && <span className="arena-badge">🏆 Arena</span>}
                     </div>
-                  </button>
-                  <button 
+                  </div>
+
+                  <button
+                    type="button"
                     className="delete-coffee-btn"
-                    onClick={(e) => deleteCoffee(coffee.id, e)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("Silinen kahve:", coffee.id);
+                      deleteCoffee(coffee.id, e);
+                    }}
                     title="Kahveyi Sil"
                   >
                     <Trash2 size={16} />
                   </button>
+
                 </div>
               ))}
             </div>
 
-            {lastDesign && (
+            {selectedCoffee && (
               <div className="arena-preparation-area">
+
                 <div className="arena-form-row">
 
                   <input
                     className="arena-coffee-name-input"
                     placeholder="Kahve İsmi..."
                     value={arenaCoffeeName}
-                    onChange={(e) => setArenaCoffeeName(e.target.value)}
+                    onChange={(e) => {
+                      console.log("Kahve adı:", e.target.value)
+                      setArenaCoffeeName(e.target.value)
+                    }}
                   />
 
-                  <label className={`arena-mini-upload ${arenaCoffeeImage ? "has-image" : ""}`}>
+                  <label
+                    className={`arena-mini-upload ${
+                      arenaCoffeeImage ? "has-image" : ""
+                    }`}
+                  >
+
                     {arenaCoffeeImage ? (
-                      <Image src={arenaCoffeeImage} alt="coffee" width={40} height={40}/>
+                      <Image
+                        src={arenaCoffeeImage}
+                        alt="coffee"
+                        width={40}
+                        height={40}
+                      />
                     ) : (
                       <ImageIcon size={20} />
                     )}
-                    <input type="file" hidden accept="image/*" onChange={handleCoffeeImageUpload}/>
+
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={(e) => {
+                        console.log("Resim seçildi:", e.target.files)
+                        handleCoffeeImageUpload(e)
+                      }}
+                    />
+
                   </label>
 
                 </div>
+
               </div>
             )}
 
             <textarea
               className="post-input"
-              placeholder={lastDesign ? "Karamel şurubu, yulaf sütü..." : "Kilitli..."}
-              disabled={!lastDesign}
+              placeholder={
+                selectedCoffee
+                  ? "Karamel şurubu, yulaf sütü..."
+                  : "Kilitli..."
+              }
+              disabled={!selectedCoffee}
               value={postText}
-              onChange={(e) => setPostText(e.target.value)}
+              onChange={(e) => {
+                console.log("Post text:", e.target.value)
+                setPostText(e.target.value)
+              }}
             />
 
             <div className="post-actions">
+
               <button
-                className={`share-btn ${isShareDisabled ? "disabled" : ""}`}
+                type="button"
+                className={`share-btn ${
+                  isShareDisabled ? "disabled" : ""
+                }`}
                 disabled={isShareDisabled}
-                onClick={sharePost}
+                onClick={() => {
+                  console.log("PAYLAŞ BUTONU TIKLANDI")
+
+                  try {
+                    sharePost()
+                  } catch (error) {
+                    console.error("sharePost hata:", error)
+                  }
+                }}
               >
                 <Share2 size={18} /> Paylaş
               </button>
+
             </div>
 
-          </div>
+          
 
           {/* POST FEED */}
           <div className="post-feed">
@@ -394,7 +464,6 @@ export default function Page() {
           </div>
 
         </section>
-
       </div>
     </div>
   )

@@ -321,11 +321,221 @@ html, body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ==========================================================================
+   RESPONSIVE DESIGN (Layout & Content) - NAV REMOVED VERSION
+   ========================================================================== */
+
+/* --- 1. GENEL TABLET DÜZENİ (max-width: 1024px) --- */
+@media (max-width: 1024px) {
+  /* Header & Navigation Kısmından Linkleri Kaldır */
+  .nav {
+    display: none !important;
+  }
+  
+  .header-container {
+    width: 92%;
+    padding: 0 25px;
+    justify-content: center; /* Sadece logo kaldığı için ortala */
+  }
+  
+  .logo-text {
+    font-size: 18px;
+  }
+
+  /* Hakkımızda Bölümü Grid Dönüşümü */
+  .about-content {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  /* Görseller Bölümü */
+  .about-images-wrapper {
+    grid-row-start: auto;
+    grid-row-end: auto;
+    flex-direction: row !important;
+    height: 400px;
+    padding: 20px 4%;
+  }
+
+  .about-img {
+    width: 50%;
+    height: 100% !important;
+  }
+
+  .first-img {
+    margin-top: 0 !important;
+  }
+
+  /* Metin Alanları */
+  .text-wrapper {
+    padding: 50px 6%;
+    gap: 40px;
+  }
+
+  .brand-title {
+    font-size: clamp(45px, 7vw, 75px);
+    margin-top: 0 !important;
+  }
+
+  /* Kart Yapıları */
+  .amacimiz-kartlar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+/* --- 2. GENEL MOBİL DÜZENİ (max-width: 768px) --- */
 @media (max-width: 768px) {
+  /* Üst Bar Esnekliği */
+  .header {
+    padding-top: 15px;
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header-container {
+    width: 85%; /* Sadece logo olacağı için barı biraz daha kompakt ve şık yapıyoruz */
+    height: 55px;
+    padding: 0 20px;
+    border-radius: 30px;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important; /* Logo ve yazıyı tam merkeze al */
+    align-items: center !important;
+    gap: 12px; /* Amblem ile yazı arasındaki nefes mesafesi */
+  }
+
+  /* Mobilde Navigasyon Linklerini Kesin Olarak Kapat */
+  .nav, .nav ul {
+    display: none !important;
+  }
+
+  /* Sabit konumlandırılmış logoyu Header akışına tam uyumlu yap */
+  .logo {
+    position: static !important; /* Fixed özelliğini kırıyoruz */
+    width: 38px !important;
+    height: 38px !important;
+    padding: 2px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 15px !important;
+    letter-spacing: 2px !important;
+    display: inline-block !important;
+    white-space: nowrap;
+  }
+
+  /* Hakkımızda Görselleri (Mobil) */
+  .about-images-wrapper {
+    height: 280px;
+    padding: 15px 4%;
+    gap: 10px;
+  }
+
+  /* Hakkımızda Metin Alanları (Mobil) */
+  .text-wrapper {
+    padding: 35px 5%;
+    gap: 30px;
+  }
+
+  .brand-title {
+    font-size: 36px;
+    line-height: 1.2;
+    margin-bottom: 15px;
+  }
+
+  .description {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+
+  /* Gridleri Tamamen Tek Sütuna Düşür */
+  .features-grid,
+  .amacimiz-kartlar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .feature-item h5 {
+    font-size: 22px;
+  }
+
+  .amacimiz-baslik h2 {
+    font-size: 28px;
+  }
+
+  .amac-kart {
+    padding: 20px;
+  }
+
+  .amac-kart h3 {
+    margin-bottom: 15px;
+  }
+
+  /* Custom Toast Bildirimlerini Mobil Ekrana Sığdır */
   .toast-viewport {
-    top: 90px;
+    top: 85px;
     right: 12px;
     left: 12px;
     width: auto;
+  }
+
+  /* ==========================================================================
+     SIDEBAR -> BOTTOM FIXED BAR (İkon Barın Alta Koyu Altyapıyla Sabitlenmesi)
+     ========================================================================== */
+  .iconbar {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(8, 8, 8, 0.95); 
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 20px 20px 0 0;
+    border-width: 1px 0 0 0;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.8);
+    padding: 0 15px;
+    z-index: 100;
+  }
+
+  .icon-label {
+    display: none !important;
+  }
+
+  .icon-wrapper {
+    transform: scale(0.95);
+  }
+
+  .icon-item:hover .icon-wrapper {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px rgba(197, 138, 92, 0.5));
+  }
+
+  body {
+    padding-bottom: 75px;
+  }
+}
+
+/* --- 3. EKSTRA KÜÇÜK EKRANLAR (max-width: 380px) --- */
+@media (max-width: 380px) {
+  .header-container {
+    width: 90%;
+    padding: 0 15px;
+  }
+  
+  .logo-text {
+    font-size: 13px !important;
   }
 }

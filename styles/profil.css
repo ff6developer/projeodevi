@@ -390,13 +390,38 @@
   gap: 8px;
 }
 
-.coffee-select-wrapper.selected .coffee-select-btn {
+.coffee-select-wrapper.selected .coffee-select-content {
   border: 2px solid var(--primary-coffee);
   background: linear-gradient(135deg, rgba(197,138,92,0.18), rgba(0,0,0,0.4));
   box-shadow: 0 8px 25px rgba(197,138,92,0.25);
 }
 
 /* ===== COFFEE SEÇİM BUTONU ===== */
+
+.coffee-select-content {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  cursor: pointer;
+  transition: 0.2s;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.coffee-select-content:hover {
+  border-color: var(--primary-coffee);
+  background: rgba(197,138,92,0.08);
+  transform: translateY(-2px);
+}
+
 .coffee-select-btn {
   flex: 1;
   display: flex;

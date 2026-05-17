@@ -32,7 +32,11 @@ export default function Dashboard({
           marginBottom: "16px"
         }}
       >
-        <span>{currentTime.toLocaleString("tr-TR")}</span>
+<span>
+  {currentTime
+    ? currentTime.toLocaleString("tr-TR")
+    : ""}
+</span>
       </div>
 
       {/* STATS */}

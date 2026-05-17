@@ -65,7 +65,7 @@ export default function AdminPanel() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [orderDetailOpen, setOrderDetailOpen] = useState(false)
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [currentTime, setCurrentTime] = useState<Date | null>(null)
 
   // Ekran boyutu kontrolü
   useEffect(() => {
@@ -272,12 +272,15 @@ export default function AdminPanel() {
   }
 
   // Real-time clock
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date())
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [])
+useEffect(() => {
+  setCurrentTime(new Date())
+
+  const timer = setInterval(() => {
+    setCurrentTime(new Date())
+  }, 1000)
+
+  return () => clearInterval(timer)
+}, [])
 
   const openOrderDetail = (order: Order) => {
     setSelectedOrder(order)

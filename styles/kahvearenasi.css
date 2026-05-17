@@ -1002,10 +1002,42 @@
   gap: 15px;
 }
 
-/* --- RESPONSIVE --- */
+/* ==========================================================================
+   RESPONSIVE DESIGN – ELMENES COFFEE ARENA (2026)
+   ========================================================================== */
+
+/* ---------- GLOBAL ADAPTIVE RULES ---------- */
+:root {
+  --arena-padding-h: clamp(10px, 4vw, 40px);
+  --arena-padding-v: clamp(40px, 8vw, 140px);
+  --arena-gap: clamp(15px, 4vw, 40px);
+}
+
+/* ---------- XL → LG (≤ 1440px) ---------- */
+@media (max-width: 1440px) {
+  .arena-page {
+    padding: var(--arena-padding-v) var(--arena-padding-h);
+  }
+
+  .arena-header {
+    margin-bottom: 60px;
+  }
+
+  .rewards-grid,
+  .arena-grid {
+    gap: var(--arena-gap);
+  }
+}
+
+/* ---------- TABLET LANDSCAPE (≤ 1024px) ---------- */
 @media (max-width: 1024px) {
-  .arena-page { 
-    padding: 120px 20px 40px 20px; 
+  .arena-page {
+    padding: 120px var(--arena-padding-h) 60px var(--arena-padding-h);
+  }
+
+  .arena-title-area h1 {
+    font-size: clamp(36px, 6vw, 65px);
+    letter-spacing: 6px;
   }
 
   .rewards-grid {
@@ -1015,6 +1047,7 @@
   .process-timeline {
     flex-wrap: wrap;
     gap: 30px;
+    justify-content: center;
   }
 
   .process-timeline::before {
@@ -1022,65 +1055,233 @@
   }
 
   .process-step {
-    max-width: 150px;
-  }
-
-  .step-icon-wrapper::after {
-    display: none;
+    max-width: 200px;
   }
 
   .join-card {
     flex-direction: column;
     text-align: center;
+    padding: 30px;
   }
 
   .join-left {
     flex-direction: column;
+    gap: 15px;
   }
 
-  .podium-container { 
-    flex-direction: column; 
-    align-items: center; 
-    gap: 50px; 
+  .podium-container {
+    flex-wrap: wrap;
+    gap: 20px;
   }
 
-  .podium-card { 
-    width: 100%; 
-    max-width: 380px; 
-  }
-
-  .gold { 
-    order: -1; 
-    transform: scale(1.05); 
-  }
-
-  .user-drawer {
-    width: 100%;
+  .podium-card {
+    width: 240px;
+    padding: 30px 20px;
   }
 
   .arena-grid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
+  }
+
+  .user-drawer {
+    width: 380px;
+    padding: 40px 30px;
   }
 }
 
+/* ---------- SMALL TABLET / LARGE PHONE (≤ 768px) ---------- */
 @media (max-width: 768px) {
+  .arena-page {
+    padding: 100px 5% 60px 5%;
+    background-position: center top;
+  }
+
+  .arena-header {
+    margin-bottom: 40px;
+  }
+
   .arena-title-area h1 {
-    font-size: clamp(30px, 10vw, 50px);
-    letter-spacing: 5px;
+    font-size: clamp(28px, 7vw, 52px);
+    letter-spacing: 4px;
+  }
+
+  .arena-title-area p {
+    font-size: 15px;
+  }
+
+  .days-badge {
+    font-size: 13px;
+    padding: 6px 18px;
+  }
+
+  .rewards-section {
+    margin-bottom: 60px;
+  }
+
+  .reward-card {
+    padding: 30px 20px;
+    border-radius: 18px;
+  }
+
+  .reward-icon-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+  .reward-card h3 {
+    font-size: 1rem;
   }
 
   .rewards-grid {
     grid-template-columns: 1fr;
   }
 
+  .process-header h2 {
+    font-size: 24px;
+    letter-spacing: 3px;
+  }
+
+  .process-timeline {
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+  }
+
   .process-step {
-    max-width: 100%;
-    width: 100%;
+    max-width: 350px;
+  }
+
+  .step-icon-wrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .step-title {
+    font-size: 0.95rem;
+  }
+
+  .join-card {
+    padding: 25px 20px;
+    gap: 20px;
+  }
+
+  .join-icon-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .join-text h3 {
+    font-size: 1.1rem;
+  }
+
+  .podium-header strong {
+    font-size: 1rem;
   }
 
   .podium-card {
-    padding: 30px 15px;
+    width: 220px;
+  }
+
+  .arena-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .arena-item-card {
+    border-radius: 25px;
+  }
+
+  .card-body {
+    padding: 24px;
+  }
+
+  .comment-input-row input {
+    padding: 10px 15px;
+  }
+
+  .comment-input-row button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-drawer {
+    width: 100%;
+    max-width: 360px;
+    padding: 30px 25px;
+  }
+
+  .drawer-stats-row {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .drawer-stat-item strong {
+    font-size: 26px;
+  }
+
+  .full-profile-btn {
+    padding: 15px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ---------- MOBILE PORTRAIT (≤ 480px) ---------- */
+@media (max-width: 480px) {
+  .arena-page {
+    padding: 80px 4% 100px;
+  }
+
+  .arena-title-area h1 {
+    font-size: clamp(24px, 8vw, 38px);
+    letter-spacing: 2.5px;
+  }
+
+  .arena-title-area p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .rewards-section {
+    margin: 20px auto 40px;
+  }
+
+  .rewards-grid {
+    gap: 20px;
+  }
+
+  .reward-icon-wrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .reward-card {
+    padding: 20px 15px;
+  }
+
+  .process-timeline {
+    padding: 0;
+  }
+
+  .process-step {
+    max-width: 100%;
+  }
+
+  .join-card {
+    gap: 15px;
+  }
+
+  .join-text p {
+    font-size: 0.9rem;
+  }
+
+  .podium-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .podium-card {
+    width: 90%;
+    padding: 25px 15px;
   }
 
   .podium-img {
@@ -1088,11 +1289,107 @@
     height: 100px;
   }
 
+  .rank-label {
+    font-size: 12px;
+    padding: 6px 18px;
+  }
+
+  .arena-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
   .card-actions {
     padding: 15px 20px;
   }
 
-  .comment-section-mini {
-    margin: 0 20px 20px 20px;
+  .vote-btn, .comment-btn {
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .score-badge {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .user-drawer {
+    width: 100%;
+    height: 100%;
+    border-left: none;
+    border-top: 1px solid var(--glass-border);
+    border-radius: 25px 25px 0 0;
+    bottom: 0;
+    top: auto;
+    transform: translateY(100%);
+  }
+
+  .user-drawer-overlay.open .user-drawer {
+    transform: translateY(0);
+  }
+
+  .close-drawer {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* ---------- SMALL MOBILE (≤ 360px) ---------- */
+@media (max-width: 360px) {
+  .arena-page {
+    padding: 70px 12px;
+  }
+
+  .arena-title-area h1 {
+    font-size: 22px;
+  }
+
+  .reward-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .join-card {
+    padding: 15px;
+  }
+
+  .join-icon-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
+  .arena-item-card,
+  .podium-card {
+    border-radius: 20px;
+  }
+
+  .card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .vote-btn, .comment-btn {
+    width: 100%;
+  }
+}
+
+/* ---------- ACCESSIBILITY ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .reward-card,
+  .process-step,
+  .podium-card,
+  .arena-item-card,
+  .user-drawer {
+    transition: none !important;
+  }
+  .podium-card:hover,
+  .reward-card:hover {
+    transform: none !important;
+  }
+}
+
+/* ---------- DARK MODE (Fallback – keeps same design) ---------- */
+@media (prefers-color-scheme: dark) {
+  .arena-page {
+    background: #050505;
   }
 }
