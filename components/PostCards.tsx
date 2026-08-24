@@ -43,7 +43,7 @@ export default function PostCard({ post, user, avatar, onDelete }: PostCardProps
             <div className="post-date">{post.date}</div>
           </div>
         </div>
-        <button className="delete-post" onClick={() => onDelete(post.id)}>
+        <button className="delete-post" onClick={() => onDelete(post.id)} aria-label="Gönderiyi Sil">
           <Trash2 size={18} />
         </button>
       </div>

@@ -1,80 +1,95 @@
 .about-container {
     width: 100%;
-    background-color: #fff;
+    background-color: #0b0b0b;
     padding: 0; /* Boşlukları Grid yönetmeli */
     box-sizing: border-box;
 }
 
 .about-content {
     display: grid;
-    /* Görseller 2 birim, Metinler 3 birim genişlik alacak */
-    grid-template-columns: 2fr 3fr; 
+    grid-template-columns: 1fr 1fr; /* Sol ve Sağ eşit genişlikte */
     width: 100%;
     min-height: 100vh; /* Ekranın tam yüksekliğini kaplasın (opsiyonel) */
+    align-items: stretch;
 }
 
 .about-images-wrapper {
-    display: flex;
-    flex-direction: row; /* Yan yana diz */
+    display: flex !important;
+    flex-direction: column !important; /* Üst üste dizilimi zorla */
     width: 100%;
     height: 100%; /* Dikeyde tam boyut */
     overflow: hidden; /* Taşmayı engelle */
+    padding: 30px 0 0 0; /* Üstte 30px, diğerleri 0 */
+    gap: 15px; /* İki görsel arasındaki hafif boşluk */
+    grid-row-start: 1;
+    grid-row-end: -1;
 }
 
 .about-img {
     flex: 1; /* İki görsel de eşit genişlik alsın */
-    width: 50%;
+    width: 100%;
     height: 100%; /* Dikeyde tam boyut */
     object-fit: cover; /* Görseli bozmadan sığdır */
     object-position: center; /* Merkeze odaklan */
     filter: brightness(0.9); /* Metinlerin öne çıkması için hafif karartma */
+    display: block;
+    border-radius: 4px; /* Hafif yuvarlak köşeler */
 }
 
 .text-wrapper {
-    padding: 80px 10% 80px 8%; /* İç boşluklar */
+    padding: 60px 8%; /* İç boşluklar */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Dikeyde ortala */
     gap: 60px; /* Hikayemiz ve Amacımız arası boşluk */
-    background-color: #fdfaf7; /* Hafif kremsi arka plan */
+    background-color: #e1c275df; /* Çok koyu kahve */
+    color: #ffffff;
 }
 
 .about-text-content {
     text-align: left;
 }
 
-.subtitle {
-    color: #8d6e63;
+.subtitle,
+.amacimiz-baslik h2 {
+    font-size: 16px;
     letter-spacing: 5px;
-    font-size: 30px;
-    margin-bottom: 10px; /* Boşluğu 160'tan 10'a düşürdük */
     text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #d4a373; /* Karamel rengi */
     display: block; /* Çizginin altına inmesi için önemli */
+}
+
+.amacimiz-baslik h2 {
+    color: #8d6e63;
 }
 
 .divider {
     width: 60px;
     height: 3px;
-    background-color: #8d6e63;
+    background-color: #d4a373;
     margin-top: 5px;    /* Hikayemiz yazısına yakınlığı */
     margin-bottom: 20px; /* Elmenes yazısına olan mesafesi */
-    /* margin-left: 0; Sola yaslı kalsın */
 }
 
 .brand-title {
-    font-size: 80px; /* 100px çok büyük geldiyse 80px idealdir */
+    font-size: 100px;
     font-weight: 800;
-    color: #0e0202;
-    margin-top: 0 !important; /* Negatif değerleri ( -150px gibi ) tamamen siliyoruz */
-    margin-bottom: 20px;
+    color: #1a1a1a;
+    margin-top: 0; /* Negatif değerleri ( -150px gibi ) tamamen siliyoruz */
+    margin-bottom: 10px;
     line-height: 1.1;
     letter-spacing: -1px;
 }
+
 .description {
-    font-size: 17px;
+    font-size: 20px; /* Okumayı kolaylaştırmak için büyütüldü */
     line-height: 1.8;
-    color: #555;
-    margin-bottom: 30px;
+    color: #444;
+    margin-bottom: 40px;
 }
 
 .features-grid {
@@ -84,34 +99,30 @@
     margin-bottom: 30px;
 }
 
-.feature-item h5 {
-    font-size: 16px;
-    color: #170101;
-    margin-bottom: 10px;
+.feature-item h2 {
+    font-size: 30px; /* Alt başlıklar */
+    color: #2c2c2c;
+    margin-bottom: 12px;
 }
 
 .feature-item p {
-    font-size: 14px;
-    color: #777;
+    font-size: 16px;
+    color: #666;
 }
 
 .tagline {
     font-style: italic;
-    font-size: 20px;
+    font-size: 24px;
     color: #8d6e63;
+    margin-top: 20px;
     margin-bottom: 30px;
+    font-family: var(--font-playfair), 'Playfair Display', serif;
 }
 
 .amacimiz-konteyner {
     text-align: left; /* Sola yasla */
     padding: 0;
     background-color: transparent; /* text-wrapper'ın rengini kullan */
-}
-
-.amacimiz-baslik h2 {
-    font-size: 2rem;
-    color: #3e2723;
-    margin-bottom: 10px;
 }
 
 .amacimiz-cizgi {
@@ -124,170 +135,21 @@
 .amacimiz-kartlar {
     display: flex;
     justify-content: flex-start; /* Sola yasla */
-    gap: 20px;
+    gap: 25px;
     flex-wrap: wrap;
     max-width: 1000px;
-}
-
-.text-wrapper {
-    /* Mevcut padding ve flex ayarların kalsın, sadece bunları ekle/değiştir */
-    background-color: #e1c275df !important; /* Çok koyu kahve */
-    color: #ffffff !important;
-}
-
-/* Hikayemiz başlığı ve altındaki çizgi */
-.subtitle {
-    color: #d4a373 !important; /* Karamel rengi */
-}
-
-.divider {
-    background-color: #d4a373 !important;
-}
-.amac-kart {
-    flex: 1;
-    min-width: 200px; /* Biraz daha dar */
-    padding: 15px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-}
-
-.amac-kart h3 {
-    font-size: 1.1rem;
-    color: #d4a373;
-    margin-bottom: 10px;
-}
-
-.amac-kart p {
-    font-size: 13px;
-    color: #5d4037;
-    line-height: 1.6;
-}
-
-.about-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Sol ve Sağ eşit genişlikte */
-    width: 100%;
-    min-height: 100vh; /* Ekranın tüm yüksekliğini kaplar */
-    align-items: stretch; /* Görsellerin boyunu metinlerle eşitler */
-}
-
-/* Görsellerin kapsayıcısı */
-.about-images-wrapper {
-    display: flex !important;
-    flex-direction: column !important; /* Üst üste dizilimi zorla */
-    width: 100%;
-    /* Dikey boşlukları daha esnek yönetmek için padding ekliyoruz */
-    padding: 30px 0 0 0; /* Üstte 30px, diğerleri 0 */
-    overflow: hidden;
-    gap: 15px; /* İki görsel arasındaki hafif boşluk */
-    /* text-wrapper ile aynı yüksekliği alması için grid-row-start kullanıyoruz */
-    grid-row-start: 1; 
-    grid-row-end: -1;
-}
-
-/* Genel görsel stilleri */
-.about-img {
-    width: 100%; /* Yatayda alanı tam doldurur */
-    object-fit: cover; /* Görseli bozmadan alanı doldurur */
-    display: block;
-    border-radius: 4px; /* Hafif yuvarlak köşeler */
-}
-
-/* Üstteki görsel (hafif aşağı kaysın) */
-.first-img {
-    height: calc(50% - 7.5px - 30px); /* İlk başta yarım yükseklik alacak, padding ve gap'in yarısı çıkarılacak */
-    margin-top: 30px; /* Üstten 30px daha aşağı kaydır */
-}
-
-/* Alttaki görsel (aşağıyı full kaplasın) */
-.second-img {
-    /* Esnek dikey boşluğu kaplaması için flex-grow: 1 kullanıyoruz */
-    flex-grow: 1; 
-    /* Dikeyde en az %50 yükseklik almasını garanti et */
-    min-height: 50%; 
-    height: auto; /* Yüksekliği flex'in belirlemesine izin ver */
-}
-.text-wrapper {
-    padding: 60px 8%; /* Metinlerin etrafındaki boşluk */
-    display: flex;
-    flex-direction: column;
-    
-    background-color: #fff; /* Arka planı bembeyaz yapar */
-}
-
-<<<<<<< HEAD
-=======
-/* Mobil için görsellerin kaybolmaması için: */
-@media (max-width: 768px) {
-    .about-content {
-        grid-template-columns: 1fr;
-    }
-    .about-images-wrapper {
-        height: 400px;
-    }
-}
-
->>>>>>> 7435b9c2501a802eb2d22081304d8b199654e0fb
-.brand-title {
-    font-size: 100px; /* Yazı boyutunu önemli ölçüde büyüttük (eski hali muhtemelen 42px veya 54px idi) */
-    font-weight: 800; /* Daha kalın ve belirgin olması için */
-    color: #1a1a1a;
-    /* Yukarı taşımak için negatif margin kullanıyoruz */
-    margin-top: -150px; /* Başlığı yukarı çeker. İhtiyaca göre bu değeri artırabilirsiniz (örn: -60px) */
-    margin-bottom: 10px; /* Alttaki çizgiyle arasını biraz daralttık */
-    line-height: 1.1; /* Satır yüksekliğini daraltarak başlığın bütünlüğünü koruduk */
-    letter-spacing: -1px; /* Harfler arası mesafeyi hafif daraltarak modern bir görünüm kattık */
-}
-
-.description {
-    font-size: 20px; /* Okumayı kolaylaştırmak için büyütüldü */
-    line-height: 1.8;
-    color: #444;
-    margin-bottom: 40px;
-}
-
-.feature-item h5 {
-    font-size: 30px; /* Alt başlıklar */
-    color: #2c2c2c;
-    margin-bottom: 12px;
-}
-
-.feature-item p {
-    font-size: 16px;
-    color: #666;
-}
-
-.tagline {
-    font-size: 24px;
-    font-style: italic;
-    color: #8d6e63;
-    margin-top: 20px;
-    font-family: 'Playfair Display', serif;
-}
-
-/* --- Amacımız Başlığı --- */
-.amacimiz-baslik h2 {
-    font-size: 40px; /* Amacımız başlığı büyütüldü */
-    color: #3e2723;
-}
-
-/* --- Amacımız Kartları ve Hover Efekti --- */
-
-.amacimiz-kartlar {
-    display: flex;
-    gap: 25px;
     margin-top: 50px;
 }
 
 .amac-kart {
     flex: 1;
+    min-width: 200px; /* Biraz daha dar */
     padding: 30px;
     background: #ffffff;
     border-radius: 15px;
     border: 1px solid #f0f0f0;
     /* Geçiş efektinin hızı */
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     cursor: pointer;
 }
@@ -300,7 +162,7 @@
 }
 
 /* Hover olunca yazı renklerini değiştirme */
-.amac-kart:hover h3, 
+.amac-kart:hover h3,
 .amac-kart:hover p {
     color: #ffffff !important; /* Yazıları beyaza çevir */
 }
@@ -319,19 +181,29 @@
     transition: color 0.3s;
 }
 
-/* İki başlığı tek seferde yönetmek için */
-.subtitle, .amacimiz-baslik h2 {
-    color: #8d6e63;
-    font-size: 16px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
+/* Üstteki görsel (hafif aşağı kaysın) */
+.first-img {
+    height: calc(50% - 7.5px - 30px); /* İlk başta yarım yükseklik alacak, padding ve gap'in yarısı çıkarılacak */
+    margin-top: 30px; /* Üstten 30px daha aşağı kaydır */
 }
 
-.about-container {
-    width: 100%;
-    background-color: #0b0b0b; /* İstediğiniz yeni renk (Örn: Soft Gri) */
-    padding: 0;
-    box-sizing: border-box;
+/* Alttaki görsel (aşağıyı full kaplasın) */
+.second-img {
+    /* Esnek dikey boşluğu kaplaması için flex-grow: 1 kullanıyoruz */
+    flex-grow: 1;
+    /* Dikeyde en az %50 yükseklik almasını garanti et */
+    min-height: 50%;
+    height: auto; /* Yüksekliği flex'in belirlemesine izin ver */
+}
+
+/* Mobil için görsellerin kaybolmaması için: */
+@media (max-width: 768px) {
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+    .about-images-wrapper {
+        height: 400px;
+    }
 }
 
 /* ==========================================================================
@@ -444,7 +316,7 @@
     gap: var(--spacing-sm);
   }
 
-  .feature-item h5 {
+  .feature-item h2 {
     font-size: var(--font-md);
   }
 
@@ -570,7 +442,7 @@
     border-radius: 10px;
   }
 
-  .feature-item h5 {
+  .feature-item h2 {
     font-size: 18px;
     margin-bottom: 8px;
   }
@@ -743,7 +615,7 @@
     padding: 14px;
   }
 
-  .feature-item h5 {
+  .feature-item h2 {
     font-size: 16px;
   }
 

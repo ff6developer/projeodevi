@@ -43,6 +43,7 @@ export default function AdminSidebar({
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="mobile-menu-btn"
+            aria-label={sidebarOpen ? "Menüyü Kapat" : "Menüyü Aç"}
           >
             {sidebarOpen ? "✕" : "☰"}
           </button>

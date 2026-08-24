@@ -2,7 +2,7 @@
 .coffee-layout {
   display: flex;
   min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
   position: relative;
   width: 100%;
 }
@@ -49,7 +49,7 @@
   position: relative;
   z-index: 3;
   display: flex;
-  irection: column;
+  flex-direction: column;
   align-items: flex-start;
   padding: 60px 50px;
   overflow: visible;
@@ -191,16 +191,6 @@
   font-size: 1.05em;
 }
 
-/* ===== FİNAL ADIMI (SİPARİŞ BUTONU KONUMU) ===== */
-.final-arena-step {
-  position: fixed;
-  left: 120px;
-  top: 65vh;
-  width: 400px;
-  z-index: 4;
-  animation: readyPop 0.5s ease;
-}
-
 /* ===== SAĞ PANEL (SEÇENEK KAYDIRMA ALANI) ===== */
 .coffee-right {
   width: 55%;
@@ -233,8 +223,11 @@
   color: white;
   font-size: 32px;
   font-weight: 700;
-  margin-bottom: 32px;
+  margin: 0;
   text-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .option-group {
@@ -348,7 +341,6 @@
   }
   .hero-sub,
   .arena-stats-container,
-  .final-arena-step,
   .lab-badge,
   .coffee-name-input-wrapper {
     left: 40px;
@@ -360,23 +352,70 @@
   }
 }
 
-/* ===== SECTION HEADER ===== */
-.section-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 25px;
-  width: 100%;
-}
+/* ===== TELEFON: DÜZENİ ALT ALTA (STACKED) ÇEVİR =====
+   Yukarıdaki sabit (fixed) konumlu öğeler geniş ekranlar için tasarlandı.
+   Telefon genişliklerinde .coffee-left ve .coffee-right yan yana sığmıyor
+   ve sabit konumlu metinler ekran dışına taşıyordu; bu yüzden mobilde
+   normal akışa (stacked/static) geçiriyoruz. */
+@media (max-width: 768px) {
+  .coffee-layout {
+    flex-direction: column;
+  }
 
-.section-title {
-  font-size: 32px;
-  color: white;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  .coffee-left {
+    width: 100%;
+    min-height: auto;
+    padding: 110px 20px 30px;
+  }
+
+  .lab-badge,
+  .hero-title,
+  .hero-sub,
+  .arena-stats-container,
+  .coffee-name-input-wrapper,
+  .hero-btn,
+  .arena-btn {
+    position: static;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .lab-badge {
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+
+  .hero-title {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .hero-sub {
+    margin-bottom: 20px;
+  }
+
+  .arena-stats-container {
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+
+  .coffee-name-input-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .hero-btn,
+  .arena-btn {
+    width: fit-content;
+  }
+
+  .coffee-right {
+    width: 100%;
+    height: auto;
+  }
 }
 
 .required-star {

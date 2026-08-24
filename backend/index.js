@@ -14,8 +14,14 @@ app.use(express.json());
 // Geçici bir "veritabanı" (Sunucu kapanınca sıfırlanır)
 const users = [];
 
+// NOT: Rotalar "/api/backend" öneki ile tanımlanıyor çünkü Vercel Services
+// yönlendirmesi isteğin ORİJİNAL tam path'ini backend servisine değiştirmeden
+// iletir (bkz. kök dizindeki vercel.json'daki rewrite kuralı). Yani tarayıcıdan
+// /api/backend/auth/login'e giden bir istek, Express'e de tam olarak
+// /api/backend/auth/login olarak ulaşır.
+
 // --- KAYIT OLMA (REGISTER) ---
-app.post('/api/auth/register', (req, res) => {
+app.post('/api/backend/auth/register', (req, res) => {
     const { name, email, password } = req.body;
 
     // Email daha önce kullanılmış mı?
@@ -32,7 +38,7 @@ app.post('/api/auth/register', (req, res) => {
 });
 
 // --- GİRİŞ YAPMA (LOGIN) ---
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/backend/auth/login', (req, res) => {
     const { email, password } = req.body;
 
     const user = users.find(u => u.email === email && u.password === password);
@@ -48,7 +54,7 @@ app.post('/api/auth/login', (req, res) => {
     });
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Backend sunucusu http://localhost:${PORT} adresinde çalışıyor!`);
 });

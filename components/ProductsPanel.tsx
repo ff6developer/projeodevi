@@ -79,6 +79,7 @@ export default function ProductsPanel({
             <button
               onClick={() => deleteProduct(product.id)}
               className="delete-product-btn"
+              aria-label={`${product.name} ürününü sil`}
             >
               🗑️
             </button>

@@ -122,6 +122,35 @@
   box-shadow: 0 0 20px var(--accent-glow);
 }
 
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  padding-right: 46px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.password-toggle-btn:hover {
+  opacity: 0.9;
+}
+
 /* BUTON */
 .login-button {
   width: 100%;
@@ -138,14 +167,20 @@
   box-shadow: 0 10px 20px rgba(197, 138, 92, 0.2);
 }
 
-.login-button:hover {
+.login-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 15px 25px rgba(197, 138, 92, 0.3);
   filter: brightness(1.1);
 }
 
-.login-button:active {
+.login-button:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* LİNKLER */
@@ -155,6 +190,14 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+}
+
+.login-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .login-links span {

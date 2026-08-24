@@ -29,34 +29,54 @@ export default function OrderCard({
             {statusConfig.icon}
           </div>
           <div>
-            <h3>
+            <h3 className="order-card-id">
               {order.coffeeName || `Sipariş #${order.id}`}
             </h3>
-            <p>{formatDate(order.date)}</p>
+            <p className="order-card-date">{formatDate(order.date)}</p>
           </div>
         </div>
 
         <div className="order-card-meta">
-          <p>₺{order.totalPrice}</p>
-          <span>{order.status}</span>
+          <div className="order-card-price">
+            <p className="order-price-value">₺{order.totalPrice}</p>
+            {order.originalPrice && order.originalPrice !== order.totalPrice && (
+              <p className="order-price-original">₺{order.originalPrice}</p>
+            )}
+          </div>
+          <div className="order-status-pill" style={{ background: statusConfig.bg }}>
+            <span>{order.status}</span>
+          </div>
         </div>
       </div>
 
-      <div>
+      <div className="order-card-details">
         {renderOrderDetails(order.details)}
       </div>
+
+      {(order.score !== undefined || order.isFromArena) && (
+        <div className="order-card-score">
+          {order.isFromArena && <span className="arena-badge-large">🏆 Arena</span>}
+          {order.score !== undefined && (
+            <div className="score-badge">
+              <span className="score-value">⭐ {order.score}</span>
+            </div>
+          )}
+        </div>
+      )}
 
 <div className="order-card-actions">
   <button
     onClick={() => updateStatus(order.id, "Hazırlanıyor")}
-    className="action-btn preparing"
+    className={`action-btn preparing ${order.status === "Hazırlanıyor" ? "disabled" : ""}`}
+    disabled={order.status === "Hazırlanıyor"}
   >
     <span>◐</span> Hazırlanıyor
   </button>
 
   <button
     onClick={() => updateStatus(order.id, "Hazır")}
-    className="action-btn ready"
+    className={`action-btn ready ${order.status === "Hazır" ? "disabled" : ""}`}
+    disabled={order.status === "Hazır"}
   >
     <span>✓</span> Hazır
   </button>
@@ -64,6 +84,7 @@ export default function OrderCard({
   <button
     onClick={() => deleteOrder(order.id)}
     className="action-btn delete"
+    aria-label="Siparişi Sil"
   >
     <span>🗑️</span> Sil
   </button>

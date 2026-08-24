@@ -50,17 +50,48 @@ export default function Dashboard({
           { label: "Toplam İndirim", value: `₺${stats.totalDiscount}`, icon: "🎁" }
         ].map((stat, i) => (
           <div key={i} className="stat-card">
-            <p>{stat.icon}</p>
-            <p>{stat.label}</p>
-            <p>{stat.value}</p>
+            <div className="stat-card-icon">{stat.icon}</div>
+            <p className="stat-card-label">{stat.label}</p>
+            <p className="stat-card-value">{stat.value}</p>
           </div>
         ))}
+      </div>
+
+      {/* STATUS OVERVIEW */}
+      <div className="status-overview">
+        <h3 className="section-heading">Sipariş Durumu</h3>
+
+        <div className="status-grid">
+          <div
+            className="status-box"
+            style={{ ["--status-color" as any]: "#6366f1", ["--status-glow" as any]: "rgba(99, 102, 241, 0.15)" }}
+          >
+            <p className="status-count">{stats.pending}</p>
+            <p className="status-label">Bekliyor</p>
+          </div>
+
+          <div
+            className="status-box"
+            style={{ ["--status-color" as any]: "#d97706", ["--status-glow" as any]: "rgba(217, 119, 6, 0.15)" }}
+          >
+            <p className="status-count">{stats.preparing}</p>
+            <p className="status-label">Hazırlanıyor</p>
+          </div>
+
+          <div
+            className="status-box"
+            style={{ ["--status-color" as any]: "#16a34a", ["--status-glow" as any]: "rgba(22, 163, 74, 0.15)" }}
+          >
+            <p className="status-count">{stats.ready}</p>
+            <p className="status-label">Hazır</p>
+          </div>
+        </div>
       </div>
 
       {/* RECENT ORDERS */}
       <div className="recent-orders">
         <div className="recent-orders-header">
-          <h3>Son Siparişler</h3>
+          <h3 className="section-heading" style={{ margin: 0 }}>Son Siparişler</h3>
           <button
             onClick={() => setActiveTab("orders")}
             className="view-all-btn"
@@ -69,26 +100,34 @@ export default function Dashboard({
           </button>
         </div>
 
-        {orders.slice(0, 5).map(order => {
-          const statusConfig = getStatusConfig(order.status)
+        {orders.length === 0 ? (
+          <p style={{ textAlign: "center", padding: "24px 0", color: "var(--text-muted)" }}>
+            Henüz sipariş yok.
+          </p>
+        ) : (
+          orders.slice(0, 5).map(order => {
+            const statusConfig = getStatusConfig(order.status)
 
-          return (
-            <div key={order.id} className="recent-order-item">
-              <div>
-                <div>{statusConfig.icon}</div>
-                <div>
-                  <p>{order.coffeeName}</p>
-                  <p>{formatDate(order.date)}</p>
+            return (
+              <div key={order.id} className="recent-order-item">
+                <div className="recent-order-info">
+                  <div className="recent-order-icon" style={{ background: statusConfig.bg }}>
+                    {statusConfig.icon}
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <p className="recent-order-id">{order.coffeeName || `Sipariş #${order.id}`}</p>
+                    <p className="recent-order-date">{formatDate(order.date)}</p>
+                  </div>
+                </div>
+
+                <div className="recent-order-meta">
+                  <p className="recent-order-price">₺{order.totalPrice}</p>
+                  <p className="recent-order-status">{order.status}</p>
                 </div>
               </div>
-
-              <div>
-                <p>₺{order.totalPrice}</p>
-                <p>{order.status}</p>
-              </div>
-            </div>
-          )
-        })}
+            )
+          })
+        )}
       </div>
     </div>
   )

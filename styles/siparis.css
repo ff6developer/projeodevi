@@ -10,13 +10,8 @@
   display:flex;
   justify-content:center;
   align-items:center;
-  .profil-page{
-  min-height:100vh;
-  width:100%;
-  background:#0f0f0f;
-  color:white;
-  font-family:system-ui;
-}}
+  overflow-y:auto;
+}
 
 /* DARK CINEMATIC OVERLAY */
 .siparis-overlay{
@@ -38,7 +33,7 @@
 /* HERO TITLE */
 .siparis-hero{
   color:white;
-  font-size:80px;
+  font-size:clamp(34px, 8vw, 80px);
   font-weight:900;
   letter-spacing:-2px;
   margin-bottom:30px;
@@ -49,11 +44,127 @@
 /* DESCRIPTION */
 .siparis-desc{
   color:rgba(255,255,255,0.85);
-  font-size:22px;
+  font-size:clamp(15px, 2.5vw, 22px);
   line-height:1.7;
   font-weight:400;
 
   animation:descFade 1.8s ease;
+}
+
+/* ORDER SUMMARY CARD */
+.siparis-order-summary{
+  margin:30px auto 0;
+  max-width:420px;
+  padding:20px 24px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  text-align:left;
+  animation:descFade 1.8s ease;
+}
+
+.siparis-order-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.siparis-order-row:last-child{
+  border-bottom:none;
+}
+
+.siparis-order-label{
+  color:rgba(255,255,255,0.6);
+  font-size:13px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+
+.siparis-order-value{
+  color:#fff;
+  font-size:15px;
+  font-weight:700;
+  text-align:right;
+}
+
+.siparis-order-discount{
+  display:block;
+  color:#c58a5c;
+  font-size:12px;
+  font-weight:600;
+  margin-top:2px;
+}
+
+.siparis-fallback-note{
+  margin-top:20px;
+  font-size:16px;
+}
+
+/* ACTIONS */
+.siparis-actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:28px;
+}
+
+.siparis-btn{
+  padding:14px 28px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:700;
+  font-family:inherit;
+  transition:0.25s;
+  min-height:48px;
+}
+
+.siparis-btn-primary{
+  background:linear-gradient(135deg, #c58a5c, #8b5e3c);
+  color:#fff;
+  box-shadow:0 10px 30px rgba(197, 138, 92, 0.3);
+}
+
+.siparis-btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 15px 35px rgba(197, 138, 92, 0.4);
+}
+
+.siparis-btn-secondary{
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.2);
+}
+
+.siparis-btn-secondary:hover{
+  background:rgba(255,255,255,0.14);
+  transform:translateY(-2px);
+}
+
+@media (max-width:480px){
+  .siparis-content{
+    padding:24px 16px;
+  }
+
+  .siparis-order-summary{
+    max-width:100%;
+  }
+
+  .siparis-actions{
+    flex-direction:column;
+  }
+
+  .siparis-btn{
+    width:100%;
+  }
 }
 
 /* HERO ANIMATION */

@@ -10,7 +10,7 @@ html, body {
   min-height: 100%;
   overflow-x: hidden;
   background-color: #080808;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-inter), 'Inter', sans-serif;
   color: #ffffff;
 }
 

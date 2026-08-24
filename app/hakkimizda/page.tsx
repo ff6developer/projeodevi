@@ -1,55 +1,68 @@
-"use client";
-import React from 'react';
+import type { Metadata } from 'next';
 import '../../styles/hakkimizda.css';
+
+export const metadata: Metadata = {
+  title: "Hakkımızda",
+  description:
+    "Elmenes Coffee olarak yolculuğumuz, kahvenin birleştirici gücüne ve sunduğu eşsiz deneyime olan tutkumuzla başladı.",
+  alternates: {
+    canonical: "/hakkimizda",
+  },
+};
 
 const About = () => {
   return (
     <section className="about-container">
       <div className="about-content">
         <div className="about-images-wrapper">
-          <img 
-            src="hakkimizdagorsel2.jpg" 
-            alt="Elmenes Coffee Sanatı" 
+          <img
+            src="/hakkimizdagorsel2.jpg"
+            alt="Elmenes Coffee Sanatı"
             className="about-img first-img"
+            // Bu görsel büyük olasılıkla sayfanın LCP (En Büyük İçerikli Boyama) öğesi
+            fetchPriority="high"
+            decoding="async"
           />
-          <img 
-            src="hakkiimizdagorsel.png" 
-            alt="Elmenes Coffee Kavurma" 
+          <img
+            src="/hakkiimizdagorsel.png"
+            alt="Elmenes Coffee Kavurma"
             className="about-img second-img"
+            loading="lazy"
+            decoding="async"
           />
         </div>
 
-       
+
         <div className="text-wrapper">
             <div className="about-text-content">
-            <h4 className="subtitle">HİKAYEMİZ</h4>
+            <p className="subtitle">HİKAYEMİZ</p>
             <div className="divider"></div>
-            <h2 className="brand-title">Elmenes Coffee</h2>
+            <h1 className="brand-title">Elmenes Coffee</h1>
             <p className="description">
-              Elmenes Coffee olarak yolculuğumuz, sadece bir fincan kahve sunma isteğiyle değil, 
-              kahvenin birleştirici gücüne ve sunduğu eşsiz deneyime olan tutkumuzla başladı. 
+              Elmenes Coffee olarak yolculuğumuz, sadece bir fincan kahve sunma isteğiyle değil,
+              kahvenin birleştirici gücüne ve sunduğu eşsiz deneyime olan tutkumuzla başladı.
               Bizim için kahve; topraktan fincana uzanan emek dolu bir hikâye ve bir sanattır.
             </p>
             <div className="features-grid">
               <div className="feature-item">
-                <h5>Nitelikli Çekirdek</h5>
+                <h2>Nitelikli Çekirdek</h2>
                 <p>Dünyanın en seçkin kahve kuşaklarından gelen %100 Arabica çekirdekleri.</p>
               </div>
               <div className="feature-item">
-                <h5>Ustalıkla Kavurma</h5>
+                <h2>Ustalıkla Kavurma</h2>
                 <p>Her çekirdeğin kendi karakterini ortaya çıkaran özel kavurma teknikleri.</p>
               </div>
             </div>
             <p className="tagline">"Kahvenin En Samimi Hali"</p>
           </div>
 
-       
+
           <div className="amacimiz-konteyner">
             <div className="amacimiz-baslik">
               <h2>Amacımız</h2>
               <div className="amacimiz-cizgi"></div>
             </div>
-            
+
             <div className="amacimiz-kartlar">
               <div className="amac-kart">
                 <h3>En İyi Deneyim</h3>
@@ -72,7 +85,7 @@ const About = () => {
           </div>
 
         </div>
-      </div> 
+      </div>
     </section>
   );
 };
