@@ -7,6 +7,7 @@ import AdminSidebar from "../../components/AdminSidebar"
 import Dashboard from "../../components/Dashboard"
 import OrdersPanel from "../../components/OrdersPanel"
 import ProductsPanel from "../../components/ProductsPanel"
+import type { Tab } from "../../components/adminTypes"
 
 
 type OrderDetails = {
@@ -50,8 +51,6 @@ type Product = {
   name: string
   price: number
 }
-
-type Tab = "dashboard" | "orders" | "products" | "coffees"
 
 // Sipariş/kahve tarihleri hem ISO (yeni) hem de Türkçe "GG.AA.YYYY SS:dd:ss"
 // (eski) formatta gelebiliyor. Tüm parse işlemleri burada tek noktadan yapılır.

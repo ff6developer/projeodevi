@@ -1,3 +1,5 @@
+import type { ReactElement } from "react"
+
 interface Props {
   order: any
   isMobile: boolean
@@ -5,7 +7,7 @@ interface Props {
   deleteOrder: (id: number) => void
   getStatusConfig: (status: string) => any
   formatDate: (date: string) => string
-  renderOrderDetails: (details: any) => JSX.Element
+  renderOrderDetails: (details: any) => ReactElement
 }
 
 export default function OrderCard({

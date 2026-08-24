@@ -1,4 +1,4 @@
-type Tab = "dashboard" | "orders" | "products" | "coffees"
+import type { Tab } from "./adminTypes"
 
 interface Props {
   activeTab: Tab

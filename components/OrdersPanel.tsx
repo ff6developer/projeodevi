@@ -1,3 +1,4 @@
+import type { ReactElement } from "react"
 import OrderCard from "../components/OrderCard"
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
   deleteOrder: (id: number) => void
   getStatusConfig: (status: string) => any
   formatDate: (date: string) => string
-  renderOrderDetails: (details: any) => JSX.Element
+  renderOrderDetails: (details: any) => ReactElement
 }
 
 export default function OrdersPanel({

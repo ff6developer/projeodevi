@@ -1,9 +1,11 @@
+import type { Tab } from "./adminTypes"
+
 interface Props {
   stats: any
   orders: any[]
   isMobile: boolean
-  currentTime: Date
-  setActiveTab: (tab: string) => void
+  currentTime: Date | null
+  setActiveTab: (tab: Tab) => void
   getStatusConfig: (status: string) => any
   formatDate: (date: string) => string
 }
