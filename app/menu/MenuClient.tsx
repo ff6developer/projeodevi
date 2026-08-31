@@ -138,7 +138,7 @@ export default function MenuClient() {
         id: 2,
         name: 'Latte',
         price: '110 TL',
-        image: '/Flat White.jpg',
+        image: '/latte.jpg',
       },
       {
         id: 3,
@@ -225,7 +225,7 @@ export default function MenuClient() {
         id: 16,
         name: 'White Mocha',
         price: '95 TL',
-        image: '/mocha.jpg',
+        image: '/white mocha.jpg',
       },
     ],
 
