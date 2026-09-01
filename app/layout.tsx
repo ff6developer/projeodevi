@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
+import "@/styles/typography.css";
 import "@/styles/layout.css";
 import { ToastProvider } from "@/components/ToastProvider";
 import HeaderNav from "@/components/HeaderNav";

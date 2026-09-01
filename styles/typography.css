@@ -1,0 +1,44 @@
+/* =============================================================
+   Elmenes Coffee — Tipografi yardımcı sınıfları (TASK-044)
+   Element defaultları: styles/base.css. Ölçek: tokens.css --fs-*.
+   ============================================================= */
+
+.text-lg {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-body);
+}
+
+.text-sm {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+}
+
+.text-caption {
+  font-size: var(--fs-caption);
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* Sitedeki TEK uppercase kullanımı — küçük etiketler. */
+.eyebrow {
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Sayısal / spec verisi — sipariş no, fiyat kolonu, origin etiketi. */
+.text-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95em;
+}
+
+.text-muted {
+  color: var(--ink-2);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
