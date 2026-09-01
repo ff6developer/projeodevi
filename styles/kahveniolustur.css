@@ -254,24 +254,7 @@
 }
 
 /* ===== BUTONLAR ===== */
-/* Not (TASK-003): butonlar da normal akışta; sol panelin sonunda görünür. */
-.hero-btn {
-  padding: 20px 50px;
-  border-radius: 60px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, #c58a5c, #8b5e3c);
-  color: white;
-  font-weight: 700;
-  box-shadow: 0 10px 30px rgba(197, 138, 92, 0.3);
-  transition: 0.3s;
-}
-
-.hero-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(197, 138, 92, 0.4);
-}
-
+/* Not (TASK-010): "Laboratuvarı Aç" ön adımı kaldırıldı; .hero-btn silindi. */
 .arena-btn {
   display: inline-flex;
   align-items: center;
@@ -414,30 +397,14 @@
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* ===== ANİMASYONLAR ===== */
-@keyframes readyPop {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* ===== MOBİL UYUMLULUK ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .coffee-left {
     padding: 100px 32px 48px;
   }
 }
 
-/* ===== TELEFON: DÜZENİ ALT ALTA (STACKED) ÇEVİR =====
-   Yukarıdaki sabit (fixed) konumlu öğeler geniş ekranlar için tasarlandı.
-   Telefon genişliklerinde .coffee-left ve .coffee-right yan yana sığmıyor
-   ve sabit konumlu metinler ekran dışına taşıyordu; bu yüzden mobilde
-   normal akışa (stacked/static) geçiriyoruz. */
+/* Telefon: iki kolon tek kolona iner (elemanlar zaten normal akışta). */
 @media (max-width: 768px) {
   .coffee-layout {
     flex-direction: column;
@@ -445,57 +412,16 @@
 
   .coffee-left {
     width: 100%;
-    min-height: auto;
-    padding: 110px 20px 30px;
-  }
-
-  .lab-badge,
-  .hero-title,
-  .hero-sub,
-  .arena-stats-container,
-  .coffee-name-input-wrapper,
-  .hero-btn,
-  .arena-btn {
-    position: static;
-    left: auto;
-    top: auto;
-    bottom: auto;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .lab-badge {
-    margin-bottom: 16px;
-    width: fit-content;
+    align-self: stretch;
+    padding: 96px 20px 32px;
   }
 
   .hero-title {
-    font-size: 36px;
-    margin-bottom: 12px;
-  }
-
-  .hero-sub {
-    margin-bottom: 20px;
-  }
-
-  .arena-stats-container {
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-    gap: 12px;
-  }
-
-  .coffee-name-input-wrapper {
-    margin-bottom: 20px;
-  }
-
-  .hero-btn,
-  .arena-btn {
-    width: fit-content;
+    font-size: 28px;
   }
 
   .coffee-right {
     width: 100%;
-    height: auto;
   }
 }
 

@@ -73,9 +73,8 @@ export default function KahveniOlusturClient() {
   const [customCoffeeName, setCustomCoffeeName] = useState("")
   const router = useRouter()
   const toast = useToast()
-  const [started, setStarted] = useState(false)
 
-  // 🔒 YENİ: Kilit ve indirim state'leri
+  // Arena'dan gelen kilitli tarif durumu
   const [isLocked, setIsLocked] = useState(false)
 
   const [form, setForm] = useState({ ...DEFAULT_FORM })
@@ -104,7 +103,6 @@ export default function KahveniOlusturClient() {
         if (parsed.image) setArenaCoffeeImage(parsed.image)
       }
 
-      setStarted(true)
       localStorage.removeItem("copiedRecipe")
     }
   }, [])
@@ -220,17 +218,15 @@ export default function KahveniOlusturClient() {
           Arenada yarışacak kahveni tasarlıyorsun. Her seçim yaratıcılık puanını artırır!
         </p>
 
-        {started && (
-          <>
-            <div className="arena-stats-container">
-              <div className="arena-stat-box">
-                <span className="stat-label"><Zap size={14} color="#ffd59e"/> Yaratıcılık Puanı</span>
-                <span className="stat-value">{creativityScore}</span>
-                <span className="stat-hint">Seçimlerinin özgünlüğü — Toplulukta öne çıkmana yardımcı olur.</span>
-              </div>
-            </div>
+        <div className="arena-stats-container">
+          <div className="arena-stat-box">
+            <span className="stat-label"><Zap size={14} color="#ffd59e"/> Yaratıcılık Puanı</span>
+            <span className="stat-value">{creativityScore}</span>
+            <span className="stat-hint">Seçimlerinin özgünlüğü — Toplulukta öne çıkmana yardımcı olur.</span>
+          </div>
+        </div>
 
-            <div className="builder-price">
+        <div className="builder-price">
               <div className="builder-price-row">
                 <span>Temel kahve</span>
                 <span>{fmtTRY(basePrice)}</span>
@@ -258,35 +254,33 @@ export default function KahveniOlusturClient() {
               </div>
             </div>
 
-            {/* ☕ KAHVE İSMİ INPUT'U - EN ALTA TAŞINDI */}
-            {!isLocked && (
-              <div className="coffee-name-input-wrapper">
-                <label className="coffee-name-label">
-                  <Beaker size={14} /> Kahvenin Adı
-                </label>
-                <input
-                  type="text"
-                  className="coffee-name-input"
-                  placeholder="Kahvene bir isim ver (opsiyonel)..."
-                  value={customCoffeeName}
-                  onChange={(e) => setCustomCoffeeName(e.target.value)}
-                  maxLength={30}
-                />
-                <span className="coffee-name-hint">
-                  {customCoffeeName.length}/30 karakter
-                </span>
-              </div>
-            )}
+        {/* KAHVE İSMİ */}
+        {!isLocked && (
+          <div className="coffee-name-input-wrapper">
+            <label className="coffee-name-label">
+              <Beaker size={14} /> Kahvenin Adı
+            </label>
+            <input
+              type="text"
+              className="coffee-name-input"
+              placeholder="Kahvene bir isim ver (opsiyonel)..."
+              value={customCoffeeName}
+              onChange={(e) => setCustomCoffeeName(e.target.value)}
+              maxLength={30}
+            />
+            <span className="coffee-name-hint">
+              {customCoffeeName.length}/30 karakter
+            </span>
+          </div>
+        )}
 
-            {isLocked && arenaCoffeeName && (
-              <div className="coffee-name-input-wrapper locked-name">
-                <label className="coffee-name-label">
-                  <Beaker size={14} /> Arena Kahvesi
-                </label>
-                <div className="locked-coffee-name">{arenaCoffeeName}</div>
-              </div>
-            )}
-          </>
+        {isLocked && arenaCoffeeName && (
+          <div className="coffee-name-input-wrapper locked-name">
+            <label className="coffee-name-label">
+              <Beaker size={14} /> Arena Kahvesi
+            </label>
+            <div className="locked-coffee-name">{arenaCoffeeName}</div>
+          </div>
         )}
 
         {isLocked && (
@@ -296,10 +290,7 @@ export default function KahveniOlusturClient() {
           </div>
         )}
 
-        {!started ? (
-          <button className="hero-btn" onClick={() => setStarted(true)}>Laboratuvarı Aç</button>
-        ) : (
-          <div className="builder-cta">
+        <div className="builder-cta">
             <div className="builder-progress">
               <span className="builder-progress-count">{selectedCount} / {SELECTION_STEPS.length} seçim tamamlandı</span>
               <span className="builder-progress-track" aria-hidden="true">
@@ -332,11 +323,9 @@ export default function KahveniOlusturClient() {
                 <span style={{ marginLeft: "8px", fontSize: "0.8em" }}>(%15 İndirim)</span>
               )}
             </button>
-          </div>
-        )}
+        </div>
       </div>
         <CoffeeRight
-  started={started}
   isLocked={isLocked}
   form={form}
   handleOptionSelect={handleOptionSelect}
