@@ -25,10 +25,7 @@ export default function ConfigSection({
 }: Props) {
   return (
     <section className="config-section" id={`section-${field}`}>
-      <h2 className="section-title">
-        {title} <span className="required-star">*</span>
-      </h2>
-      <span className="required-text">(Bu kısım zorunludur)</span>
+      <h2 className="section-title">{title}</h2>
 
       <div className="option-group">
         {options.map(item => (

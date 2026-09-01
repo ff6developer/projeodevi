@@ -6,6 +6,67 @@ import { Beaker, Zap, Trophy, Lock, Unlock } from "lucide-react"
 import CoffeeRight from "../../components/CoffeeRight"
 import { useToast } from "../../components/ToastProvider"
 
+type RecipeOption = { name: string; price: number; power: number }
+
+const MILK_OPTIONS: RecipeOption[] = [
+  { name: "Laktozlu Süt", price: 10, power: 5 }, { name: "Laktozsuz Süt", price: 15, power: 7 },
+  { name: "Yulaf Sütü", price: 18, power: 12 }, { name: "Badem Sütü", price: 18, power: 12 },
+  { name: "Soya Sütü", price: 15, power: 10 }, { name: "Hindistan Cevizi", price: 20, power: 15 },
+  { name: "Proteinli Süt", price: 22, power: 18 }, { name: "Yağsız Süt", price: 8, power: 4 },
+  { name: "Süt İstemiyorum", price: 0, power: 2 },
+]
+
+const BEAN_OPTIONS: RecipeOption[] = [
+  { name: "Brezilya Çekirdeği", price: 20, power: 10 }, { name: "Kolombiya Çekirdeği", price: 25, power: 15 },
+  { name: "Etiyopya Çekirdeği", price: 30, power: 25 }, { name: "Guatemala Çekirdeği", price: 35, power: 30 },
+]
+
+const FOAM_OPTIONS: RecipeOption[] = [
+  { name: "Köpük Var", price: 5, power: 10 }, { name: "Köpük Yok", price: 0, power: 0 },
+]
+
+const CUP_OPTIONS: RecipeOption[] = [
+  { name: "Karton Bardak", price: 0, power: 0 }, { name: "Cam Bardak", price: 8, power: 10 },
+  { name: "Termos Bardak", price: 20, power: 15 }, { name: "Büyük Boy Bardak", price: 12, power: 5 },
+]
+
+const SYRUP_OPTIONS: RecipeOption[] = [
+  { name: "Vanilya Şurubu", price: 15, power: 10 }, { name: "Karamel Şurubu", price: 18, power: 12 },
+  { name: "Fındık Şurubu", price: 18, power: 12 }, { name: "Çikolata Şurubu", price: 20, power: 15 },
+  { name: "Şurup İstemiyorum", price: 0, power: 0 },
+]
+
+const SPICE_OPTIONS: RecipeOption[] = [
+  { name: "Tarçın", price: 6, power: 5 }, { name: "Kakao Tozu", price: 7, power: 5 },
+  { name: "Hindistan Cevizi", price: 10, power: 10 }, { name: "Muskat", price: 8, power: 12 },
+  { name: "Baharat İstemiyorum", price: 0, power: 0 },
+]
+
+const SWEETENER_OPTIONS: RecipeOption[] = [
+  { name: "Beyaz Şeker", price: 4, power: 2 }, { name: "Esmer Şeker", price: 6, power: 5 },
+  { name: "Bal", price: 12, power: 15 }, { name: "Stevia", price: 10, power: 10 },
+  { name: "Tatlandırıcı İstemiyorum", price: 0, power: 0 },
+]
+
+const TECHNIQUE_OPTIONS: RecipeOption[] = [
+  { name: "Extra Shot", price: 22, power: 25 }, { name: "Daha Sıcak Servis", price: 3, power: 2 },
+  { name: "Ilık Servis", price: 0, power: 0 }, { name: "Buzlu Servis", price: 8, power: 10 },
+  { name: "Latte Art", price: 15, power: 30 }, { name: "Değişiklik Yok", price: 0, power: 0 },
+]
+
+// Kullanıcı hiçbir şeye dokunmadan geçerli bir başlangıç reçetesi görsün diye
+// her alanın mantıklı bir varsayılanı var (opt-out'lar seçili gelir).
+const DEFAULT_FORM = {
+  milkType: MILK_OPTIONS[0],       // Laktozlu Süt
+  beanType: BEAN_OPTIONS[0],       // Brezilya Çekirdeği
+  foam: FOAM_OPTIONS[1],           // Köpük Yok
+  cupType: CUP_OPTIONS[0],         // Karton Bardak
+  syrup: SYRUP_OPTIONS[4],         // Şurup İstemiyorum
+  spice: SPICE_OPTIONS[4],         // Baharat İstemiyorum
+  sweetener: SWEETENER_OPTIONS[4], // Tatlandırıcı İstemiyorum
+  technique: TECHNIQUE_OPTIONS[5], // Değişiklik Yok
+}
+
 export default function KahveniOlusturClient() {
   const [arenaCoffeeName, setArenaCoffeeName] = useState("")
   const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
@@ -17,32 +78,23 @@ export default function KahveniOlusturClient() {
   // 🔒 YENİ: Kilit ve indirim state'leri
   const [isLocked, setIsLocked] = useState(false)
 
-  const [form, setForm] = useState({
-    milkType: null as any,
-    beanType: null as any,
-    foam: null as any,
-    cupType: null as any,
-    syrup: null as any,
-    spice: null as any,
-    sweetener: null as any,
-    technique: null as any
-  })
+  const [form, setForm] = useState({ ...DEFAULT_FORM })
 
   useEffect(() => {
     const copied = localStorage.getItem("copiedRecipe")
     if (copied) {
       const parsed = JSON.parse(copied)
-      
-      // Form verilerini yükle
+
+      // Arena'dan gelen tarif — eksik alan varsa varsayılanla tamamla.
       setForm({
-        milkType: parsed.milkType || null,
-        beanType: parsed.beanType || null,
-        foam: parsed.foam || null,
-        cupType: parsed.cupType || null,
-        syrup: parsed.syrup || null,
-        spice: parsed.spice || null,
-        sweetener: parsed.sweetener || null,
-        technique: parsed.technique || null
+        milkType: parsed.milkType || DEFAULT_FORM.milkType,
+        beanType: parsed.beanType || DEFAULT_FORM.beanType,
+        foam: parsed.foam || DEFAULT_FORM.foam,
+        cupType: parsed.cupType || DEFAULT_FORM.cupType,
+        syrup: parsed.syrup || DEFAULT_FORM.syrup,
+        spice: parsed.spice || DEFAULT_FORM.spice,
+        sweetener: parsed.sweetener || DEFAULT_FORM.sweetener,
+        technique: parsed.technique || DEFAULT_FORM.technique,
       })
 
       // 🔒 ARENA KONTROLÜ: Eğer arena'dan geliyorsa kilitle
@@ -73,51 +125,7 @@ export default function KahveniOlusturClient() {
   const missingSteps = SELECTION_STEPS.filter((s) => !form[s.field])
   const allSelected = missingSteps.length === 0
 
-  const milkOptions = [
-    { name: "Laktozlu Süt", price: 10, power: 5 }, { name: "Laktozsuz Süt", price: 15, power: 7 },
-    { name: "Yulaf Sütü", price: 18, power: 12 }, { name: "Badem Sütü", price: 18, power: 12 },
-    { name: "Soya Sütü", price: 15, power: 10 }, { name: "Hindistan Cevizi", price: 20, power: 15 },
-    { name: "Proteinli Süt", price: 22, power: 18 }, { name: "Yağsız Süt", price: 8, power: 4 },
-    { name: "Süt İstemiyorum", price: 0, power: 2 }
-  ]
-
-  const beanOptions = [
-    { name: "Brezilya Çekirdeği", price: 20, power: 10 }, { name: "Kolombiya Çekirdeği", price: 25, power: 15 },
-    { name: "Etiyopya Çekirdeği", price: 30, power: 25 }, { name: "Guatemala Çekirdeği", price: 35, power: 30 }
-  ]
-
-  const foamOptions = [{ name: "Köpük Var", price: 5, power: 10 }, { name: "Köpük Yok", price: 0, power: 0 }]
-  
-  const cupOptions = [
-    { name: "Karton Bardak", price: 0, power: 0 }, { name: "Cam Bardak", price: 8, power: 10 },
-    { name: "Termos Bardak", price: 20, power: 15 }, { name: "Büyük Boy Bardak", price: 12, power: 5 }
-  ]
-
-  const syrupOptions = [
-    { name: "Vanilya Şurubu", price: 15, power: 10 }, { name: "Karamel Şurubu", price: 18, power: 12 },
-    { name: "Fındık Şurubu", price: 18, power: 12 }, { name: "Çikolata Şurubu", price: 20, power: 15 },
-    { name: "Şurup İstemiyorum", price: 0, power: 0 }
-  ]
-
-  const spiceOptions = [
-    { name: "Tarçın", price: 6, power: 5 }, { name: "Kakao Tozu", price: 7, power: 5 },
-    { name: "Hindistan Cevizi", price: 10, power: 10 }, { name: "Muskat", price: 8, power: 12 },
-    { name: "Baharat İstemiyorum", price: 0, power: 0 }
-  ]
-
-  const sweetenerOptions = [
-    { name: "Beyaz Şeker", price: 4, power: 2 }, { name: "Esmer Şeker", price: 6, power: 5 },
-    { name: "Bal", price: 12, power: 15 }, { name: "Stevia", price: 10, power: 10 },
-    { name: "Tatlandırıcı İstemiyorum", price: 0, power: 0 }
-  ]
-
-  const techniqueOptions = [
-    { name: "Extra Shot", price: 22, power: 25 }, { name: "Daha Sıcak Servis", price: 3, power: 2 },
-    { name: "Ilık Servis", price: 0, power: 0 }, { name: "Buzlu Servis", price: 8, power: 10 },
-    { name: "Latte Art", price: 15, power: 30 }, { name: "Değişiklik Yok", price: 0, power: 0 }
-  ]
-
-  const creativityScore = 
+  const creativityScore =
     (form.milkType?.power || 0) + (form.beanType?.power || 0) + 
     (form.syrup?.power || 0) + (form.technique?.power || 0) + 
     (form.spice?.power || 0);
@@ -311,14 +319,14 @@ export default function KahveniOlusturClient() {
   isLocked={isLocked}
   form={form}
   handleOptionSelect={handleOptionSelect}
-  milkOptions={milkOptions}
-  beanOptions={beanOptions}
-  foamOptions={foamOptions}
-  cupOptions={cupOptions}
-  syrupOptions={syrupOptions}
-  spiceOptions={spiceOptions}
-  sweetenerOptions={sweetenerOptions}
-  techniqueOptions={techniqueOptions}
+  milkOptions={MILK_OPTIONS}
+  beanOptions={BEAN_OPTIONS}
+  foamOptions={FOAM_OPTIONS}
+  cupOptions={CUP_OPTIONS}
+  syrupOptions={SYRUP_OPTIONS}
+  spiceOptions={SPICE_OPTIONS}
+  sweetenerOptions={SWEETENER_OPTIONS}
+  techniqueOptions={TECHNIQUE_OPTIONS}
 />
 
     </div>

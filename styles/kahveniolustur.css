@@ -438,18 +438,6 @@
   }
 }
 
-.required-star {
-  color: #ff4d4d;
-  font-weight: bold;
-  font-size: 24px;
-}
-
-.required-text {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.85rem;
-  font-style: italic;
-  display: block;
-}
 
 /* 🔒 KİLİTLİ TARİF STİLLERİ */
 .milk-item.locked {
