@@ -1,15 +1,6 @@
-import type { Metadata } from 'next';
-import KahveArenasiClient from './KahveArenasiClient';
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Kahve Arenası",
-  description:
-    "Kahveni oluştur, Kahve Arenası'nda paylaş, oy topla ve şampiyonlar ligine katıl. Her ay en çok oy alan tasarım ödül kazanır.",
-  alternates: {
-    canonical: "/kahvearenasii",
-  },
-};
-
-export default function KahveArenasiPage() {
-  return <KahveArenasiClient />;
+// Eski adres — kalıcı yönlendirme (geriye uyumluluk).
+export default function KahveArenasiRedirect() {
+  redirect("/topluluk");
 }

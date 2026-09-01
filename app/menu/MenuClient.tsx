@@ -408,7 +408,7 @@ export default function MenuClient() {
 
             <button
               onClick={() =>
-                router.push('/kahvearenasii')
+                router.push('/topluluk')
               }
               className="arena-btn"
             >

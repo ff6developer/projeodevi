@@ -11,7 +11,7 @@ import {
 import "../../styles/kahvearenasi.css"
 import { useToast } from "../../components/ToastProvider"
 
-export default function KahveArenasiClient() {
+export default function ToplulukClient() {
   const router = useRouter()
   const toast = useToast()
 

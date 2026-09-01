@@ -1,6 +1,17 @@
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
+import Home from "./_home/Home";
+import { SITE_NAME, SITE_DESCRIPTION } from "./site-config";
 
-export default function RootPage() {
-  // Kullanıcı ana sayfaya geldiği anda Kahve Arenası'na yönlendirilir
-  redirect("/kahvearenasii");
+export const metadata: Metadata = {
+  title: {
+    absolute: SITE_NAME,
+  },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+};
+
+export default function HomePage() {
+  return <Home />;
 }
