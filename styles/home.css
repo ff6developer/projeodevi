@@ -11,7 +11,7 @@
 .home-hero {
   max-width: 720px;
   margin: 0 auto;
-  padding: 140px 0 80px;
+  padding: var(--s-8) 0 var(--s-8);
   text-align: center;
 }
 
@@ -203,7 +203,7 @@
 
 @media (max-width: 768px) {
   .home-hero {
-    padding: 110px 0 56px;
+    padding: var(--s-7) 0 var(--s-7);
   }
 
   .home-split {

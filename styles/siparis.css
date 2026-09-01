@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 120px 20px 80px;
+  padding: var(--s-7) var(--s-5) var(--s-8);
 }
 
 .siparis-content {

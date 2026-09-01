@@ -79,7 +79,7 @@
   /* --- Layout --- */
   --container: 1120px;
   --container-narrow: 720px;
-  --header-h: 96px;
+  --header-h: 64px;
   --rail-gap: 90px; /* sol sabit ikon rayı payı — TASK-054'te ray kalkınca sadeleşecek */
 }
 

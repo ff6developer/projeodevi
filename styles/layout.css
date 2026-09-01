@@ -9,157 +9,168 @@
   position: relative;
 }
 
-/* ===== HEADER ===== */
-.header {
-  position: fixed;
+/* ===== HEADER (TASK-053/054/058) ===== */
+.site-header {
+  position: sticky;
   top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-top: 25px;
-  z-index: 50;
+  z-index: var(--z-header);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
 }
 
-.header-container {
-  width: 90%;
-  height: 70px;
+.site-header-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  height: var(--header-h);
+  padding: 0 var(--s-5);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--line);
+  gap: var(--s-4);
+}
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  text-decoration: none;
+}
+
+.site-brand-logo {
   border-radius: var(--r-pill);
-  box-shadow: var(--shadow-1);
-}
-
-.logo {
-  position: fixed;
-  left: 30px;
-  top: 15px;
-  width: 65px;
-  height: 65px;
   object-fit: cover;
-  border-radius: 50%;
-  background: #000;
-  padding: var(--s-1);
-  border: 1px solid rgba(197, 138, 92, 0.4);
-  z-index: 60;
 }
 
-.logo-text {
+.site-brand-name {
+  font-family: var(--font-display);
   font-size: var(--fs-lg);
   font-weight: 600;
   color: var(--ink);
-  letter-spacing: 0.02em;
 }
-/* ===== NAV ===== */
-.nav ul {
+
+.site-nav {
   display: flex;
-  gap: var(--s-7);
-  list-style: none;
+  align-items: center;
+  gap: var(--s-6);
 }
 
-.nav a {
-  color: rgba(255, 255, 255, 0.6);
+.site-nav-link {
+  color: var(--ink-2);
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: normal; position: relative;
-  transition: 0.3s;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  padding: var(--s-2) 0;
+  border-bottom: 2px solid transparent;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
 }
 
-.nav a:hover {
+.site-nav-link:hover {
   color: var(--ink);
 }
 
-.nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+.site-nav-link.is-active {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
 }
 
-.nav a:hover::after {
-  width: 100%;
+.site-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+  border-radius: var(--r-sm);
 }
 
-/* ===== SIDEBAR (ICONBAR) ===== */
-.iconbar {
+.site-nav-toggle:hover {
+  background: var(--tint);
+}
+
+/* ===== NAV DRAWER (< lg) ===== */
+.nav-drawer-overlay {
   position: fixed;
-  top: 120px;
-  left: 20px;
-  width: 70px;
-  height: 75vh;
+  inset: 0;
+  z-index: var(--z-drawer);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.nav-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(320px, 82vw);
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  box-shadow: var(--shadow-2);
+  padding: var(--s-7) var(--s-5) var(--s-5);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-1);
-  z-index: 40;
 }
 
-/* Yeni Lucide İkonları için Wrapper */
-.icon-wrapper {
-  color: rgba(255, 255, 255, 0.4); /* İkonun varsayılan soluk rengi */
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-item:hover .icon-wrapper {
-  color: var(--accent); /* Hover olunca kahve tonu */
-  transform: scale(1.25);
-  filter: drop-shadow(0 0 12px rgba(197, 138, 92, 0.6));
-}
-
-.icon-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.icon-label {
+.nav-drawer-close {
   position: absolute;
-  left: 85px;
-  padding: var(--s-3) var(--s-5);
-  border-radius: var(--r-md);
-  backdrop-filter: blur(20px);
-  background: rgba(10, 10, 10, 0.95);
-  border: 1px solid var(--accent);
-  box-shadow: var(--shadow-1);
+  top: var(--s-3);
+  right: var(--s-3);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  border-radius: var(--r-sm);
+}
+
+.nav-drawer-close:hover {
+  background: var(--tint);
   color: var(--ink);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: normal; white-space: nowrap;
-  opacity: 0;
-  transform: translateX(-15px);
-  transition: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  pointer-events: none;
 }
 
-.icon-item:hover .icon-label {
-  opacity: 1;
-  transform: translateX(0);
+.nav-drawer-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  margin-top: var(--s-4);
 }
 
-/* ===== MAIN ===== */
+.nav-drawer-link {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-3);
+  border-radius: var(--r-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  min-height: 44px;
+}
+
+.nav-drawer-link:hover {
+  background: var(--tint);
+  color: var(--ink);
+}
+
+.nav-drawer-link.is-active {
+  color: var(--accent);
+  background: var(--tint);
+}
+
+@media (max-width: 1023px) {
+  .site-nav {
+    display: none;
+  }
+  .site-nav-toggle {
+    display: flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-drawer-overlay {
+    display: none;
+  }
+}
 
 /* ===== FOOTER (TASK-021) ===== */
 .footer {
@@ -355,223 +366,35 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN (Layout & Content) - NAV REMOVED VERSION
+   RESPONSIVE — hakkımızda sayfası artıkları (TASK-099'da hakkimizda.css'e taşınacak)
    ========================================================================== */
-
-/* --- 1. GENEL TABLET DÜZENİ (max-width: 1024px) --- */
 @media (max-width: 1024px) {
-  /* Header & Navigation Kısmından Linkleri Kaldır */
-  .nav {
-    display: none !important;
-  }
-  
-  .header-container {
-    width: 92%;
-    padding: 0 25px;
-    justify-content: center; /* Sadece logo kaldığı için ortala */
-  }
-  
-  .logo-text {
-    font-size: 18px;
-  }
-
-  /* Hakkımızda Bölümü Grid Dönüşümü */
-  .about-content {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-
-  /* Görseller Bölümü */
+  .about-content { grid-template-columns: 1fr; min-height: auto; }
   .about-images-wrapper {
-    grid-row-start: auto;
-    grid-row-end: auto;
-    flex-direction: row !important;
-    height: 400px;
-    padding: 20px 4%;
+    grid-row-start: auto; grid-row-end: auto;
+    flex-direction: row !important; height: 400px; padding: var(--s-5) 4%;
   }
-
-  .about-img {
-    width: 50%;
-    height: 100% !important;
-  }
-
-  .first-img {
-    margin-top: 0 !important;
-  }
-
-  /* Metin Alanları */
-  .text-wrapper {
-    padding: 50px 6%;
-    gap: var(--s-7);
-  }
-
-  .brand-title {
-    font-size: clamp(45px, 7vw, 75px);
-    margin-top: 0 !important;
-  }
-
-  /* Kart Yapıları */
-  .amacimiz-kartlar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-5);
-  }
+  .about-img { width: 50%; height: 100% !important; }
+  .first-img { margin-top: 0 !important; }
+  .text-wrapper { padding: var(--s-8) 6%; gap: var(--s-7); }
+  .brand-title { font-size: clamp(45px, 7vw, 75px); margin-top: 0 !important; }
+  .amacimiz-kartlar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
 }
 
-/* --- 2. GENEL MOBİL DÜZENİ (max-width: 768px) --- */
 @media (max-width: 768px) {
-  /* Üst Bar Esnekliği */
-  .header {
-    padding-top: 15px;
-    width: 100%;
-    left: 0;
-    display: flex;
-    justify-content: center;
-  }
+  .about-images-wrapper { height: 280px; padding: var(--s-4) 4%; gap: var(--s-3); }
+  .text-wrapper { padding: var(--s-7) 5%; gap: var(--s-6); }
+  .brand-title { font-size: 36px; line-height: 1.2; margin-bottom: var(--s-4); }
+  .description { font-size: var(--fs-body); line-height: 1.6; margin-bottom: var(--s-5); }
+  .features-grid, .amacimiz-kartlar { display: grid; grid-template-columns: 1fr; gap: var(--s-4); }
+  .amac-kart { padding: var(--s-5); }
 
-  .header-container {
-    width: 85%; /* Sadece logo olacağı için barı biraz daha kompakt ve şık yapıyoruz */
-    height: 55px;
-    padding: 0 20px;
-    border-radius: var(--r-lg);
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important; /* Logo ve yazıyı tam merkeze al */
-    align-items: center !important;
-    gap: var(--s-3); /* Amblem ile yazı arasındaki nefes mesafesi */
-  }
-
-  /* Mobilde Navigasyon Linklerini Kesin Olarak Kapat */
-  .nav, .nav ul {
-    display: none !important;
-  }
-
-  /* Sabit konumlandırılmış logoyu Header akışına tam uyumlu yap */
-  .logo {
-    position: static !important; /* Fixed özelliğini kırıyoruz */
-    width: 38px !important;
-    height: 38px !important;
-    padding: var(--s-1);
-    flex-shrink: 0;
-  }
-
-  .logo-text {
-    font-size: 15px !important;
-    letter-spacing: 2px !important;
-    display: inline-block !important;
-    white-space: nowrap;
-  }
-
-  /* Hakkımızda Görselleri (Mobil) */
-  .about-images-wrapper {
-    height: 280px;
-    padding: 15px 4%;
-    gap: var(--s-3);
-  }
-
-  /* Hakkımızda Metin Alanları (Mobil) */
-  .text-wrapper {
-    padding: 35px 5%;
-    gap: var(--s-6);
-  }
-
-  .brand-title {
-    font-size: 36px;
-    line-height: 1.2;
-    margin-bottom: 15px;
-  }
-
-  .description {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-  }
-
-  /* Gridleri Tamamen Tek Sütuna Düşür */
-  .features-grid,
-  .amacimiz-kartlar {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--s-4);
-  }
-
-  .feature-item h5 {
-    font-size: 22px;
-  }
-
-  .amacimiz-baslik h2 {
-    font-size: 28px;
-  }
-
-  .amac-kart {
-    padding: var(--s-5);
-  }
-
-  .amac-kart h3 {
-    margin-bottom: 15px;
-  }
-
-  /* Custom Toast Bildirimlerini Mobil Ekrana Sığdır */
   .toast-viewport {
-    top: 85px;
-    right: 12px;
-    left: 12px;
-    width: auto;
-  }
-
-  /* ==========================================================================
-     SIDEBAR -> BOTTOM FIXED BAR (İkon Barın Alta Koyu Altyapıyla Sabitlenmesi)
-     ========================================================================== */
-  .iconbar {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 65px;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    background: rgba(8, 8, 8, 0.95); 
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border-radius: var(--r-lg) var(--r-lg) 0 0;
-    border-width: 1px 0 0 0;
-    border-color: var(--line);
-    box-shadow: var(--shadow-1);
-    padding: 0 15px;
-    z-index: 100;
-  }
-
-  .icon-label {
-    display: none !important;
-  }
-
-  .icon-wrapper {
-    transform: scale(0.95);
-  }
-
-  .icon-item:hover .icon-wrapper {
-    transform: scale(1.15);
-    filter: drop-shadow(0 0 8px rgba(197, 138, 92, 0.5));
-  }
-
-  body {
-    padding-bottom: 75px;
+    top: calc(var(--header-h) + var(--s-2));
+    right: var(--s-3); left: var(--s-3); width: auto;
   }
 }
 
-/* --- 3. EKSTRA KÜÇÜK EKRANLAR (max-width: 380px) --- */
-@media (max-width: 380px) {
-  .header-container {
-    width: 90%;
-    padding: 0 15px;
-  }
-  
-  .logo-text {
-    font-size: 13px !important;
-  }
-}
 /* ===== ROUTE STATES (404 / loading / error) — TASK-018 =====
    Token'lara TASK-028+ ile bağlanacak. */
 .route-state {

@@ -5,7 +5,7 @@
   min-height: 100vh;
   width: 100%;
   background: var(--paper);
-  padding: 140px 40px 60px 110px;
+  padding: var(--s-7) var(--s-6) var(--s-8);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -979,7 +979,7 @@
 /* ---------- TABLET LANDSCAPE (≤ 1024px) ---------- */
 @media (max-width: 1024px) {
   .arena-page {
-    padding: 120px var(--arena-padding-h) 60px var(--arena-padding-h);
+    padding: var(--s-6) var(--arena-padding-h) var(--s-8);
   }
 
   .arena-title-area h1 {
@@ -1038,7 +1038,7 @@
 /* ---------- SMALL TABLET / LARGE PHONE (≤ 768px) ---------- */
 @media (max-width: 768px) {
   .arena-page {
-    padding: 100px 5% 60px 5%;
+    padding: var(--s-6) 5% var(--s-8);
     background-position: center top;
   }
 

@@ -83,3 +83,11 @@ Format: `TASK-XXX | tarih | özet | build / tsc | regresyon notu`
 | TASK-050 | 2026-09-01 | Spacing token migrasyonu — `adminpanel.css`. (aynı sweep) | ✅ / ✅ | build yeşil. |
 | TASK-051 | 2026-09-01 | Spacing token migrasyonu — `hakkimizda.css` (kendi `--spacing-*` seti TASK-040'ta zaten `--s-*`'e geçmişti; kalan çıplak px → token). Toplam sweep: 290 değişim. | ✅ / ✅ | build yeşil. |
 | TASK-052 | 2026-09-01 | **FAZ 4 REGRESSION CHECKPOINT.** `next build` ✅, `tsc` ✅. Fraunces (display) + IBM Plex Sans (metin) + Plex Mono (veri) canlı; h1-h4 `base.css`'te ölçek + Fraunces. `text-transform:uppercase` yalnız `typography.css .eyebrow`'da. Gradient text = 0. Font-weight 700-950 → 600. Spacing token'lı (290 değişim). Browser: `/giris`, `/topluluk` tutarlı hiyerarşi; `/menu` hâlâ açık tema adası (TASK-085). **FAZ 4 COMPLETE.** | ✅ / ✅ | — |
+
+## FAZ 5 — Navigation
+
+| Task | Tarih | Özet | build/tsc | Not |
+|---|---|---|---|---|
+| TASK-053 | 2026-09-01 | `HeaderNav` yeniden yazıldı: fixed glass pill + `position:fixed` logo → **düz sticky header** (`--surface` + alt `--line` border, `--header-h:64px`). Sol: logo + "Elmenes Coffee" wordmark (Fraunces). Sağ: yatay nav (`>=lg`). `NAV_ITEMS` tek kaynak (TASK-017). | ✅ / ✅ | Browser: temiz düz header, glass/pill gitti. |
+| TASK-054 | 2026-09-01 | Tablet & mobil: `< lg` (1024) hamburger → `components/NavDrawer.tsx` (erişilebilir: `role=dialog aria-modal`, ESC, focus-trap, `body` scroll-lock, `aria-expanded/controls`, rota değişince kapanır). Sağdan panel. Alt bar YOK — drawer tek çözüm. | ✅ / ✅ | Browser 375px: hamburger → drawer 5 link, ESC kapatıyor, scroll-lock çalışıyor. |
+| TASK-058 | 2026-09-01 | `iconbar` + `.icon-*` + eski `.header/.header-container/.logo/.logo-text/.nav` CSS tamamen silindi (base + tüm media query'ler). `body{padding-bottom:75px}` (eski alt bar) kaldırıldı. Sayfa üst padding'leri (140px/120px/110px/100px) → `var(--s-6/s-7)` (sticky header artık akışta). `.arena-page padding-left:110px` (ray payı) → simetrik. `.toast-viewport top` → `calc(var(--header-h) + --s-*)`. Hakkımızda artığı media kuralları korundu (TASK-099'da taşınacak). | ✅ / ✅ | build yeşil. |

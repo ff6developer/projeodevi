@@ -6,7 +6,7 @@
   min-height: 100vh;
   background: radial-gradient(circle at top, var(--surface-2) 0%, var(--paper) 100%);
   color: #fff;
-  padding: 140px 20px 60px;
+  padding: var(--s-7) var(--s-5) var(--s-8);
   font-family: var(--font-sans);
 }
 

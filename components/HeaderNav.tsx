@@ -3,65 +3,72 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { Menu as MenuIcon } from "lucide-react"
 import { visibleNavItems } from "@/lib/nav"
+import NavDrawer from "./NavDrawer"
 
 export default function HeaderNav() {
+  const pathname = usePathname()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  const checkAuth = () => {
-    const user = localStorage.getItem("user")
-    setIsLoggedIn(!!user)
-  }
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   useEffect(() => {
+    const checkAuth = () => setIsLoggedIn(!!localStorage.getItem("user"))
     checkAuth()
     window.addEventListener("authChanged", checkAuth)
     return () => window.removeEventListener("authChanged", checkAuth)
   }, [])
 
+  // Rota değişince drawer'ı kapat
+  useEffect(() => {
+    setDrawerOpen(false)
+  }, [pathname])
+
   const items = visibleNavItems(isLoggedIn)
 
   return (
-    <>
-      <header className="header">
-        <Image
-          src="/logo.png"
-          alt="Elmenes Coffee"
-          width={50}
-          height={50}
-          priority
-          className="logo"
-        />
+    <header className="site-header">
+      <div className="site-header-inner">
+        <Link href="/" className="site-brand" aria-label="Elmenes Coffee ana sayfa">
+          <Image src="/logo.png" alt="" width={36} height={36} priority className="site-brand-logo" />
+          <span className="site-brand-name">Elmenes Coffee</span>
+        </Link>
 
-        <div className="header-container">
-          {/* Marka adı sayfanın h1'i değildir; her sayfanın kendi h1'i var. */}
-          <p className="logo-text">ELMENES COFFEE</p>
-
-          <nav className="nav" aria-label="Ana menü">
-            <ul>
-              {items.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </header>
-
-      <aside className="iconbar" aria-label="Hızlı erişim">
-        {items.map((item) => {
-          const Icon = item.icon
-          return (
-            <div className="icon-item" key={item.href}>
-              <Link href={item.href} className="icon-wrapper" aria-label={item.label}>
-                <Icon size={28} />
+        <nav className="site-nav" aria-label="Ana menü">
+          {items.map((item) => {
+            const active = pathname === item.href
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`site-nav-link${active ? " is-active" : ""}`}
+                aria-current={active ? "page" : undefined}
+              >
+                {item.label}
               </Link>
-              <span className="icon-label">{item.label}</span>
-            </div>
-          )
-        })}
-      </aside>
-    </>
+            )
+          })}
+        </nav>
+
+        <button
+          type="button"
+          className="site-nav-toggle"
+          aria-label="Menüyü aç"
+          aria-expanded={drawerOpen}
+          aria-controls="nav-drawer"
+          onClick={() => setDrawerOpen(true)}
+        >
+          <MenuIcon size={24} />
+        </button>
+      </div>
+
+      <NavDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        items={items}
+        currentPath={pathname}
+      />
+    </header>
   )
 }
