@@ -82,3 +82,4 @@ Format: `TASK-XXX | tarih | özet | build / tsc | regresyon notu`
 | TASK-049 | 2026-09-01 | Spacing token migrasyonu — `kahveniolustur.css` + `profil.css`. (aynı sweep) | ✅ / ✅ | build yeşil. |
 | TASK-050 | 2026-09-01 | Spacing token migrasyonu — `adminpanel.css`. (aynı sweep) | ✅ / ✅ | build yeşil. |
 | TASK-051 | 2026-09-01 | Spacing token migrasyonu — `hakkimizda.css` (kendi `--spacing-*` seti TASK-040'ta zaten `--s-*`'e geçmişti; kalan çıplak px → token). Toplam sweep: 290 değişim. | ✅ / ✅ | build yeşil. |
+| TASK-052 | 2026-09-01 | **FAZ 4 REGRESSION CHECKPOINT.** `next build` ✅, `tsc` ✅. Fraunces (display) + IBM Plex Sans (metin) + Plex Mono (veri) canlı; h1-h4 `base.css`'te ölçek + Fraunces. `text-transform:uppercase` yalnız `typography.css .eyebrow`'da. Gradient text = 0. Font-weight 700-950 → 600. Spacing token'lı (290 değişim). Browser: `/giris`, `/topluluk` tutarlı hiyerarşi; `/menu` hâlâ açık tema adası (TASK-085). **FAZ 4 COMPLETE.** | ✅ / ✅ | — |
