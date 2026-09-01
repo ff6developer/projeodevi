@@ -1,18 +1,4 @@
-/* ===== RESET ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
-  background-color: #080808;
-  font-family: var(--font-inter), 'Inter', sans-serif;
-  color: #ffffff;
-}
+/* Reset + taban element stilleri → styles/base.css (TASK-030) */
 
 /* ===== LAYOUT ===== */
 .layout {
@@ -21,8 +7,6 @@ html, body {
   min-height: 100vh;
   width: 100%;
   position: relative;
-  /* Üstten vuran hafif kahve ışıltısı */
-  background: radial-gradient(circle at 50% -20%, rgba(197, 138, 92, 0.15) 0%, transparent 50%);
 }
 
 /* ===== HEADER ===== */
