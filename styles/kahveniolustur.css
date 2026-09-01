@@ -25,10 +25,9 @@
 }
 
 /* ===== LABORATUVAR ROZETİ ===== */
+/* Not (TASK-003): sol paneldeki tüm elemanlar eski `position:fixed` + `vh`
+   yerleşiminden normal doküman akışına alındı. Çakışma/taşma riski kalktı. */
 .lab-badge {
-  position: fixed;
-  left: 120px;
-  top: 15vh;
   background: rgba(197, 138, 92, 0.2);
   border: 1px solid #c58a5c;
   padding: 8px 16px;
@@ -37,10 +36,10 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  z-index: 3;
+  width: fit-content;
 }
 
 /* ===== SOL PANEL (STATLAR VE TANITIM) ===== */
@@ -51,40 +50,31 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 60px 50px;
+  align-self: flex-start;
+  gap: 20px;
+  padding: 120px 50px 60px;
   overflow: visible;
-  height: auto;
-  min-height: 100vh;
 }
 
 .hero-title {
-  position: fixed;
-  left: 120px;
-  top: 22vh;
-  font-size: 82px;
+  font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 800;
   color: white;
   margin: 0;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .hero-sub {
-  position: fixed;
-  left: 120px;
-  top: 42vh;
-  width: 480px;
+  max-width: 480px;
   font-size: 18px;
   color: rgba(255, 255, 255, 0.7);
 }
 
 /* ===== ARENA STAT KUTULARI ===== */
 .arena-stats-container {
-  position: fixed;
-  left: 120px;
-  top: 52vh;
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
-  z-index: 3;
 }
 
 .arena-stat-box {
@@ -113,12 +103,10 @@
   margin-top: 5px;
 }
 
-/* ===== KAHVE İSMİ INPUT - POZİSYON AYARI ===== */
+/* ===== KAHVE İSMİ INPUT ===== */
 .coffee-name-input-wrapper {
-  position: fixed;
-  left: 120px;
-  top: 65vh;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   padding: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -266,10 +254,8 @@
 }
 
 /* ===== BUTONLAR ===== */
+/* Not (TASK-003): butonlar da normal akışta; sol panelin sonunda görünür. */
 .hero-btn {
-  position: fixed;
-  left: 120px;
-  top: 65vh;
   padding: 20px 50px;
   border-radius: 60px;
   border: none;
@@ -287,16 +273,7 @@
 }
 
 .arena-btn {
-  /* Butonu sol alt köşeye sabitliyoruz */
-  position: fixed; 
-  bottom: 80px;
-  left: 130px;
-  
-  /* Diğer elemanların (sol panel metinlerinin) üzerine binmemesi için */
-  z-index: 999; 
-  
-  /* Mevcut tasarım özelliklerin (renk, padding vs.) kalsın */
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -327,20 +304,8 @@
 
 /* ===== MOBİL UYUMLULUK ===== */
 @media (max-width: 1024px) {
-  .hero-title {
-    left: 40px;
-    font-size: 50px;
-  }
-  .hero-sub,
-  .arena-stats-container,
-  .lab-badge,
-  .coffee-name-input-wrapper {
-    left: 40px;
-    width: 320px;
-  }
-  .arena-btn {
-    left: 50px;
-    bottom: 60px;
+  .coffee-left {
+    padding: 100px 32px 48px;
   }
 }
 
