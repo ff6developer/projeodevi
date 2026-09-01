@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Beaker, Zap, Trophy, Lock, Unlock } from "lucide-react"
 import CoffeeRight from "../../components/CoffeeRight"
 import { useToast } from "../../components/ToastProvider"
+import { createOrder } from "../../lib/orders"
 
 type RecipeOption = { name: string; price: number; power: number }
 
@@ -164,11 +165,33 @@ export default function KahveniOlusturClient() {
       return;
     }
 
-    // ☕ KAHVE İSMİ: Kullanıcı girdiyse onu, arena'dan geldiyse onu, yoksa İsimsiz
+    // Kahve ismi: kullanıcı girdiyse onu, arena'dan geldiyse onu, yoksa İsimsiz
     const finalCoffeeName = customCoffeeName.trim() || arenaCoffeeName || "İsimsiz Kahve"
 
-    const orderData = {
-      id: Date.now(),
+    // Kanonik sipariş kaydı (lib/orders → elmenes.orders)
+    const order = createOrder({
+      items: [
+        {
+          kind: "recipe",
+          name: finalCoffeeName,
+          image: arenaCoffeeImage,
+          unitKurus: Math.round(total * 100),
+          qty: 1,
+          recipe: form,
+          score: creativityScore,
+          fromArena: isLocked,
+        },
+      ],
+      subtotalKurus: Math.round(originalTotal * 100),
+      discountKurus: Math.round(discountAmount * 100),
+      shippingKurus: 0,
+      totalKurus: Math.round(total * 100),
+    })
+
+    // Geçiş dönemi: Admin paneli hâlâ eski "orders" anahtarını okuyor (TASK-122'de
+    // lib/orders'a taşınacak). O güne kadar eski formatta bir kopya da yazılır.
+    const legacyOrder = {
+      id: order.id,
       coffeeName: finalCoffeeName,
       details: form,
       totalPrice: total,
@@ -177,11 +200,10 @@ export default function KahveniOlusturClient() {
       isFromArena: isLocked,
       score: creativityScore,
       status: "Bekliyor",
-      date: new Date().toLocaleString('tr-TR')
+      date: new Date().toLocaleString("tr-TR"),
     }
-
-    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-    localStorage.setItem("orders", JSON.stringify([...existingOrders, orderData]));
+    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]")
+    localStorage.setItem("orders", JSON.stringify([...existingOrders, legacyOrder]))
 
     const coffeeData = {
       id: Date.now(),
@@ -198,12 +220,10 @@ export default function KahveniOlusturClient() {
     const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]");
     localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]));
 
-    toast.success(isLocked ? "Siparişin alındı! %15 Arena İndirimi uygulandı" : "Siparişin alındı!")
-    
-    // Input'u temizle
+    toast.success(isLocked ? "Siparişin alındı — %15 Arena indirimi uygulandı." : "Siparişin alındı.")
+
     setCustomCoffeeName("")
-    
-    router.push("/siparis");
+    router.push(`/siparis?o=${order.id}`)
   }
 
   
