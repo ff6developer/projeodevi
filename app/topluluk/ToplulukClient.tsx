@@ -10,6 +10,7 @@ import {
 } from "lucide-react"
 import "@/styles/kahvearenasi.css"
 import { useToast } from "@/components/ToastProvider"
+import { getRemainingDays, rollOverIfNeeded } from "@/lib/community"
 
 export default function ToplulukClient() {
   const router = useRouter()
@@ -23,63 +24,25 @@ export default function ToplulukClient() {
   const [commentText, setCommentText] = useState("")
   const [remainingDays, setRemainingDays] = useState(0)
 
-  // 1. TURNOVA KONTROL SİSTEMİ
-  const checkTournament = (posts: any[]) => {
-    const start = localStorage.getItem("tournamentStart")
-    if (!start) {
-      localStorage.setItem("tournamentStart", Date.now().toString())
-      return posts
-    }
-    const now = Date.now()
-    const diff = now - Number(start)
-    const ONE_MONTH = 1000 * 60 * 60 * 24 * 30
-
-    if (diff > ONE_MONTH) {
-      if (posts.length > 0) {
-        const winner = [...posts].sort((a, b) => (b.likes || 0) - (a.likes || 0))[0]
-        localStorage.setItem("arenaChampion", JSON.stringify({
-          name: winner.coffee.name,
-          creator: winner.userName,
-          image: winner.coffee.image
-        }))
-      }
-      localStorage.setItem("arenaPosts", JSON.stringify([]))
-      localStorage.setItem("tournamentStart", Date.now().toString())
-      return []
-    }
-    return posts
-  }
-
-  // 2. VERİ YÜKLEME
+  // VERİ YÜKLEME — dönem (takvim ayı) değiştiyse seçki yenilenir
   useEffect(() => {
     const timer = setTimeout(() => {
       const rawPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
-      const checkedPosts = checkTournament(rawPosts)
+      const checkedPosts = rollOverIfNeeded(rawPosts)
       const savedVotes = JSON.parse(localStorage.getItem("userVotes") || "[]")
 
       setPosts(checkedPosts)
       setVotedPosts(savedVotes)
       setIsLoading(false)
-    }, 500)
+    }, 400)
     return () => clearTimeout(timer)
   }, [])
 
-  // 3. GERİ SAYIM
+  // KALAN GÜN — ay sonuna kadar
   useEffect(() => {
-    let start = localStorage.getItem("tournamentStart")
-    if (!start) {
-      start = Date.now().toString()
-      localStorage.setItem("tournamentStart", start)
-    }
-    const calculate = () => {
-      const now = Date.now()
-      const diff = now - Number(start)
-      const ONE_DAY = 1000 * 60 * 60 * 24
-      const remaining = 30 - Math.floor(diff / ONE_DAY)
-      setRemainingDays(remaining > 0 ? remaining : 0)
-    }
-    calculate()
-    const interval = setInterval(calculate, 60000)
+    const update = () => setRemainingDays(getRemainingDays())
+    update()
+    const interval = setInterval(update, 60000)
     return () => clearInterval(interval)
   }, [])
 
