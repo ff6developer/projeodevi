@@ -378,8 +378,18 @@ export default function KahveArenasiClient() {
         </section>
       )}
 
-      {/* ANA LİSTE (SOLDAKİ GÖRSELLER) */}
+      {/* ANA LİSTE */}
       <main className="arena-feed">
+        {!isLoading && posts.length === 0 ? (
+          <div className="arena-empty">
+            <Coffee size={32} />
+            <h3>Henüz tasarım paylaşılmamış</h3>
+            <p>Bu ayın seçkisinde ilk sıra senin olabilir. Kendi kahveni tasarla ve toplulukla paylaş.</p>
+            <button className="arena-empty-btn" onClick={() => router.push("/kahveniolustur")}>
+              Kahveni tasarla
+            </button>
+          </div>
+        ) : (
         <div className="arena-grid">
           {isLoading ? (
             [1, 2, 3, 4].map((n) => (
@@ -447,6 +457,7 @@ export default function KahveArenasiClient() {
             ))
           )}
         </div>
+        )}
       </main>
 
       {/* USER DRAWER */}

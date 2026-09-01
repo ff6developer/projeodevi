@@ -975,6 +975,50 @@
   gap: 15px;
 }
 
+/* --- BOŞ DURUM (TASK-012) --- */
+.arena-empty {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: #888;
+}
+
+.arena-empty h3 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.arena-empty p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.arena-empty-btn {
+  margin-top: 6px;
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  background: var(--primary-coffee);
+  color: #1a120b;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.18s ease;
+}
+
+.arena-empty-btn:hover {
+  background: var(--primary-hover);
+}
+
 /* ==========================================================================
    RESPONSIVE DESIGN – ELMENES COFFEE ARENA (2026)
    ========================================================================== */
