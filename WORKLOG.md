@@ -118,3 +118,9 @@ Format: `TASK-XXX | tarih | özet | build / tsc | regresyon notu`
 | TASK-076/077 | 2026-09-01 | `components/ui/index.ts` barrel (tüm export + tipler). `/dev/ui` iç demo sayfası (noindex) — tüm bileşenler tek ekranda görsel QA. | ✅ / ✅ | Browser doğrulandı. |
 | TASK-078–082 | 2026-09-01 | Component a11y geçişleri: bileşenler baştan a11y-first yazıldı (aria rolleri, klavye, `:focus-visible` global, `role=alert`/`status`/`progressbar`/`tablist`, `aria-modal`+focus-trap). DOM ile doğrulandı. `eslint components/ui` temiz. `QuantityStepper` (TASK-113) erken eklendi. | ✅ / ✅ | — |
 | TASK-083 | 2026-09-01 | **FAZ 6 REGRESSION CHECKPOINT.** `next build` ✅ (17 route, `/dev/ui` dahil), `tsc` ✅, `eslint components/ui` temiz. Tüm ui bileşenleri `/dev/ui` demo'da render + DOM ile a11y doğrulandı (tablist/progressbar/alert/status/group rolleri, focus-trap, klavye). Hiçbir mevcut sayfa henüz migrate edilmedi; build sağlam. **FAZ 6 COMPLETE.** | ✅ / ✅ | — |
+
+## FAZ 7 — Sayfa sayfa refactor
+
+| Task | Tarih | Özet | build/tsc | Not |
+|---|---|---|---|---|
+| TASK-084 | 2026-09-01 | Ana sayfa refactor. `Home.tsx` → `Container` (`.container`/`.container-narrow`), `.eyebrow` utility, tip ölçeği, `Button` (size lg), ürün vitrini `Card as={Link} interactive` + `Price` + `RoastMeter` + `OriginTag`, split `Card pad=lg`, trust şeridi lucide `Mail`. Ham `#ffffff`/`.home-btn` kaldırıldı; `home.css` tamamen token'lı. | ✅ / ✅ | Browser: 4 ürün kartı (Card+Price+RoastMeter), 2 split Card, 3 trust, 4 Button — hepsi sistem üstünde. |

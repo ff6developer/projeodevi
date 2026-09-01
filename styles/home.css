@@ -1,80 +1,40 @@
-/* Ana sayfa — TASK-020. Token bağlama + tam tasarım TASK-084'te. */
+/* Ana sayfa — TASK-084 (component + token). */
 
 .home {
   width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 24px 96px;
+  padding-bottom: var(--s-9);
 }
 
-/* --- HERO --- */
 .home-hero {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: var(--s-8) 0 var(--s-8);
+  padding-block: var(--s-9) var(--s-8);
   text-align: center;
 }
 
-.home-eyebrow {
-  margin: 0 0 16px;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  color: #c58a5c;
+.home-hero .eyebrow {
+  display: block;
+  margin-bottom: var(--s-4);
 }
 
 .home-title {
-  margin: 0 0 20px;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 600;
-  line-height: 1.15;
-  color: #ffffff;
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-h1);
   text-wrap: balance;
 }
 
 .home-lede {
-  margin: 0 auto 32px;
+  margin: 0 auto var(--s-6);
   max-width: 52ch;
-  font-size: 1.05rem;
-  line-height: 1.65;
-  color: #b3b3b3;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-body);
+  color: var(--ink-2);
 }
 
 .home-cta-row {
-  display: flex;
-  gap: var(--s-3);
-  flex-wrap: wrap;
   justify-content: center;
 }
 
-.home-btn {
-  padding: var(--s-4) var(--s-6);
-  border-radius: var(--r-lg);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: transparent;
-  color: #ffffff;
-  font-weight: 600;
-  text-decoration: none;
-  transition: border-color 0.18s ease, background-color 0.18s ease;
-  display: inline-block;
-}
-
-.home-btn:hover {
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-.home-btn-primary {
-  background: #c58a5c;
-  color: #1a120b;
-  border-color: transparent;
-}
-
-.home-btn-primary:hover {
-  background: #d59a6a;
-}
-
-/* --- SECTIONS --- */
 .home-section {
-  padding: 48px 0;
+  padding-block: var(--s-7);
 }
 
 .home-section-head {
@@ -82,47 +42,24 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s-4);
-  margin-bottom: 24px;
+  margin-bottom: var(--s-5);
 }
 
 .home-section-head h2 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #ffffff;
+  font-size: var(--fs-h2);
 }
 
 .home-section-link {
-  color: #c58a5c;
-  font-size: 14px;
+  color: var(--accent);
+  font-size: var(--fs-sm);
   font-weight: 600;
-  text-decoration: none;
 }
 
-.home-section-link:hover {
-  text-decoration: underline;
-}
-
-/* --- PRODUCT GRID --- */
 .home-product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--s-5);
-}
-
-.home-product {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-2);
-  padding: var(--s-3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--r-lg);
-  text-decoration: none;
-  transition: border-color 0.18s ease;
-}
-
-.home-product:hover {
-  border-color: rgba(197, 138, 92, 0.6);
+  gap: var(--s-4);
 }
 
 .home-product-image {
@@ -132,6 +69,7 @@
   aspect-ratio: 4 / 3;
   border-radius: var(--r-md);
   overflow: hidden;
+  margin-bottom: var(--s-3);
 }
 
 .home-product-image img {
@@ -139,73 +77,70 @@
 }
 
 .home-product-name {
-  color: #ffffff;
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
   font-weight: 600;
-  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.home-product-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  margin: var(--s-2) 0;
 }
 
 .home-product-price {
-  color: #b3b3b3;
-  font-size: 0.9rem;
-  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--ink);
 }
 
-/* --- SPLIT --- */
 .home-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--s-5);
+  gap: var(--s-4);
 }
 
-.home-split-card {
-  padding: var(--s-6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--r-lg);
+.home-split h2 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-h3);
 }
 
-.home-split-card h2 {
-  margin: 0 0 10px;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #ffffff;
+.home-split-text {
+  margin: 0 0 var(--s-4);
+  color: var(--ink-2);
+  line-height: var(--lh-body);
+  font-size: var(--fs-sm);
 }
 
-.home-split-card p {
-  margin: 0 0 18px;
-  color: #b3b3b3;
-  line-height: 1.6;
-  font-size: 0.95rem;
-}
-
-/* --- TRUST STRIP --- */
 .home-trust {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-5);
   justify-content: center;
-  padding: 32px 0 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  margin-top: 24px;
+  padding-block: var(--s-6) 0;
+  border-top: 1px solid var(--line);
+  margin-top: var(--s-5);
 }
 
 .home-trust-item {
   display: flex;
   align-items: center;
-  gap: var(--s-3);
-  color: #b3b3b3;
-  font-size: 14px;
+  gap: var(--s-2);
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
 }
 
 .home-trust-item svg {
-  color: #c58a5c;
+  color: var(--accent);
   flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
   .home-hero {
-    padding: var(--s-7) 0 var(--s-7);
+    padding-block: var(--s-7) var(--s-6);
   }
-
   .home-split {
     grid-template-columns: 1fr;
   }
