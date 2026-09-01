@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import "@/styles/tokens.css";
 import "@/styles/layout.css";
 import { ToastProvider } from "@/components/ToastProvider";
 import HeaderNav from "@/components/HeaderNav";

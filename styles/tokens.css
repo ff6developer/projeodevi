@@ -1,0 +1,167 @@
+/* =============================================================
+   Elmenes Coffee — Design Tokens (TEK KAYNAK)
+   Yeni :root bloğu açma. Yeni sabit hex/px kullanma. var(--...) kullan.
+   Dark-first: bare :root = koyu (varsayılan). Açık tema alternatif.
+   ============================================================= */
+
+:root {
+  /* --- Yüzeyler & mürekkep (KOYU / varsayılan) --- */
+  --paper: #17140f;          /* zemin — derin espresso siyahı */
+  --surface: #201c16;        /* kart / panel */
+  --surface-2: #2a251d;      /* input / yükseltilmiş */
+  --ink: #f2ede3;            /* ana metin — sıcak beyaz */
+  --ink-2: #b3aa9b;          /* ikincil metin */
+  --ink-3: #837a6b;          /* soluk / caption */
+  --line: #322c23;           /* hairline border */
+  --line-strong: #453d31;    /* belirgin border */
+  --tint: #241f18;           /* çok hafif dolgu */
+
+  /* --- Aksan (tek marka rengi) --- */
+  --accent: #d98a5c;         /* "roast" — kavurma kızılı */
+  --accent-weak: #b9705a;
+  --accent-contrast: #1a120b; /* aksan üstündeki metin */
+
+  /* --- Semantik (aksandan ayrı) --- */
+  --success: #6fbf7f;
+  --warning: #d9a441;
+  --danger: #e0715c;
+  --info: #6fa8c9;
+
+  /* --- Elevation (KOYU) --- */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.24), 0 8px 24px -12px rgba(0, 0, 0, 0.45);
+  --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.3), 0 24px 48px -16px rgba(0, 0, 0, 0.55);
+
+  /* --- Tipografi --- (font aileleri TASK-043'te Fraunces + IBM Plex'e geçecek) */
+  --font-display: var(--font-playfair, Georgia), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter, system-ui), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, monospace;
+
+  --fs-caption: 0.8125rem; /* 13 */
+  --fs-sm: 0.875rem;       /* 14 */
+  --fs-body: 1rem;         /* 16 */
+  --fs-lg: 1.125rem;       /* 18 */
+  --fs-h3: 1.375rem;       /* 22 */
+  --fs-h2: 1.875rem;       /* 30 */
+  --fs-h1: clamp(2.25rem, 4vw, 3rem);
+
+  --lh-tight: 1.15;
+  --lh-body: 1.6;
+  --tracking-eyebrow: 0.08em;
+
+  /* --- Spacing (4px tabanlı) --- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+
+  /* --- Radius --- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  /* --- Z-index --- */
+  --z-header: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+
+  /* --- Motion --- */
+  --t-fast: 120ms;
+  --t-base: 180ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* --- Layout --- */
+  --container: 1120px;
+  --container-narrow: 720px;
+  --header-h: 96px;
+  --rail-gap: 90px; /* sol sabit ikon rayı payı — TASK-054'te ray kalkınca sadeleşecek */
+}
+
+/* --- Breakpoint referansı (JS ile ortak; sadece dokümantasyon) ---
+   sm 480 · md 768 · lg 1024 · xl 1280 · 2xl 1440
+*/
+
+/* =============================================================
+   AÇIK TEMA — OS tercihi açıksa ve kullanıcı koyuya sabitlememişse
+   ============================================================= */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --paper: #f5f3ee;
+    --surface: #ffffff;
+    --surface-2: #efece5;
+    --ink: #1f1c19;
+    --ink-2: #57514a;
+    --ink-3: #8a8279;
+    --line: #e4dfd6;
+    --line-strong: #d3ccc0;
+    --tint: #ece7e2;
+
+    --accent: #9c4a2f;
+    --accent-weak: #b9705a;
+    --accent-contrast: #ffffff;
+
+    --success: #2f7d4f;
+    --warning: #b4791e;
+    --danger: #b23b2e;
+    --info: #3a6b8a;
+
+    --shadow-1: 0 1px 2px rgba(20, 16, 12, 0.06), 0 8px 24px -12px rgba(20, 16, 12, 0.16);
+    --shadow-2: 0 2px 8px rgba(20, 16, 12, 0.08), 0 24px 48px -16px rgba(20, 16, 12, 0.2);
+  }
+}
+
+/* Kullanıcı açık temaya sabitlediyse (toggle) — her iki yönde kazanır */
+:root[data-theme="light"] {
+  --paper: #f5f3ee;
+  --surface: #ffffff;
+  --surface-2: #efece5;
+  --ink: #1f1c19;
+  --ink-2: #57514a;
+  --ink-3: #8a8279;
+  --line: #e4dfd6;
+  --line-strong: #d3ccc0;
+  --tint: #ece7e2;
+
+  --accent: #9c4a2f;
+  --accent-weak: #b9705a;
+  --accent-contrast: #ffffff;
+
+  --success: #2f7d4f;
+  --warning: #b4791e;
+  --danger: #b23b2e;
+  --info: #3a6b8a;
+
+  --shadow-1: 0 1px 2px rgba(20, 16, 12, 0.06), 0 8px 24px -12px rgba(20, 16, 12, 0.16);
+  --shadow-2: 0 2px 8px rgba(20, 16, 12, 0.08), 0 24px 48px -16px rgba(20, 16, 12, 0.2);
+}
+
+/* Kullanıcı koyu temaya sabitlediyse — bare :root ile aynı ama açıkça */
+:root[data-theme="dark"] {
+  --paper: #17140f;
+  --surface: #201c16;
+  --surface-2: #2a251d;
+  --ink: #f2ede3;
+  --ink-2: #b3aa9b;
+  --ink-3: #837a6b;
+  --line: #322c23;
+  --line-strong: #453d31;
+  --tint: #241f18;
+
+  --accent: #d98a5c;
+  --accent-weak: #b9705a;
+  --accent-contrast: #1a120b;
+
+  --success: #6fbf7f;
+  --warning: #d9a441;
+  --danger: #e0715c;
+  --info: #6fa8c9;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.24), 0 8px 24px -12px rgba(0, 0, 0, 0.45);
+  --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.3), 0 24px 48px -16px rgba(0, 0, 0, 0.55);
+}
