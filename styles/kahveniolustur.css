@@ -191,31 +191,23 @@
   font-size: 1.05em;
 }
 
-/* ===== SAĞ PANEL (SEÇENEK KAYDIRMA ALANI) ===== */
+/* ===== SAĞ PANEL (SEÇENEK ALANI) ===== */
+/* Not: eski tam-ekran scroll-hijack kaldırıldı (TASK-002). Bölümler artık
+   sayfanın normal akışında dikey olarak sıralanır. */
 .coffee-right {
   width: 55%;
   position: relative;
   z-index: 2;
-  height: 100vh;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.coffee-right::-webkit-scrollbar {
-  display: none;
 }
 
 .config-section {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 120px 0 80px;
+  padding: 48px 0;
   width: 100%;
 }
 

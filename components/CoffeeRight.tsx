@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Lock } from "lucide-react"
 import ConfigSection from "./ConfigSection"
 
@@ -16,56 +15,6 @@ export default function CoffeeRight({
   sweetenerOptions,
   techniqueOptions
 }: any) {
-
-  useEffect(() => {
-    if (!started) return
-
-    const container = document.querySelector(".coffee-right") as HTMLElement
-    const sections = document.querySelectorAll(".config-section")
-
-    if (!container) return
-
-    let index = 0
-    let animating = false
-
-    const smoothScroll = (targetY: number) => {
-      const startY = container.scrollTop
-      const distance = targetY - startY
-      const duration = 700
-
-      let startTime: number | null = null
-
-      const ease = (t: number) => 1 - Math.pow(1 - t, 4)
-
-      const animate = (time: number) => {
-        if (!startTime) startTime = time
-        const progress = time - startTime
-        const percent = Math.min(progress / duration, 1)
-
-        container.scrollTop = startY + distance * ease(percent)
-
-        if (percent < 1) requestAnimationFrame(animate)
-        else animating = false
-      }
-
-      requestAnimationFrame(animate)
-    }
-
-    const wheelHandler = (e: WheelEvent) => {
-      if (animating) return
-      animating = true
-
-      if (e.deltaY > 0) index = Math.min(index + 1, sections.length - 1)
-      else index = Math.max(index - 1, 0)
-
-      const targetSection = sections[index] as HTMLElement
-      if (targetSection) smoothScroll(targetSection.offsetTop)
-    }
-
-    container.addEventListener("wheel", wheelHandler)
-
-    return () => container.removeEventListener("wheel", wheelHandler)
-  }, [started])
 
   return (
     <div className="coffee-right">
