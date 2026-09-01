@@ -91,11 +91,12 @@ export default function RootLayout({
     >
       <body>
         <ToastProvider>
+          <a href="#main" className="skip-link">İçeriğe geç</a>
           <div className="layout">
 
             <HeaderNav />
 
-            <main className="main">
+            <main id="main" className="main">
               {children}
             </main>
 

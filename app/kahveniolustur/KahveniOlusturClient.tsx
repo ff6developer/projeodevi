@@ -6,6 +6,7 @@ import { Beaker, Zap, Trophy, Lock, Unlock } from "lucide-react"
 import CoffeeRight from "@/components/CoffeeRight"
 import { useToast } from "@/components/ToastProvider"
 import { createOrder } from "@/lib/orders"
+import { isLoggedIn } from "@/lib/session"
 
 type RecipeOption = { name: string; price: number; power: number }
 
@@ -158,8 +159,7 @@ export default function KahveniOlusturClient() {
 
   const handleSiparis = () => {
     if (!allSelected) return;
-    const loggedInUser = localStorage.getItem("user");
-    if (!loggedInUser) {
+    if (!isLoggedIn()) {
       toast.warning("Sipariş vermek için önce giriş yapmalısın!")
       router.push("/giris");
       return;

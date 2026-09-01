@@ -8,6 +8,7 @@ import Dashboard from "@/components/Dashboard"
 import OrdersPanel from "@/components/OrdersPanel"
 import ProductsPanel from "@/components/ProductsPanel"
 import type { Tab } from "@/components/adminTypes"
+import { isAdmin } from "@/lib/session"
 
 
 type OrderDetails = {
@@ -91,8 +92,7 @@ export default function AdminPanelClient() {
 
   // Yetki kontrolü: admin girişi yapılmamışsa panele erişimi engelle
   useEffect(() => {
-    const isAdmin = localStorage.getItem("isAdmin")
-    if (isAdmin !== "true") {
+    if (!isAdmin()) {
       router.push("/giris")
       return
     }

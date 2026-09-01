@@ -6,6 +6,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu as MenuIcon } from "lucide-react"
 import { visibleNavItems } from "@/lib/nav"
+import { isLoggedIn as sessionLoggedIn, subscribe } from "@/lib/session"
 import NavDrawer from "./NavDrawer"
 
 export default function HeaderNav() {
@@ -14,10 +15,9 @@ export default function HeaderNav() {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   useEffect(() => {
-    const checkAuth = () => setIsLoggedIn(!!localStorage.getItem("user"))
-    checkAuth()
-    window.addEventListener("authChanged", checkAuth)
-    return () => window.removeEventListener("authChanged", checkAuth)
+    const sync = () => setIsLoggedIn(sessionLoggedIn())
+    sync()
+    return subscribe(sync)
   }, [])
 
   // Rota değişince drawer'ı kapat

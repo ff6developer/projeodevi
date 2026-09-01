@@ -10,6 +10,7 @@ import {
 
 import "@/styles/profil.css"
 import { useToast } from "@/components/ToastProvider"
+import { getUser, setUser as setSessionUser, clearSession } from "@/lib/session"
 
 
 export default function ProfilClient() {
@@ -33,13 +34,12 @@ export default function ProfilClient() {
   const [editEmail, setEditEmail] = useState("")
 
   useEffect(() => {
-    const loggedInUser = localStorage.getItem("user")
-    if (!loggedInUser) {
+    const parsed = getUser()
+    if (!parsed) {
       router.push("/giris")
       return
     }
 
-    const parsed = JSON.parse(loggedInUser)
     setUser(parsed)
     setEditName(parsed.name)
     setEditEmail(parsed.email)
@@ -62,9 +62,7 @@ export default function ProfilClient() {
   }, [router])
 
   const handleLogout = () => {
-    localStorage.removeItem("user")
-    localStorage.removeItem("isLoggedIn")
-    window.dispatchEvent(new Event("authChanged"))
+    clearSession()
     router.push("/giris")
   }
 
@@ -90,7 +88,7 @@ export default function ProfilClient() {
       email: editEmail
     }
 
-    localStorage.setItem("user", JSON.stringify(updatedUser))
+    setSessionUser(updatedUser)
     setUser(updatedUser)
     setShowEdit(false)
   }

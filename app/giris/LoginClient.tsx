@@ -5,6 +5,7 @@ import AuthForm from "@/components/AuthForm"
 import "@/styles/login.css"
 import { useToast } from "@/components/ToastProvider"
 import { API_BASE_URL } from "@/app/site-config"
+import { setUser } from "@/lib/session"
 
 export default function LoginClient() {
   const router = useRouter()
@@ -45,8 +46,7 @@ export default function LoginClient() {
         storageValue: "true"
       }}
       onSuccess={(data) => {
-        localStorage.setItem("user", JSON.stringify(data.user))
-        localStorage.setItem("isLoggedIn", "true")
+        setUser(data.user)
         toast.success(`Hoş geldin, ${data.user.name}!`)
         router.push("/profil")
       }}
