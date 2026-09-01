@@ -1,6 +1,5 @@
 /* ===== ELMENES COFFEE ARENA - REFINED COMPETITION THEME ===== */
 
-
 /* --- LAYOUT & BACKGROUND --- */
 .arena-page {
   min-height: 100vh;
@@ -50,8 +49,7 @@
   color: var(--ink-3);
   font-size: 18px;
   margin-top: 10px;
-  letter-spacing: 2px;
-}
+  letter-spacing: normal; }
 
 .days-badge {
   display: inline-block;
@@ -61,10 +59,9 @@
   border: 1px solid var(--accent);
   color: var(--accent);
   border-radius: var(--r-pill);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 14px;
-  letter-spacing: 1px;
-}
+  letter-spacing: normal; }
 
 /* --- REWARDS SECTION (ÖDÜLLER) --- */
 .rewards-section {
@@ -82,11 +79,9 @@
 
 .rewards-header h2 {
   font-size: clamp(24px, 4vw, 36px);
-  font-weight: 800;
+  font-weight: 600;
   color: var(--accent);
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  display: flex;
+  letter-spacing: normal; display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
@@ -157,7 +152,7 @@
 .reward-card h3 {
   color: #fff;
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 8px;
 }
 
@@ -191,11 +186,9 @@
 
 .process-header h2 {
   font-size: clamp(24px, 4vw, 36px);
-  font-weight: 800;
+  font-weight: 600;
   color: var(--accent);
-  letter-spacing: 4px;
-  text-transform: uppercase;
-}
+  letter-spacing: normal; }
 
 .process-timeline {
   display: flex;
@@ -250,7 +243,7 @@
   transform: translateY(-50%);
   color: var(--accent);
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .process-step:last-child .step-icon-wrapper::after {
@@ -273,15 +266,14 @@
 
 .step-number {
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent);
   margin-bottom: 8px;
-  letter-spacing: 1px;
-}
+  letter-spacing: normal; }
 
 .step-title {
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #fff;
   margin-bottom: 8px;
 }
@@ -343,10 +335,9 @@
 .join-text h3 {
   color: #fff;
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 600;
   margin-bottom: 6px;
-  letter-spacing: 1px;
-}
+  letter-spacing: normal; }
 
 .join-text p {
   color: var(--ink-3);
@@ -386,14 +377,12 @@
   color: var(--accent);
   font-size: 1.2rem;
   margin-bottom: 6px;
-  letter-spacing: 2px;
-}
+  letter-spacing: normal; }
 
 .podium-header p {
   font-size: 0.9rem;
   color: var(--ink-2);
-  letter-spacing: 1px;
-}
+  letter-spacing: normal; }
 
 .podium-container {
   display: flex;
@@ -473,11 +462,9 @@
   transform: translateX(-50%);
   padding: 8px 22px; 
   border-radius: var(--r-pill); 
-  font-weight: 900; 
+  font-weight: 600; 
   font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
+  letter-spacing: normal; }
 
 .gold .rank-label { 
   background: var(--accent); 
@@ -561,7 +548,7 @@
   color: var(--accent);
   padding: 8px 16px;
   border-radius: var(--r-md);
-  font-weight: 800;
+  font-weight: 600;
   display: flex; 
   align-items: center; 
   gap: 8px;
@@ -705,7 +692,7 @@
 }
 
 .comment-author { 
-  font-weight: 800; 
+  font-weight: 600; 
   color: var(--accent); 
   margin-right: 8px; 
 }
@@ -870,9 +857,7 @@
 .drawer-stat-item span {
   color: var(--ink-3);
   font-size: 0.85rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
+  letter-spacing: normal; }
 
 .full-profile-btn {
   width: 100%; 
@@ -881,7 +866,7 @@
   padding: 20px; 
   border-radius: var(--r-lg); 
   border: none; 
-  font-weight: 800;
+  font-weight: 600;
   cursor: pointer; 
   display: flex; 
   align-items: center; 
@@ -937,7 +922,7 @@
 .arena-empty h3 {
   color: #fff;
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   margin: 0;
 }
 
@@ -999,8 +984,7 @@
 
   .arena-title-area h1 {
     font-size: clamp(36px, 6vw, 65px);
-    letter-spacing: 6px;
-  }
+    letter-spacing: normal; }
 
   .rewards-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1064,8 +1048,7 @@
 
   .arena-title-area h1 {
     font-size: clamp(28px, 7vw, 52px);
-    letter-spacing: 4px;
-  }
+    letter-spacing: normal; }
 
   .arena-title-area p {
     font-size: 15px;
@@ -1099,8 +1082,7 @@
 
   .process-header h2 {
     font-size: 24px;
-    letter-spacing: 3px;
-  }
+    letter-spacing: normal; }
 
   .process-timeline {
     flex-direction: column;
@@ -1195,8 +1177,7 @@
 
   .arena-title-area h1 {
     font-size: clamp(24px, 8vw, 38px);
-    letter-spacing: 2.5px;
-  }
+    letter-spacing: normal; }
 
   .arena-title-area p {
     font-size: 14px;

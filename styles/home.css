@@ -19,14 +19,13 @@
   margin: 0 0 16px;
   font-size: 13px;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: #c58a5c;
 }
 
 .home-title {
   margin: 0 0 20px;
   font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.15;
   color: #ffffff;
   text-wrap: balance;
@@ -89,7 +88,7 @@
 .home-section-head h2 {
   margin: 0;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
 }
 
@@ -167,7 +166,7 @@
 .home-split-card h2 {
   margin: 0 0 10px;
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
 }
 

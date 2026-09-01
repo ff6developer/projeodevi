@@ -32,7 +32,7 @@
 
 .siparis-hero {
   font-size: clamp(26px, 5vw, 38px);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.15;
   margin: 0 0 8px;
 }
@@ -97,7 +97,7 @@
 .siparis-order-total .siparis-order-label,
 .siparis-order-total .siparis-order-value {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .siparis-status-badge {

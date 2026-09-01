@@ -53,9 +53,7 @@
 .subtitle,
 .amacimiz-baslik h2 {
     font-size: 16px;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    letter-spacing: normal; margin-bottom: 10px;
 }
 
 .subtitle {
@@ -77,13 +75,12 @@
 
 .brand-title {
     font-size: 100px;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--surface);
     margin-top: 0; /* Negatif değerleri ( -150px gibi ) tamamen siliyoruz */
     margin-bottom: 10px;
     line-height: 1.1;
-    letter-spacing: -1px;
-}
+    letter-spacing: normal; }
 
 .description {
     font-size: 20px; /* Okumayı kolaylaştırmak için büyütüldü */
@@ -210,7 +207,6 @@
    RESPONSIVE DESIGN - Modern Mobile-First Approach
    ========================================================================== */
 
-
 /* --- LARGE TABLETS & SMALL LAPTOPS (max-width: 1200px) --- */
 @media (max-width: 1200px) {
   .about-content {
@@ -283,13 +279,11 @@
   .brand-title {
     font-size: var(--fs-h1);
     line-height: 1.05;
-    letter-spacing: -0.5px;
-  }
+    letter-spacing: normal; }
 
   .subtitle {
     font-size: var(--fs-sm);
-    letter-spacing: 3px;
-  }
+    letter-spacing: normal; }
 
   .divider {
     width: 50px;
@@ -402,8 +396,7 @@
 
   .subtitle {
     font-size: 12px;
-    letter-spacing: 2px;
-    margin-bottom: 5px;
+    letter-spacing: normal; margin-bottom: 5px;
   }
 
   .divider {
@@ -586,8 +579,7 @@
 
   .subtitle {
     font-size: 11px;
-    letter-spacing: 1.5px;
-  }
+    letter-spacing: normal; }
 
   .description {
     font-size: 15px;

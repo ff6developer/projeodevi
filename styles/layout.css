@@ -67,10 +67,8 @@
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   font-size: 13px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  position: relative;
+  font-weight: 600;
+  letter-spacing: normal; position: relative;
   transition: 0.3s;
 }
 
@@ -148,10 +146,8 @@
   box-shadow: var(--shadow-1);
   color: var(--ink);
   font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: normal; white-space: nowrap;
   opacity: 0;
   transform: translateX(-15px);
   transition: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -164,7 +160,6 @@
 }
 
 /* ===== MAIN ===== */
-
 
 /* ===== FOOTER (TASK-021) ===== */
 .footer {
@@ -188,7 +183,7 @@
 .footer-brand {
   margin: 0;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--ink);
 }
 
@@ -594,7 +589,7 @@
 .route-state h1 {
   margin: 0;
   font-size: clamp(24px, 4vw, 34px);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--ink);
 }
 

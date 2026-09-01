@@ -30,7 +30,7 @@
 .comment-cancel-btn,
 .comment-toggle-btn {
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .menu-champion-btn,
@@ -60,7 +60,7 @@
   text-align: center;
   color: black;
   font-size: 3.5rem;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 40px;
 }
 
@@ -95,7 +95,7 @@
 
 .arena-label {
   color: #d97706;
-  font-weight: bold;
+  font-weight: 600;
   margin: 0;
 }
 
@@ -343,7 +343,7 @@
 }
 
 .product-price {
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1.1rem;
   margin-bottom: 10px;
 }
