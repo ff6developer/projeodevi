@@ -116,7 +116,7 @@ Sakin, kesin, "biz" dili. Türkçe. Developer terimi yok. Hype yok. Örn: "Sepet
 |---|---|---|---|
 | 0 | Analiz & Plan | TASK-000 | ✅ COMPLETE |
 | 1 | Kritik UX & kırık akışlar | TASK-001 … TASK-015 | ✅ COMPLETE |
-| 2 | Bilgi mimarisi | TASK-016 … TASK-027 | ⬜ |
+| 2 | Bilgi mimarisi | TASK-016 … TASK-027 | ✅ COMPLETE |
 | 3 | Design system | TASK-028 … TASK-042 | ⬜ |
 | 4 | Typography & spacing | TASK-043 … TASK-052 | ⬜ |
 | 5 | Navigation | TASK-053 … TASK-061 | ⬜ |
