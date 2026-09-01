@@ -194,16 +194,86 @@ html, body {
 /* ===== MAIN ===== */
 
 
-/* ===== FOOTER ===== */
+/* ===== FOOTER (TASK-021) ===== */
 .footer {
+  margin-top: 64px;
   background: #050505;
-  color: #444;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 40px 24px;
+  color: #b3b3b3;
+}
+
+.footer-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   text-align: center;
-  padding: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.03);
-  letter-spacing: 4px;
-  font-size: 10px;
+}
+
+.footer-brand {
+  margin: 0;
+  font-size: 18px;
   font-weight: 700;
+  color: #ffffff;
+}
+
+.footer-tagline {
+  margin: 0;
+  font-size: 14px;
+  color: #8a8279;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-nav a {
+  color: #b3b3b3;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.18s ease;
+}
+
+.footer-nav a:hover {
+  color: #ffffff;
+}
+
+.footer-contact {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.footer-contact span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-contact svg {
+  color: #c58a5c;
+}
+
+.footer-rule {
+  width: 100%;
+  max-width: 480px;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 4px 0;
+}
+
+.footer-copy {
+  margin: 0;
+  font-size: 12px;
+  color: #8a8279;
 }
 
 /* Özel Scrollbar (Tüm sayfalarda premium görünüm) */

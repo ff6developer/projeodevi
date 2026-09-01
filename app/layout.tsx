@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "../styles/layout.css";
 import { ToastProvider } from "../components/ToastProvider";
 import HeaderNav from "../components/HeaderNav";
+import SiteFooter from "../components/SiteFooter";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./site-config";
 
 const inter = Inter({
@@ -78,57 +79,7 @@ export default function RootLayout({
               {children}
             </main>
 
-            <footer className="footer" style={{
-              marginTop: "40px",
-              padding: "30px 20px",
-              color: "white"
-            }}>
-              <div style={{
-                maxWidth: "1000px",
-                margin: "0 auto",
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                alignItems: "center",
-                textAlign: "center"
-              }}>
-
-                <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>
-                  ELMENES COFFEE
-                </h2>
-
-                <p style={{ opacity: 0.7 }}>
-                  Özel kahve deneyimini dijital dünyaya taşıyoruz.
-                </p>
-
-                <nav style={{
-                  display: "flex",
-                  gap: "20px",
-                  flexWrap: "wrap",
-                  justifyContent: "center"
-                }} aria-label="Alt bilgi bağlantıları">
-                  <a href="/menu">Menü</a>
-                  <a href="/hakkimizda">Hakkımızda</a>
-                  <a href="/profil">Profil</a>
-                  <a href="/kahveniolustur">Kahveni Oluştur</a>
-                </nav>
-
-                <div style={{
-                  display: "flex",
-                  gap: "15px"
-                }}>
-                  <span>📧 info@elmenes.com</span>
-                  <span>📍 Türkiye</span>
-                </div>
-
-                <hr style={{ width: "100%", opacity: 0.1 }} />
-
-                <p style={{ fontSize: "14px", opacity: 0.6 }}>
-                  © 2026 ELMENES COFFEE. Tüm hakları saklıdır.
-                </p>
-
-              </div>
-            </footer>
+            <SiteFooter />
 
           </div>
         </ToastProvider>
