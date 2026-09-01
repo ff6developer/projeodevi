@@ -1,0 +1,12 @@
+.price {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.strike {
+  margin-left: var(--s-2);
+  color: var(--ink-3);
+  text-decoration: line-through;
+  font-size: 0.85em;
+  font-weight: 400;
+}

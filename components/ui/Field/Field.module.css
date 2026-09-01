@@ -1,0 +1,76 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.hint {
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+
+.error {
+  font-size: var(--fs-caption);
+  color: var(--danger);
+}
+
+.control {
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  outline: none;
+  transition: border-color var(--t-base) var(--ease);
+}
+
+.control::placeholder {
+  color: var(--ink-3);
+}
+
+.control:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  outline-offset: 1px;
+}
+
+.control[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+textarea.control {
+  min-height: 96px;
+  resize: vertical;
+  line-height: var(--lh-body);
+}
+
+.passwordWrap {
+  position: relative;
+}
+.passwordWrap .control {
+  padding-right: 44px;
+}
+.passwordToggle {
+  position: absolute;
+  right: var(--s-2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  border-radius: var(--r-sm);
+}
+.passwordToggle:hover {
+  color: var(--ink);
+}

@@ -1,0 +1,63 @@
+/* Kahveye özgü bilgi tasarımı primitive'leri (TASK-075). Dekoratif değil, bilgilendirici. */
+
+.roast {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+
+.roastBars {
+  display: inline-flex;
+  gap: 3px;
+  align-items: flex-end;
+}
+.roastBar {
+  width: 4px;
+  background: var(--line-strong);
+  border-radius: 1px;
+}
+.roastBar.on {
+  background: var(--accent);
+}
+
+.dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-pill);
+  background: var(--line-strong);
+}
+.dot.on {
+  background: var(--accent);
+}
+
+.origin {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.note {
+  padding: 2px var(--s-2);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--tint);
+  font-size: var(--fs-caption);
+  color: var(--ink-2);
+}

@@ -97,3 +97,23 @@ Format: `TASK-XXX | tarih | özet | build / tsc | regresyon notu`
 | TASK-059 | 2026-09-01 | `lib/session.ts` — `getUser/isLoggedIn/isAdmin/setUser/setAdmin/clearSession/subscribe`. `localStorage["user"]` erişimi tek yerde. Bağlandı: `HeaderNav` (`subscribe`), `LoginClient` (`setUser`), `ProfilClient` (`getUser`/`setSessionUser`/`clearSession`), `AdminPanelClient` (`isAdmin()`), `KahveniOlusturClient` (`isLoggedIn()`). `AuthForm` adminCheck generic setItem korundu (not: authChanged fire etmiyor — admin nav-bağımlı değil). | ✅ / ✅ | build+tsc yeşil. |
 | TASK-060 | 2026-09-01 | Skip link + landmark. `<a href="#main" class="skip-link">İçeriğe geç</a>` (layout.tsx, HeaderNav'dan önce), `<main id="main">`. `.skip-link` sadece `:focus-visible`'da görünür (accent, token'lı). `<header>`/`<nav aria-label>`/`<footer>`/`<main>` landmark'ları yerinde. | ✅ / ✅ | build yeşil. |
 | TASK-061 | 2026-09-01 | **FAZ 5 REGRESSION CHECKPOINT.** `next build` ✅ (16 route), `tsc` ✅. 8 route smoke → 200. Browser: `.site-header` sticky düz, `.iconbar` + eski `.header-container` DOM'da yok; nav aktif state (`Hakkımızda*` doğru sayfada); skip link + `#main` yerinde; drawer 375px'te aç/ESC/scroll-lock çalışıyor (TASK-054'te doğrulandı). Sayfa üst padding'leri sticky header'a göre ayarlı. **FAZ 5 COMPLETE.** | ✅ / ✅ | — |
+
+## FAZ 6 — Ortak componentler
+
+| Task | Tarih | Özet | build/tsc | Not |
+|---|---|---|---|---|
+| TASK-062 | 2026-09-01 | `components/ui/Button` (variant: primary/secondary/ghost/danger · size: md 40px/lg 48px · block · loading spinner · `href` ile Link) + `IconButton` (kare 36/44px, `label` zorunlu → `aria-label`, tone danger). CSS Modules, token'lı, `:disabled`, hover renk (transform yok). | ✅ / ✅ | demo doğrulandı. |
+| TASK-063 | 2026-09-01 | `components/ui/Field`: `Input`/`PasswordInput` (göster-gizle)/`Textarea`/`Select`. Ortak `FieldShell` (label + hint + error + `htmlFor`/`aria-describedby`/`aria-invalid`, error `role=alert`). `useId`. Tek görsel stil (`--surface-2`, `--accent` focus ring, `--r-sm`). | ✅ / ✅ | demo: hata mesajı `role=alert` görünüyor. |
+| TASK-064 | 2026-09-01 | `components/ui/Card` + `CardHeader`/`CardFooter`. `as`, `pad` (none/sm/md/lg), `elevated` (`--shadow-1`), `interactive` (hover border→accent, transform yok). | ✅ / ✅ | — |
+| TASK-065 | 2026-09-01 | `components/ui/Badge`: tone neutral/accent/success/warning/danger (`color-mix` ile token'dan). Gradient/glow yok. | ✅ / ✅ | — |
+| TASK-066 | 2026-09-01 | `components/ui/Modal` (portal, `role=dialog aria-modal`, focus-trap, ESC, `body` scroll-lock, ilk odak, kapanışta odağı geri ver, `aria-labelledby`, overlay-tık kapat) + `ConfirmDialog` (`ConfirmProvider` + `useConfirm(): Promise<boolean>`). `layout.tsx`'e `<ConfirmProvider>` eklendi. | ✅ / ✅ | demo: ESC kapatıyor, confirm Promise akışı. |
+| TASK-068 | 2026-09-01 | `components/ui/Tabs` (`role=tablist/tab/tabpanel`, ok/Home/End tuşları, `aria-selected`, roving tabindex). | ✅ / ✅ | demo: 3 sekme, klavye. |
+| TASK-069 | 2026-09-01 | `components/ui/Stepper` (numaralı işaretçi = gerçek sıra, `aria-current="step"`, done=check, mobilde kompakt). | ✅ / ✅ | — |
+| TASK-070 | 2026-09-01 | `components/ui/Progress` (`role=progressbar` + aria-value*, ince, token). | ✅ / ✅ | — |
+| TASK-071 | 2026-09-01 | `components/ui/States`: `EmptyState` (ikon+başlık+açıklama+aksiyon), `LoadingState` (nötr spinner, `role=status`), `ErrorState`. | ✅ / ✅ | — |
+| TASK-072 | 2026-09-01 | `Dropdown` — NO-OP. Mevcut ihtiyaçları `Select` + `Modal` karşılıyor; gerçek menü-widget ihtiyacı çıkarsa Faz 7'de eklenecek. | — | Gerekçe kayıtlı. |
+| TASK-073 | 2026-09-01 | `styles/utilities.css`: `.container`/`.container-narrow`, `.stack(-2..6)`, `.cluster`, `.section`, `.sr-only`. `layout.tsx` import. | ✅ / ✅ | — |
+| TASK-074 | 2026-09-01 | `lib/format.ts` (`formatPrice` kuruş→₺, `liraToKurus`, `formatDateTime`) + `components/ui/Price` (`value`/`original` üstü çizili, `tabular-nums`). | ✅ / ✅ | demo: ₺145 / ~~₺160~~. |
+| TASK-075 | 2026-09-01 | `components/ui/CoffeeSpec`: `RoastMeter` (bar), `IntensityDots`, `OriginTag` (mono), `TastingNotes` (pill). Marka bilgi-tasarımı — dekoratif değil, klişe görsel yok. | ✅ / ✅ | demo: kahve kartında görünüyor. |
+| TASK-076/077 | 2026-09-01 | `components/ui/index.ts` barrel (tüm export + tipler). `/dev/ui` iç demo sayfası (noindex) — tüm bileşenler tek ekranda görsel QA. | ✅ / ✅ | Browser doğrulandı. |
+| TASK-078–082 | 2026-09-01 | Component a11y geçişleri: bileşenler baştan a11y-first yazıldı (aria rolleri, klavye, `:focus-visible` global, `role=alert`/`status`/`progressbar`/`tablist`, `aria-modal`+focus-trap). DOM ile doğrulandı. `eslint components/ui` temiz. `QuantityStepper` (TASK-113) erken eklendi. | ✅ / ✅ | — |

@@ -3,8 +3,10 @@ import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/typography.css";
+import "@/styles/utilities.css";
 import "@/styles/layout.css";
 import { ToastProvider } from "@/components/ToastProvider";
+import { ConfirmProvider } from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import HeaderNav from "@/components/HeaderNav";
 import SiteFooter from "@/components/SiteFooter";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./site-config";
@@ -91,6 +93,7 @@ export default function RootLayout({
     >
       <body>
         <ToastProvider>
+          <ConfirmProvider>
           <a href="#main" className="skip-link">İçeriğe geç</a>
           <div className="layout">
 
@@ -103,6 +106,7 @@ export default function RootLayout({
             <SiteFooter />
 
           </div>
+          </ConfirmProvider>
         </ToastProvider>
       </body>
     </html>

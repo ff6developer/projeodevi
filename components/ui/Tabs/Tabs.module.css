@@ -1,0 +1,27 @@
+.tablist {
+  display: flex;
+  gap: var(--s-2);
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.tab {
+  padding: var(--s-3) var(--s-3);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--ink-2);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.tab:hover {
+  color: var(--ink);
+}
+.tab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+.panel {
+  padding-top: var(--s-5);
+}
