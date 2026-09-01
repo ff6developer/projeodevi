@@ -172,7 +172,7 @@ export default function ToplulukClient() {
       id: 1,
       icon: "/arena-gift.png", // Hediye kutusu görseli
       title: "Özel Hediye Kutusu",
-      desc: "Kazanan kullanıcılara özel hazırlanmış premium hediye koleksiyonu"
+      desc: "Ayın öne çıkan tasarımına özel hazırlanmış hediye kutusu"
     },
     {
       id: 2,
@@ -184,7 +184,7 @@ export default function ToplulukClient() {
       id: 3,
       icon: "/bardak.png", // Özel kupa görseli
       title: "Elmenes Coffee Özel Kupa",
-      desc: "Sadece şampiyonlara özel, isim yazılı limited edition seramik kupa"
+      desc: "Ayın öne çıkanına özel, isim yazılı seramik kupa"
     }
   ]
 
@@ -195,35 +195,35 @@ export default function ToplulukClient() {
       icon: <Coffee size={28} />,
       number: "1. ADIM",
       title: "Katıl",
-      desc: "Kahveni oluştur ve Arena'da paylaş"
+      desc: "Kahveni oluştur ve toplulukta paylaş"
     },
     {
       id: 2,
       icon: <Heart size={28} />,
       number: "2. ADIM",
-      title: "Oy Topla",
+      title: "Oy topla",
       desc: "Diğer kullanıcılar oy versin"
     },
     {
       id: 3,
       icon: <TrendingUp size={28} />,
       number: "3. ADIM",
-      title: "Sıralamada Yüksel",
-      desc: "Puanın artsın, liderliğe oyna"
+      title: "Sıralamada yüksel",
+      desc: "Oy aldıkça sıralamada yukarı çık"
     },
     {
       id: 4,
       icon: <Trophy size={28} />,
       number: "4. ADIM",
-      title: "Şampiyon Ol",
-      desc: "Ay sonunda en yüksek puanı topla"
+      title: "Öne çık",
+      desc: "Ay sonunda en çok oyu topla"
     },
     {
       id: 5,
       icon: <Gift size={28} />,
       number: "5. ADIM",
-      title: "Ödül Kazan",
-      desc: "Sürpriz ödüller seni bekliyor!"
+      title: "Ödül kazan",
+      desc: "Ayın öne çıkan tasarımına ödül"
     }
   ]
 
@@ -237,9 +237,9 @@ export default function ToplulukClient() {
       <header className="arena-header">
         <div className="arena-title-area">
           <Trophy className="gold-trophy" size={40} />
-          <h1>KAHVE ARENASI</h1>
-          <p>Kahveni Oluştur ve Şampiyonlar Ligine Katıl!</p>
-          <span className="days-badge">{remainingDays} gün kaldı</span>
+          <h1>Topluluk</h1>
+          <p>Kendi kahveni tasarla, toplulukla paylaş, oy ver.</p>
+          <span className="days-badge">Bu ayın seçkisi — {remainingDays} gün kaldı</span>
         </div>
       </header>
 
@@ -273,10 +273,10 @@ export default function ToplulukClient() {
         <p className="rewards-footer">ve daha fazlası...</p>
       </section>
 
-      {/* TURNUVA SÜRECİ BÖLÜMÜ */}
+      {/* NASIL ÇALIŞIR */}
       <section className="process-section">
         <div className="process-header">
-          <h2>TURNUVA SÜRECİ</h2>
+          <h2>Nasıl çalışır</h2>
         </div>
 
         <div className="process-timeline">
@@ -320,7 +320,7 @@ export default function ToplulukClient() {
       {!isLoading && topThree.length > 0 && (
         <section className="podium-section">
           <div className="podium-header">
-            <strong>🏆 Anlık Sıralama</strong>
+            <strong>Bu ayın sıralaması</strong>
             <p>Oy sayısına göre anlık olarak değişir</p>
           </div>
 
@@ -355,7 +355,7 @@ export default function ToplulukClient() {
 
                     {isGold && (
                       <div style={{ fontSize: "0.8rem", color: "#ffcc00", marginTop: "4px" }}>
-                        Şu an lider
+                        Şu an önde
                       </div>
                     )}
                   </div>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import ToplulukClient from './ToplulukClient';
 
 export const metadata: Metadata = {
-  title: "Kahve Arenası",
+  title: "Topluluk",
   description:
     "Kendi kahveni tasarla, toplulukla paylaş, oy ver. Her ay öne çıkan tasarım ödül kazanır.",
   alternates: {

@@ -24,7 +24,7 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { href: "/menu", label: "Menü", icon: Coffee },
   { href: "/kahveniolustur", label: "Kahveni Oluştur", icon: FlaskConical, requiresAuth: true },
-  { href: "/topluluk", label: "Kahve Arenası", icon: Trophy },
+  { href: "/topluluk", label: "Topluluk", icon: Trophy },
   { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
   { href: "/giris", label: "Giriş Yap", icon: LogIn, hideWhenAuth: true },
   { href: "/kayit", label: "Kayıt Ol", icon: UserPlus, hideWhenAuth: true },

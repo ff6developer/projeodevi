@@ -5,7 +5,7 @@ import { BRAND } from "@/app/site-config";
 const FOOTER_LINKS = [
   { href: "/menu", label: "Menü" },
   { href: "/kahveniolustur", label: "Kahveni Oluştur" },
-  { href: "/topluluk", label: "Kahve Arenası" },
+  { href: "/topluluk", label: "Topluluk" },
   { href: "/hakkimizda", label: "Hakkımızda" },
 ];
 

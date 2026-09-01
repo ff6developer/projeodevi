@@ -379,7 +379,7 @@ export default function MenuClient() {
 
             <div className="arena-info">
               <p className="arena-label">
-                🏅 KAHVE ARENASI ŞAMPİYONU
+                Ayın öne çıkan tasarımı
               </p>
 
               <h2 className="arena-name">
@@ -387,10 +387,7 @@ export default function MenuClient() {
               </h2>
 
               <p className="arena-creator">
-                Yapan:
-                <strong>
-                  {arenaSampiyonu?.creator}
-                </strong>
+                Tasarlayan: <strong>{arenaSampiyonu?.creator}</strong>
               </p>
             </div>
 
