@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { 
   Trophy, MessageCircle, Zap, Award, 
-  Flame, X, User, ShoppingCart, Send, Star, Trash2,
+  Flame, X, User, ClipboardCopy, Send, Star, Trash2,
   Sparkles, Coffee, Heart, TrendingUp, Gift, Users
 } from "lucide-react"
 import "../../styles/kahvearenasi.css"
@@ -157,7 +157,7 @@ export default function KahveArenasiClient() {
       arenaScore: post.arenaScore || 0
     }))
 
-    toast.success("Tarif laboratuvara aktarıldı! %15 indirim kazandın!")
+    toast.success("Tarif kahve tasarımına aktarıldı — %15 indirim uygulandı.")
     router.push("/kahveniolustur")
   }
 
@@ -397,8 +397,8 @@ export default function KahveArenasiClient() {
                   </button>
 
                   <div className="score-badge"><Zap size={14} /> {post.arenaScore} Puan</div>
-                  <button className="copy-recipe-btn" onClick={(e) => { e.stopPropagation(); copyRecipe(post) }} aria-label="Tarifi Kopyala">
-                    <ShoppingCart size={18} />
+                  <button className="copy-recipe-btn" onClick={(e) => { e.stopPropagation(); copyRecipe(post) }} aria-label="Tarifi kahve tasarımına kopyala">
+                    <ClipboardCopy size={18} />
                   </button>
                 </div>
 
