@@ -30,14 +30,14 @@
 .lab-badge {
   background: rgba(197, 138, 92, 0.2);
   border: 1px solid var(--accent);
-  padding: 8px 16px;
+  padding: var(--s-2) var(--s-4);
   border-radius: var(--r-lg);
   color: #ffd59e;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: normal; display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-2);
   width: fit-content;
 }
 
@@ -50,7 +50,7 @@
   flex-direction: column;
   align-items: flex-start;
   align-self: flex-start;
-  gap: 20px;
+  gap: var(--s-5);
   padding: 120px 50px 60px;
   overflow: visible;
 }
@@ -73,13 +73,13 @@
 .arena-stats-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: var(--s-5);
 }
 
 .arena-stat-box {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px 25px;
+  padding: var(--s-4) var(--s-6);
   border-radius: var(--r-lg);
   backdrop-filter: blur(10px);
 }
@@ -87,7 +87,7 @@
 .stat-label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s-2);
   font-size: 11px;
   color: #888;
   letter-spacing: normal; }
@@ -104,7 +104,7 @@
 .coffee-name-input-wrapper {
   width: 100%;
   max-width: 400px;
-  padding: 14px;
+  padding: var(--s-4);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--r-lg);
@@ -120,7 +120,7 @@
 .coffee-name-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-2);
   font-size: 0.8em;
   color: #ffd59e;
   margin-bottom: 10px;
@@ -129,7 +129,7 @@
 
 .coffee-name-input {
   width: 100%;
-  padding: 12px 14px;
+  padding: var(--s-3) var(--s-4);
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--r-md);
@@ -165,7 +165,7 @@
 }
 
 .locked-coffee-name {
-  padding: 10px 14px;
+  padding: var(--s-3) var(--s-4);
   background: rgba(0, 0, 0, 0.3);
   border-radius: var(--r-md);
   color: #ffd59e;
@@ -201,7 +201,7 @@
   text-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-2);
 }
 
 .option-group {
@@ -209,7 +209,7 @@
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--r-lg);
-  padding: 26px;
+  padding: var(--s-6);
   color: white;
   width: 100%;
   max-width: 500px;
@@ -221,7 +221,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: var(--s-4) var(--s-5);
   border-radius: var(--r-lg);
   cursor: pointer;
   transition: all 0.3s ease;
@@ -252,8 +252,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 15px 25px;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-6);
   background: linear-gradient(90deg, #783c12, #714614);
   border-radius: var(--r-md);
   color: white;
@@ -276,7 +276,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--s-3);
   width: 100%;
   max-width: 400px;
 }
@@ -284,7 +284,7 @@
 .builder-progress {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--s-2);
   width: 100%;
 }
 
@@ -344,8 +344,8 @@
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  gap: var(--s-2);
+  padding: var(--s-4);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--r-lg);
@@ -354,7 +354,7 @@
 .builder-price-row {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--s-4);
   font-size: 13px;
   color: rgba(255, 255, 255, 0.75);
 }
@@ -370,7 +370,7 @@
 .builder-price-discount span:first-child {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .builder-price-total {
@@ -442,11 +442,11 @@
 .locked-banner {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-3);
   background: rgba(255, 213, 158, 0.12);
   border: 1px solid rgba(255, 213, 158, 0.25);
   border-radius: var(--r-md);
-  padding: 12px 16px;
+  padding: var(--s-3) var(--s-4);
   margin-bottom: 20px;
   color: #ffd59e;
   font-weight: 600;
@@ -456,10 +456,10 @@
 .locked-warning {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-2);
   background: rgba(255, 213, 158, 0.08);
   border-left: 3px solid #ffd59e;
-  padding: 10px 14px;
+  padding: var(--s-3) var(--s-4);
   border-radius: 0 8px 8px 0;
   margin: 15px 0;
   color: #ffd59e;

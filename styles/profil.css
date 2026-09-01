@@ -21,7 +21,7 @@
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  padding: 60px 40px;
+  padding: var(--s-8) var(--s-7);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,7 +39,7 @@
   background: rgba(255, 255, 255, 0.05);
   color: #ff4d4d;
   border: 1px solid rgba(255, 77, 77, 0.2);
-  padding: 12px;
+  padding: var(--s-3);
   border-radius: 50%;
   cursor: pointer;
   transition: all var(--t-base) var(--ease);
@@ -64,7 +64,7 @@
   width: 165px;
   height: 165px;
   border-radius: 50%;
-  padding: 6px;
+  padding: var(--s-2);
   background: linear-gradient(135deg, var(--accent), #222);
   cursor: pointer;
   transition: all var(--t-base) var(--ease);
@@ -115,7 +115,7 @@
 
 .edit-profile-btn {
   margin-top: 10px;
-  padding: 10px 22px;
+  padding: var(--s-3) var(--s-5);
   background: var(--accent);
   color: #000;
   border-radius: var(--r-lg);
@@ -147,7 +147,7 @@
 .edit-modal {
   background: #141414;
   width: 340px;
-  padding: 25px;
+  padding: var(--s-6);
   border-radius: var(--r-lg);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-1);
@@ -176,7 +176,7 @@
 
 .edit-modal input {
   width: 100%;
-  padding: 12px;
+  padding: var(--s-3);
   border-radius: var(--r-md);
   border: 1px solid var(--line);
   background: #0c0c0c;
@@ -193,13 +193,13 @@
 
 .edit-buttons {
   display: flex;
-  gap: 12px;
+  gap: var(--s-3);
   margin-top: 10px;
 }
 
 .save-edit-btn {
   flex: 1;
-  padding: 12px;
+  padding: var(--s-3);
   border-radius: var(--r-md);
   background: var(--accent);
   font-weight: 600;
@@ -216,7 +216,7 @@
 
 .cancel-edit-btn {
   flex: 1;
-  padding: 12px;
+  padding: var(--s-3);
   border-radius: var(--r-md);
   background: #222;
   font-weight: 600;
@@ -239,7 +239,7 @@
   width: 100%;
   max-width: 400px;
   min-height: 110px;
-  padding: 14px 16px;
+  padding: var(--s-4) var(--s-4);
   border-radius: var(--r-lg);
   border: 1px solid rgba(255,255,255,0.08);
   background: linear-gradient(145deg, #000000, #161414);
@@ -267,7 +267,7 @@
 
 .profil-stats {
   display: flex;
-  gap: 40px;
+  gap: var(--s-7);
   margin-top: 25px;
   padding-top: 25px;
   border-top: 1px solid var(--line);
@@ -277,7 +277,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .stat-item strong {
@@ -286,7 +286,7 @@
   color: #fff;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .stat-icon {
@@ -313,7 +313,7 @@
   margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-3);
 }
 
 /* ===== COFFEE SEÇİM LİSTESİ ===== */
@@ -323,7 +323,7 @@
   padding-right: 6px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--s-3);
 }
 
 .coffee-select-list::-webkit-scrollbar {
@@ -344,7 +344,7 @@
   position: relative;
   display: flex;
   align-items: stretch;
-  gap: 8px;
+  gap: var(--s-2);
 }
 
 .coffee-select-wrapper.selected .coffee-select-content {
@@ -360,11 +360,11 @@
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  padding: 16px;
+  padding: var(--s-4);
 
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--s-3);
 
   cursor: pointer;
   transition: 0.2s;
@@ -407,13 +407,13 @@
 .coffee-select-details {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--s-2);
   width: 100%;
 }
 
 .detail-tag {
   background: rgba(255, 255, 255, 0.08);
-  padding: 4px 10px;
+  padding: var(--s-1) var(--s-3);
   border-radius: var(--r-md);
   font-size: 0.72em;
   color: #aaa;
@@ -446,7 +446,7 @@
   font-size: 0.78em;
   background: rgba(255, 215, 0, 0.15);
   color: var(--accent);
-  padding: 3px 10px;
+  padding: var(--s-1) var(--s-3);
   border-radius: var(--r-md);
   font-weight: 600;
   border: 1px solid rgba(255, 215, 0, 0.2);
@@ -478,12 +478,12 @@
   margin-top: 15px;
   background: rgba(255,255,255,0.03);
   border-radius: var(--r-lg);
-  padding: 14px;
+  padding: var(--s-4);
 }
 
 .arena-form-row {
   display: flex;
-  gap: 12px;
+  gap: var(--s-3);
   align-items: center;
 }
 
@@ -493,7 +493,7 @@
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
-  padding: 12px;
+  padding: var(--s-3);
   color: #fff;
   transition: 0.2s;
   font-size: 14px;
@@ -547,7 +547,7 @@
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  padding: 14px;
+  padding: var(--s-4);
   color: #fff;
   resize: none;
   min-height: 90px;
@@ -580,8 +580,8 @@
 .share-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-5);
   border-radius: var(--r-lg);
   background: var(--accent);
   color: #000;
@@ -612,7 +612,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 25px;
+  gap: var(--s-6);
   margin-top: 40px;
 }
 
@@ -622,7 +622,7 @@
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  padding: 20px;
+  padding: var(--s-5);
   box-shadow: var(--shadow-1);
   transition: all var(--t-base) var(--ease);
   animation: fadeIn 0.6s ease-out;
@@ -643,7 +643,7 @@
 .post-user-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--s-3);
 }
 
 .post-user-avatar {
@@ -688,7 +688,7 @@
 .post-arena-score {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s-2);
   font-weight: 600;
   color: var(--accent);
   font-size: 14px;
@@ -700,7 +700,7 @@
   border: none;
   color: #888;
   cursor: pointer;
-  padding: 8px;
+  padding: var(--s-2);
   border-radius: var(--r-sm);
   transition: 0.2s;
   display: flex;
@@ -757,7 +757,7 @@
   }
 
   .profil-hero {
-    padding: 40px 20px;
+    padding: var(--s-7) var(--s-5);
     border-radius: var(--r-lg);
   }
 
@@ -771,7 +771,7 @@
   }
 
   .profil-stats {
-    gap: 30px;
+    gap: var(--s-6);
   }
 
   .stat-item strong {
@@ -779,7 +779,7 @@
   }
 
   .post-box {
-    padding: 18px;
+    padding: var(--s-5);
     border-radius: var(--r-lg);
   }
 
@@ -795,13 +795,13 @@
   }
 
   .profil-hero {
-    padding: 30px 15px;
+    padding: var(--s-6) var(--s-4);
   }
 
   .logout-button {
     top: 15px;
     right: 15px;
-    padding: 10px;
+    padding: var(--s-3);
   }
 
   .arena-form-row {
@@ -818,20 +818,20 @@
 .post-coffee-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--s-2);
   flex: 1;
 }
 
 .post-ingredients {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: var(--s-2);
 }
 
 .post-ingredient-tag {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 3px 10px;
+  padding: var(--s-1) var(--s-3);
   border-radius: var(--r-md);
   font-size: 0.72em;
   color: #aaa;
@@ -846,14 +846,14 @@
 
 .post-coffee-info {
   margin-top: 12px;
-  padding: 14px 16px;
+  padding: var(--s-4) var(--s-4);
   background: rgba(197,138,92,0.08);
   border-radius: var(--r-lg);
   border: 1px solid rgba(197,138,92,0.15);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--s-3);
 }
 
 .post-coffee-name {

@@ -45,7 +45,7 @@
   object-fit: cover;
   border-radius: 50%;
   background: #000;
-  padding: 3px;
+  padding: var(--s-1);
   border: 1px solid rgba(197, 138, 92, 0.4);
   z-index: 60;
 }
@@ -59,7 +59,7 @@
 /* ===== NAV ===== */
 .nav ul {
   display: flex;
-  gap: 35px;
+  gap: var(--s-7);
   list-style: none;
 }
 
@@ -138,7 +138,7 @@
 .icon-label {
   position: absolute;
   left: 85px;
-  padding: 10px 18px;
+  padding: var(--s-3) var(--s-5);
   border-radius: var(--r-md);
   backdrop-filter: blur(20px);
   background: rgba(10, 10, 10, 0.95);
@@ -166,7 +166,7 @@
   margin-top: 64px;
   background: var(--surface);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 40px 24px;
+  padding: var(--s-7) var(--s-5);
   color: var(--ink-2);
 }
 
@@ -176,7 +176,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: var(--s-4);
   text-align: center;
 }
 
@@ -195,7 +195,7 @@
 
 .footer-nav {
   display: flex;
-  gap: 20px;
+  gap: var(--s-5);
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -213,7 +213,7 @@
 
 .footer-contact {
   display: flex;
-  gap: 20px;
+  gap: var(--s-5);
   flex-wrap: wrap;
   justify-content: center;
   font-size: 13px;
@@ -222,7 +222,7 @@
 .footer-contact span {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .footer-contact svg {
@@ -266,7 +266,7 @@
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--s-3);
   width: min(420px, calc(100vw - 36px));
   pointer-events: none;
 }
@@ -277,7 +277,7 @@
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: start;
-  gap: 10px;
+  gap: var(--s-3);
   padding: 12px 12px 12px 14px;
   border-radius: var(--r-lg);
   border: 1px solid rgba(255, 255, 255, 0.10);
@@ -402,7 +402,7 @@
   /* Metin Alanları */
   .text-wrapper {
     padding: 50px 6%;
-    gap: 40px;
+    gap: var(--s-7);
   }
 
   .brand-title {
@@ -414,7 +414,7 @@
   .amacimiz-kartlar {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: var(--s-5);
   }
 }
 
@@ -438,7 +438,7 @@
     flex-direction: row !important;
     justify-content: center !important; /* Logo ve yazıyı tam merkeze al */
     align-items: center !important;
-    gap: 12px; /* Amblem ile yazı arasındaki nefes mesafesi */
+    gap: var(--s-3); /* Amblem ile yazı arasındaki nefes mesafesi */
   }
 
   /* Mobilde Navigasyon Linklerini Kesin Olarak Kapat */
@@ -451,7 +451,7 @@
     position: static !important; /* Fixed özelliğini kırıyoruz */
     width: 38px !important;
     height: 38px !important;
-    padding: 2px;
+    padding: var(--s-1);
     flex-shrink: 0;
   }
 
@@ -466,13 +466,13 @@
   .about-images-wrapper {
     height: 280px;
     padding: 15px 4%;
-    gap: 10px;
+    gap: var(--s-3);
   }
 
   /* Hakkımızda Metin Alanları (Mobil) */
   .text-wrapper {
     padding: 35px 5%;
-    gap: 30px;
+    gap: var(--s-6);
   }
 
   .brand-title {
@@ -492,7 +492,7 @@
   .amacimiz-kartlar {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: var(--s-4);
   }
 
   .feature-item h5 {
@@ -504,7 +504,7 @@
   }
 
   .amac-kart {
-    padding: 20px;
+    padding: var(--s-5);
   }
 
   .amac-kart h3 {
@@ -580,7 +580,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: var(--s-4);
   padding: 120px 24px 80px;
   text-align: center;
   color: var(--ink-2);
@@ -602,14 +602,14 @@
 
 .route-state-actions {
   display: flex;
-  gap: 12px;
+  gap: var(--s-3);
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 8px;
 }
 
 .route-state-btn {
-  padding: 12px 22px;
+  padding: var(--s-3) var(--s-5);
   border-radius: var(--r-lg);
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: transparent;

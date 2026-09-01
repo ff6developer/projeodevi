@@ -20,7 +20,7 @@
     height: 100%; /* Dikeyde tam boyut */
     overflow: hidden; /* Taşmayı engelle */
     padding: 30px 0 0 0; /* Üstte 30px, diğerleri 0 */
-    gap: 15px; /* İki görsel arasındaki hafif boşluk */
+    gap: var(--s-4); /* İki görsel arasındaki hafif boşluk */
     grid-row-start: 1;
     grid-row-end: -1;
 }
@@ -41,7 +41,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center; /* Dikeyde ortala */
-    gap: 60px; /* Hikayemiz ve Amacımız arası boşluk */
+    gap: var(--s-8); /* Hikayemiz ve Amacımız arası boşluk */
     background-color: #e1c275df; /* Çok koyu kahve */
     color: var(--ink);
 }
@@ -92,7 +92,7 @@
 .features-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: var(--s-5);
     margin-bottom: 30px;
 }
 
@@ -132,7 +132,7 @@
 .amacimiz-kartlar {
     display: flex;
     justify-content: flex-start; /* Sola yasla */
-    gap: 25px;
+    gap: var(--s-6);
     flex-wrap: wrap;
     max-width: 1000px;
     margin-top: 50px;
@@ -141,7 +141,7 @@
 .amac-kart {
     flex: 1;
     min-width: 200px; /* Biraz daha dar */
-    padding: 30px;
+    padding: var(--s-6);
     background: var(--ink);
     border-radius: var(--r-lg);
     border: 1px solid var(--ink-2);
@@ -229,11 +229,11 @@
   }
 
   .amacimiz-kartlar {
-    gap: 15px;
+    gap: var(--s-4);
   }
 
   .amac-kart {
-    padding: 25px;
+    padding: var(--s-6);
   }
 }
 
@@ -359,7 +359,7 @@
 
   .nav a {
     font-size: 11px;
-    padding: 8px 10px;
+    padding: var(--s-2) var(--s-3);
     min-height: 44px;
     display: flex;
     align-items: center;
@@ -555,11 +555,11 @@
 
   .nav a {
     font-size: 10px;
-    padding: 6px 8px;
+    padding: var(--s-2) var(--s-2);
   }
 
   .about-images-wrapper {
-    padding: 12px;
+    padding: var(--s-3);
     aspect-ratio: 16 / 9;
     max-height: 30vh;
   }
@@ -569,8 +569,8 @@
   }
 
   .text-wrapper {
-    padding: 24px 16px;
-    gap: 24px;
+    padding: var(--s-5) var(--s-4);
+    gap: var(--s-5);
   }
 
   .brand-title {
@@ -586,11 +586,11 @@
   }
 
   .features-grid {
-    gap: 12px;
+    gap: var(--s-3);
   }
 
   .feature-item {
-    padding: 14px;
+    padding: var(--s-4);
   }
 
   .feature-item h2 {
@@ -606,7 +606,7 @@
   }
 
   .amac-kart {
-    padding: 16px;
+    padding: var(--s-4);
   }
 
   .amac-kart h3 {

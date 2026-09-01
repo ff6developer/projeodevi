@@ -75,10 +75,10 @@
   background-color: rgba(255, 215, 0, 0.2);
   border: 3px solid #facc15;
   border-radius: var(--r-lg);
-  padding: 30px;
+  padding: var(--s-6);
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: var(--s-6);
   justify-content: center;
   flex-wrap: wrap;
   backdrop-filter: blur(5px);
@@ -125,7 +125,7 @@
 }
 
 .menu-champion-btn {
-  padding: 15px 30px;
+  padding: var(--s-4) var(--s-6);
   background-color: #3e2723;
   color: white;
   border-radius: var(--r-pill);
@@ -141,14 +141,14 @@
 /* Category Buttons */
 .category-buttons {
   display: flex;
-  gap: 15px;
+  gap: var(--s-4);
   justify-content: center;
   margin-bottom: 40px;
   flex-wrap: wrap;
 }
 
 .category-btn {
-  padding: 12px 30px;
+  padding: var(--s-3) var(--s-6);
   border-radius: var(--r-lg);
   background-color: #d7ccc8;
   color: black;
@@ -170,7 +170,7 @@
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, 285px);
-  gap: 25px;
+  gap: var(--s-6);
   max-width: 1300px;
   margin: 0 auto;
   justify-content: center;
@@ -188,7 +188,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: var(--s-5);
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(12px);
 }
@@ -204,7 +204,7 @@
   box-shadow: var(--shadow-1);
   backdrop-filter: blur(24px) saturate(140%);
   -webkit-backdrop-filter: blur(24px) saturate(140%);
-  padding: 18px;
+  padding: var(--s-5);
   animation: menuModalIn 180ms ease-out;
 }
 
@@ -250,7 +250,7 @@
   background-color: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(10px);
   border-radius: var(--r-lg);
-  padding: 20px;
+  padding: var(--s-5);
   box-shadow: var(--shadow-1);
   border: 1px solid rgba(255,255,255,0.3);
   display: flex;
@@ -395,7 +395,7 @@
 
 .comment-item {
   background-color: rgba(255,255,255,0.4);
-  padding: 8px;
+  padding: var(--s-2);
   border-radius: var(--r-sm);
   margin-bottom: 8px;
   font-size: 0.8rem;
@@ -424,7 +424,7 @@
 .product-card.is-modal .comment-item {
   background-color: rgba(255, 255, 255, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 12px;
+  padding: var(--s-3);
   border-radius: var(--r-lg);
   font-size: 0.98rem;
 }
@@ -466,7 +466,7 @@
 
 .product-card.is-expanded .comment-item {
   background-color: rgba(255, 255, 255, 0.62);
-  padding: 12px;
+  padding: var(--s-3);
   border-radius: var(--r-md);
   font-size: 0.95rem;
   border: 1px solid rgba(62, 39, 35, 0.12);
@@ -500,7 +500,7 @@
   height: 60px;
   margin-top: 10px;
   border-radius: var(--r-md);
-  padding: 10px;
+  padding: var(--s-3);
   font-size: 0.85rem;
   border: 1px solid #ccc;
   resize: vertical;
@@ -521,7 +521,7 @@
 /* Image Upload Area */
 .image-upload-area {
   margin-top: 10px;
-  padding: 10px;
+  padding: var(--s-3);
   background-color: rgba(255,255,255,0.3);
   border-radius: var(--r-md);
   border: 1px dashed #bcaaa4;
@@ -534,8 +534,8 @@
 .image-upload-label {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px 16px;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-4);
   background-color: #5d4037;
   color: white;
   border-radius: var(--r-lg);
@@ -550,8 +550,8 @@
   margin-top: 10px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
+  gap: var(--s-3);
+  padding: var(--s-2);
   background-color: rgba(255,255,255,0.5);
   border-radius: var(--r-sm);
 }
@@ -573,7 +573,7 @@
 .image-preview-info {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: var(--s-2);
   flex: 1;
   min-width: 0;
 }
@@ -585,7 +585,7 @@
 }
 
 .image-remove-btn {
-  padding: 4px 10px;
+  padding: var(--s-1) var(--s-3);
   background-color: #ef4444;
   color: white;
   border-radius: var(--r-lg);
@@ -600,13 +600,13 @@
 /* Comment Form Buttons */
 .comment-form-buttons {
   display: flex;
-  gap: 8px;
+  gap: var(--s-2);
   margin-top: 10px;
 }
 
 .comment-submit-btn {
   flex: 1;
-  padding: 8px;
+  padding: var(--s-2);
   background-color: #3e2723;
   color: white;
   border-radius: var(--r-md);
@@ -618,7 +618,7 @@
 
 .comment-cancel-btn {
   flex: 1;
-  padding: 8px;
+  padding: var(--s-2);
   background-color: #d7ccc8;
   color: #3e2723;
   border-radius: var(--r-md);
@@ -634,7 +634,7 @@
   background: none;
   border: 1px solid #3e2723;
   color: #3e2723;
-  padding: 6px 15px;
+  padding: var(--s-2) var(--s-4);
   border-radius: var(--r-lg);
   font-size: 0.85rem;
   transition: all 0.2s;
@@ -661,8 +661,8 @@
   }
 
   .arena-champion-inner {
-    padding: 20px;
-    gap: 15px;
+    padding: var(--s-5);
+    gap: var(--s-4);
   }
 
   .arena-name {
@@ -693,7 +693,7 @@
 
   .menu-modal {
     width: 96vw;
-    padding: 14px;
+    padding: var(--s-4);
   }
 
   .product-card.is-modal .product-image-wrapper {

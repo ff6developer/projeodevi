@@ -54,7 +54,7 @@
 .days-badge {
   display: inline-block;
   margin-top: 20px;
-  padding: 8px 24px;
+  padding: var(--s-2) var(--s-5);
   background: rgba(255, 204, 0, 0.1);
   border: 1px solid var(--accent);
   color: var(--accent);
@@ -84,7 +84,7 @@
   letter-spacing: normal; display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: var(--s-3);
 }
 
 .rewards-header .sparkle-icon {
@@ -95,14 +95,14 @@
 .rewards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: var(--s-6);
 }
 
 .reward-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  padding: 40px 30px;
+  padding: var(--s-7) var(--s-6);
   text-align: center;
   transition: all var(--t-base) var(--ease);
   position: relative;
@@ -297,11 +297,11 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  padding: 40px 50px;
+  padding: var(--s-7) var(--s-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 30px;
+  gap: var(--s-6);
   transition: all var(--t-base) var(--ease);
 }
 
@@ -313,7 +313,7 @@
 .join-left {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: var(--s-6);
 }
 
 .join-icon-wrapper {
@@ -364,7 +364,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: var(--s-8);
 }
 
 .podium-header {
@@ -388,7 +388,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 30px;
+  gap: var(--s-6);
   perspective: 1200px;
 }
 
@@ -396,7 +396,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
-  padding: 40px 20px;
+  padding: var(--s-7) var(--s-5);
   text-align: center;
   width: 280px;
   cursor: pointer;
@@ -460,7 +460,7 @@
   top: -15px; 
   left: 50%; 
   transform: translateX(-50%);
-  padding: 8px 22px; 
+  padding: var(--s-2) var(--s-5); 
   border-radius: var(--r-pill); 
   font-weight: 600; 
   font-size: 14px;
@@ -503,7 +503,7 @@
 .arena-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 40px;
+  gap: var(--s-7);
 }
 
 .arena-item-card {
@@ -546,12 +546,12 @@
   background: rgba(0, 0, 0, 0.8);
   border: 1px solid var(--accent);
   color: var(--accent);
-  padding: 8px 16px;
+  padding: var(--s-2) var(--s-4);
   border-radius: var(--r-md);
   font-weight: 600;
   display: flex; 
   align-items: center; 
-  gap: 8px;
+  gap: var(--s-2);
   backdrop-filter: blur(5px);
 }
 
@@ -603,13 +603,13 @@
 }
 
 .card-body { 
-  padding: 30px; 
+  padding: var(--s-6); 
 }
 
 .user-line { 
   display: flex; 
   align-items: center; 
-  gap: 12px; 
+  gap: var(--s-3); 
   margin-bottom: 15px; 
   cursor: pointer; 
 }
@@ -622,18 +622,18 @@
 /* --- CARD ACTIONS --- */
 .card-actions { 
   display: flex;
-  gap: 10px;
+  gap: var(--s-3);
   margin-top: 15px;
   align-items: center;
   border-top: 1px solid rgba(255,255,255,0.05); 
-  padding: 20px 30px;
+  padding: var(--s-5) var(--s-6);
 }
 
 .vote-btn, .comment-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--s-2);
   height: 45px;
   padding: 0 20px;
   border-radius: var(--r-lg);
@@ -679,7 +679,7 @@
 .comment-section-mini {
   margin: 0 30px 30px 30px;
   background: rgba(255,255,255,0.02);
-  padding: 20px;
+  padding: var(--s-5);
   border-radius: var(--r-lg);
   border: 1px solid var(--line);
 }
@@ -699,7 +699,7 @@
 
 .comment-input-row { 
   display: flex; 
-  gap: 12px; 
+  gap: var(--s-3); 
   margin-top: 20px; 
 }
 
@@ -707,7 +707,7 @@
   flex: 1; 
   background: var(--surface-2); 
   border: 1px solid #333;
-  padding: 12px 18px; 
+  padding: var(--s-3) var(--s-5); 
   border-radius: var(--r-lg); 
   color: #fff; 
   outline: none;
@@ -760,7 +760,7 @@
   width: 450px; 
   height: 100%;
   background: var(--paper); 
-  padding: 60px 40px;
+  padding: var(--s-8) var(--s-7);
   transform: translateX(100%); 
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: var(--shadow-1);
@@ -780,7 +780,7 @@
   border: none;
   color: var(--ink-3);
   cursor: pointer;
-  padding: 8px;
+  padding: var(--s-2);
   border-radius: 50%;
   transition: all 0.3s;
 }
@@ -793,7 +793,7 @@
 .drawer-content {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: var(--s-6);
 }
 
 .drawer-header {
@@ -801,7 +801,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: var(--s-4);
 }
 
 .drawer-avatar-bg {
@@ -823,12 +823,12 @@
 .barista-rank {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--s-2);
   color: var(--accent);
   font-size: 0.9rem;
   font-weight: 600;
   background: rgba(255, 204, 0, 0.1);
-  padding: 6px 16px;
+  padding: var(--s-2) var(--s-4);
   border-radius: var(--r-pill);
   border: 1px solid rgba(255, 204, 0, 0.3);
 }
@@ -837,7 +837,7 @@
   display: flex; 
   justify-content: space-around;
   background: rgba(255,255,255,0.03); 
-  padding: 25px; 
+  padding: var(--s-6); 
   border-radius: var(--r-lg); 
   margin: 10px 0;
   border: 1px solid var(--line);
@@ -863,7 +863,7 @@
   width: 100%; 
   background: linear-gradient(135deg, var(--accent), var(--accent-weak));
   color: #fff; 
-  padding: 20px; 
+  padding: var(--s-5); 
   border-radius: var(--r-lg); 
   border: none; 
   font-weight: 600;
@@ -871,7 +871,7 @@
   display: flex; 
   align-items: center; 
   justify-content: center; 
-  gap: 15px;
+  gap: var(--s-4);
   transition: all 0.3s;
   font-size: 1rem;
 }
@@ -899,10 +899,10 @@
   height: 450px;
   background: var(--surface);
   border-radius: var(--r-lg);
-  padding: 20px;
+  padding: var(--s-5);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--s-4);
 }
 
 /* --- BOŞ DURUM (TASK-012) --- */
@@ -910,12 +910,12 @@
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
-  padding: 48px 24px;
+  padding: var(--s-7) var(--s-5);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: var(--s-4);
   color: var(--ink-3);
 }
 
@@ -934,7 +934,7 @@
 
 .arena-empty-btn {
   margin-top: 6px;
-  padding: 12px 24px;
+  padding: var(--s-3) var(--s-5);
   border-radius: var(--r-lg);
   border: none;
   cursor: pointer;
@@ -992,7 +992,7 @@
 
   .process-timeline {
     flex-wrap: wrap;
-    gap: 30px;
+    gap: var(--s-6);
     justify-content: center;
   }
 
@@ -1007,22 +1007,22 @@
   .join-card {
     flex-direction: column;
     text-align: center;
-    padding: 30px;
+    padding: var(--s-6);
   }
 
   .join-left {
     flex-direction: column;
-    gap: 15px;
+    gap: var(--s-4);
   }
 
   .podium-container {
     flex-wrap: wrap;
-    gap: 20px;
+    gap: var(--s-5);
   }
 
   .podium-card {
     width: 240px;
-    padding: 30px 20px;
+    padding: var(--s-6) var(--s-5);
   }
 
   .arena-grid {
@@ -1031,7 +1031,7 @@
 
   .user-drawer {
     width: 380px;
-    padding: 40px 30px;
+    padding: var(--s-7) var(--s-6);
   }
 }
 
@@ -1056,7 +1056,7 @@
 
   .days-badge {
     font-size: 13px;
-    padding: 6px 18px;
+    padding: var(--s-2) var(--s-5);
   }
 
   .rewards-section {
@@ -1064,7 +1064,7 @@
   }
 
   .reward-card {
-    padding: 30px 20px;
+    padding: var(--s-6) var(--s-5);
     border-radius: var(--r-lg);
   }
 
@@ -1087,7 +1087,7 @@
   .process-timeline {
     flex-direction: column;
     align-items: center;
-    gap: 25px;
+    gap: var(--s-6);
   }
 
   .process-step {
@@ -1104,8 +1104,8 @@
   }
 
   .join-card {
-    padding: 25px 20px;
-    gap: 20px;
+    padding: var(--s-6) var(--s-5);
+    gap: var(--s-5);
   }
 
   .join-icon-wrapper {
@@ -1127,7 +1127,7 @@
 
   .arena-grid {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: var(--s-6);
   }
 
   .arena-item-card {
@@ -1135,11 +1135,11 @@
   }
 
   .card-body {
-    padding: 24px;
+    padding: var(--s-5);
   }
 
   .comment-input-row input {
-    padding: 10px 15px;
+    padding: var(--s-3) var(--s-4);
   }
 
   .comment-input-row button {
@@ -1150,12 +1150,12 @@
   .user-drawer {
     width: 100%;
     max-width: 360px;
-    padding: 30px 25px;
+    padding: var(--s-6) var(--s-6);
   }
 
   .drawer-stats-row {
     flex-direction: column;
-    gap: 15px;
+    gap: var(--s-4);
     text-align: center;
   }
 
@@ -1164,7 +1164,7 @@
   }
 
   .full-profile-btn {
-    padding: 15px;
+    padding: var(--s-4);
     font-size: 0.95rem;
   }
 }
@@ -1189,7 +1189,7 @@
   }
 
   .rewards-grid {
-    gap: 20px;
+    gap: var(--s-5);
   }
 
   .reward-icon-wrapper {
@@ -1198,7 +1198,7 @@
   }
 
   .reward-card {
-    padding: 20px 15px;
+    padding: var(--s-5) var(--s-4);
   }
 
   .process-timeline {
@@ -1210,7 +1210,7 @@
   }
 
   .join-card {
-    gap: 15px;
+    gap: var(--s-4);
   }
 
   .join-text p {
@@ -1224,7 +1224,7 @@
 
   .podium-card {
     width: 90%;
-    padding: 25px 15px;
+    padding: var(--s-6) var(--s-4);
   }
 
   .podium-img {
@@ -1234,16 +1234,16 @@
 
   .rank-label {
     font-size: 12px;
-    padding: 6px 18px;
+    padding: var(--s-2) var(--s-5);
   }
 
   .arena-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: var(--s-5);
   }
 
   .card-actions {
-    padding: 15px 20px;
+    padding: var(--s-4) var(--s-5);
   }
 
   .vote-btn, .comment-btn {
@@ -1253,7 +1253,7 @@
 
   .score-badge {
     font-size: 13px;
-    padding: 6px 12px;
+    padding: var(--s-2) var(--s-3);
   }
 
   .user-drawer {
@@ -1280,7 +1280,7 @@
 /* ---------- SMALL MOBILE (≤ 360px) ---------- */
 @media (max-width: 360px) {
   .arena-page {
-    padding: 70px 12px;
+    padding: var(--s-9) var(--s-3);
   }
 
   .arena-title-area h1 {
@@ -1292,7 +1292,7 @@
   }
 
   .join-card {
-    padding: 15px;
+    padding: var(--s-4);
   }
 
   .join-icon-wrapper {
@@ -1307,7 +1307,7 @@
 
   .card-actions {
     flex-direction: column;
-    gap: 8px;
+    gap: var(--s-2);
   }
 
   .vote-btn, .comment-btn {
