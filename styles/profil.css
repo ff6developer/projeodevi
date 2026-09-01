@@ -7,7 +7,7 @@
   background: radial-gradient(circle at top, var(--surface-2) 0%, var(--paper) 100%);
   color: #fff;
   padding: 140px 20px 60px;
-  font-family: var(--font-inter), 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .profil-container {
@@ -728,7 +728,7 @@
   align-items: center;
   justify-content: center;
   color: var(--accent);
-  font-family: var(--font-inter), 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .loading-screen h1 {

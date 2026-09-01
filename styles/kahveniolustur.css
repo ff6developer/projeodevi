@@ -2,7 +2,7 @@
 .coffee-layout {
   display: flex;
   min-height: 100vh;
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   position: relative;
   width: 100%;
 }

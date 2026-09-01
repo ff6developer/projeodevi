@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/layout.css";
@@ -8,15 +8,27 @@ import HeaderNav from "@/components/HeaderNav";
 import SiteFooter from "@/components/SiteFooter";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./site-config";
 
-const inter = Inter({
+// Display: karakterli modern serif (başlıklar, ürün adları, fiyatlar)
+const fraunces = Fraunces({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
-const playfairDisplay = Playfair_Display({
+// Metin / UI: humanist sans, tam Türkçe desteği
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-playfair",
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-sans",
+  display: "swap",
+});
+
+// Veri: sipariş no, fiyat kolonları, origin/kavurma etiketleri
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -72,7 +84,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" className={`${inter.variable} ${playfairDisplay.variable}`}>
+    <html
+      lang="tr"
+      className={`${fraunces.variable} ${plexSans.variable} ${plexMono.variable}`}
+    >
       <body>
         <ToastProvider>
           <div className="layout">

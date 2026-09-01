@@ -116,7 +116,7 @@
     color: var(--accent-weak);
     margin-top: 20px;
     margin-bottom: 30px;
-    font-family: var(--font-playfair), 'Playfair Display', serif;
+    font-family: var(--font-display);
 }
 
 .amacimiz-konteyner {
