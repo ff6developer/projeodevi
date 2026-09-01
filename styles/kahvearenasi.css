@@ -41,14 +41,9 @@
 }
 
 .arena-title-area h1 {
-  font-size: clamp(40px, 7vw, 85px);
-  font-weight: 950;
-  letter-spacing: 10px;
-  background: linear-gradient(180deg, var(--ink) 20%, var(--accent) 70%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-transform: uppercase;
-  filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8));
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  color: var(--ink);
 }
 
 .arena-title-area p {
