@@ -106,15 +106,15 @@ export default function AuthForm({
       const data = await res.json()
 
       if (!res.ok) {
-        toast.error(onError ? onError(data) : (data.message || "Bir hata oluştu"))
+        toast.error(onError ? onError(data) : (data.message || "Bir şeyler ters gitti, tekrar dener misin?"))
         return
       }
 
       onSuccess(data, formData)
 
     } catch (err) {
-      console.error("Bağlantı Hatası:", err)
-      toast.error("Server'a ulaşılamıyor. Lütfen backend terminalini kontrol edin!")
+      console.error("Bağlantı hatası:", err)
+      toast.error("Şu an işlem tamamlanamadı. Lütfen birazdan tekrar dene.")
     } finally {
       setSubmitting(false)
     }

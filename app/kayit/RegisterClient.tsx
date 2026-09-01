@@ -48,7 +48,7 @@ export default function RegisterClient() {
         toast.success("Kayıt başarılı ✔")
         router.push("/giris")
       }}
-      onError={(data) => data.message || "Bir hata oluştu"}
+      onError={(data) => data.message || "Bir şeyler ters gitti, tekrar dener misin?"}
       links={[
         { text: "Zaten hesabınız var mı?", href: "/giris", label: "Giriş Yap" }
       ]}
