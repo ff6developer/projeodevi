@@ -67,7 +67,7 @@ export default function ProductsPanel({
       {/* Liste */}
       <div className={`products-grid ${isMobile ? 'mobile' : ''}`}>
         {products.map(product => (
-          <div key={product.id} className="product-card">
+          <div key={product.id} className="admin-product-card">
             <div className="product-info">
               <div className="product-icon">☕</div>
               <div>

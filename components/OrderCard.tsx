@@ -59,7 +59,7 @@ export default function OrderCard({
         <div className="order-card-score">
           {order.isFromArena && <span className="arena-badge-large">🏆 Arena</span>}
           {order.score !== undefined && (
-            <div className="score-badge">
+            <div className="admin-score-badge">
               <span className="score-value">⭐ {order.score}</span>
             </div>
           )}

@@ -22,7 +22,7 @@
 }
 
 /* Shared button primitives */
-.arena-btn,
+.menu-champion-btn,
 .category-btn,
 .image-upload-label,
 .image-remove-btn,
@@ -33,7 +33,7 @@
   font-weight: bold;
 }
 
-.arena-btn,
+.menu-champion-btn,
 .category-btn,
 .image-remove-btn,
 .comment-submit-btn,
@@ -124,7 +124,7 @@
   height: 100%;
 }
 
-.arena-btn {
+.menu-champion-btn {
   padding: 15px 30px;
   background-color: #3e2723;
   color: white;
@@ -133,7 +133,7 @@
   transition: background-color 0.2s, transform 0.2s;
 }
 
-.arena-btn:hover {
+.menu-champion-btn:hover {
   background-color: #5d4037;
   transform: translateY(-2px);
 }

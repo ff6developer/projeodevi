@@ -255,7 +255,7 @@
 
 /* ===== BUTONLAR ===== */
 /* Not (TASK-010): "Laboratuvarı Aç" ön adımı kaldırıldı; .hero-btn silindi. */
-.arena-btn {
+.builder-submit-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -268,12 +268,12 @@
   cursor: pointer;
 }
 
-.arena-btn:hover:not(:disabled) {
+.builder-submit-btn:hover:not(:disabled) {
   transform: scale(1.02);
   box-shadow: 0 8px 25px rgba(102, 50, 36, 0.4);
 }
 
-.arena-btn:disabled {
+.builder-submit-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }

@@ -407,7 +407,7 @@ export default function MenuClient() {
               onClick={() =>
                 router.push('/topluluk')
               }
-              className="arena-btn"
+              className="menu-champion-btn"
             >
               Detaylara Git →
             </button>

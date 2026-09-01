@@ -334,7 +334,7 @@ export default function KahveniOlusturClient() {
             )}
 
             <button
-              className="arena-btn"
+              className="builder-submit-btn"
               onClick={handleSiparis}
               disabled={!allSelected}
             >

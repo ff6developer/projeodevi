@@ -1080,7 +1080,7 @@ html, body {
   justify-content: flex-end;
 }
 
-.score-badge {
+.admin-score-badge {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1302,7 +1302,7 @@ html, body {
   grid-template-columns: 1fr;
 }
 
-.product-card {
+.admin-product-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 20px;
@@ -1313,7 +1313,7 @@ html, body {
   transition: all 0.3s ease;
 }
 
-.product-card:hover {
+.admin-product-card:hover {
   border-color: var(--border-medium);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
@@ -1546,7 +1546,7 @@ html, body {
 .order-card,
 .coffee-card,
 .stat-card,
-.product-card {
+.admin-product-card {
   animation: slideUp 0.4s ease forwards;
 }
 
@@ -1614,7 +1614,7 @@ html, body {
     padding: 12px;
   }
 
-  .product-card {
+  .admin-product-card {
     padding: 16px;
   }
 
@@ -1750,7 +1750,7 @@ html, body {
 .stat-card:hover,
 .order-card:hover,
 .coffee-card:hover,
-.product-card:hover {
+.admin-product-card:hover {
   box-shadow:
     0 10px 35px rgba(0, 0, 0, 0.5),
     0 0 25px rgba(245, 197, 24, 0.08);
@@ -1760,7 +1760,7 @@ html, body {
 .stat-card::after,
 .order-card::after,
 .coffee-card::after,
-.product-card::after {
+.admin-product-card::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -1784,7 +1784,7 @@ html, body {
 .stat-card:hover::after,
 .order-card:hover::after,
 .coffee-card:hover::after,
-.product-card:hover::after {
+.admin-product-card:hover::after {
   opacity: 1;
 }
 
@@ -1890,7 +1890,7 @@ html, body {
   .stat-card:hover,
   .order-card:hover,
   .coffee-card:hover,
-  .product-card:hover {
+  .admin-product-card:hover {
     transform: none;
   }
 
