@@ -130,17 +130,26 @@ export default function KahveniOlusturClient() {
     (form.syrup?.power || 0) + (form.technique?.power || 0) + 
     (form.spice?.power || 0);
 
-  // 🔒 YENİ: İndirimli fiyat hesaplama
-  const subtotal = 
-    (form.milkType?.price || 0) + (form.beanType?.price || 0) + 
-    (form.foam?.price || 0) + (form.cupType?.price || 0) + 
-    (form.syrup?.price || 0) + (form.spice?.price || 0) + 
+  // Fiyat: temel kahve + seçilen eklentiler (varsa Arena indirimi eklentilere uygulanır)
+  const subtotal =
+    (form.milkType?.price || 0) + (form.beanType?.price || 0) +
+    (form.foam?.price || 0) + (form.cupType?.price || 0) +
+    (form.syrup?.price || 0) + (form.spice?.price || 0) +
     (form.sweetener?.price || 0) + (form.technique?.price || 0)
 
   const basePrice = 100
   const discountAmount = isLocked ? Math.round(subtotal * 0.15) : 0
   const total = basePrice + subtotal - discountAmount
   const originalTotal = basePrice + subtotal
+
+  // Geçici para birimi biçimlendirici (TASK-074'te lib/format'a taşınacak)
+  const fmtTRY = (n: number) =>
+    new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(n)
+
+  // Fiyat dökümü satırları — sadece ücretli eklentiler gösterilir
+  const priceRows = SELECTION_STEPS
+    .map((s) => ({ label: s.label, price: (form[s.field]?.price as number) || 0, name: form[s.field]?.name as string }))
+    .filter((r) => r.price > 0)
 
   // 🔒 YENİ: Kilit kontrollü seçim
   const handleOptionSelect = (field: string, item: any) => {
@@ -217,24 +226,36 @@ export default function KahveniOlusturClient() {
               <div className="arena-stat-box">
                 <span className="stat-label"><Zap size={14} color="#ffd59e"/> Yaratıcılık Puanı</span>
                 <span className="stat-value">{creativityScore}</span>
+                <span className="stat-hint">Seçimlerinin özgünlüğü — Toplulukta öne çıkmana yardımcı olur.</span>
               </div>
-              <div className="arena-stat-box">
-                <span className="stat-label">Toplam Fiyat</span>
-                <span className="stat-value">
-                  {total} TL
-                  {isLocked && (
-                    <span style={{ textDecoration: 'line-through', opacity: 0.6, fontSize: '0.8em', marginLeft: '8px' }}>
-                      {originalTotal} TL
-                    </span>
+            </div>
+
+            <div className="builder-price">
+              <div className="builder-price-row">
+                <span>Temel kahve</span>
+                <span>{fmtTRY(basePrice)}</span>
+              </div>
+              {priceRows.map((r) => (
+                <div className="builder-price-row" key={r.label}>
+                  <span>{r.label}<span className="builder-price-opt"> · {r.name}</span></span>
+                  <span>+ {fmtTRY(r.price)}</span>
+                </div>
+              ))}
+              {isLocked && discountAmount > 0 && (
+                <div className="builder-price-row builder-price-discount">
+                  <span><Unlock size={13} /> Arena indirimi (%15)</span>
+                  <span>− {fmtTRY(discountAmount)}</span>
+                </div>
+              )}
+              <div className="builder-price-row builder-price-total">
+                <span>Toplam</span>
+                <span>
+                  {fmtTRY(total)}
+                  {isLocked && discountAmount > 0 && (
+                    <span className="builder-price-was">{fmtTRY(originalTotal)}</span>
                   )}
                 </span>
               </div>
-              {isLocked && (
-                <div className="arena-stat-box discount-box">
-                  <span className="stat-label"><Unlock size={14} color="#4ade80"/> Arena İndirimi</span>
-                  <span className="stat-value" style={{ color: '#4ade80' }}>-%15</span>
-                </div>
-              )}
             </div>
 
             {/* ☕ KAHVE İSMİ INPUT'U - EN ALTA TAŞINDI */}

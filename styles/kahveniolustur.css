@@ -353,6 +353,67 @@
   scroll-margin-top: 110px;
 }
 
+/* ===== YARATICILIK PUANI İPUCU + FİYAT DÖKÜMÜ (TASK-006) ===== */
+.stat-hint {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 240px;
+}
+
+.builder-price {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+
+.builder-price-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.builder-price-opt {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.builder-price-discount {
+  color: #86efac;
+}
+
+.builder-price-discount span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.builder-price-total {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.builder-price-was {
+  margin-left: 8px;
+  font-size: 0.8em;
+  font-weight: 400;
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.4);
+}
+
 /* ===== ANİMASYONLAR ===== */
 @keyframes readyPop {
   from {
