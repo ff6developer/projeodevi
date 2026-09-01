@@ -496,7 +496,7 @@ html, body {
 .stat-card:hover {
   transform: translateY(-3px);
   border-color: var(--line-strong);
-  box-shadow: var(--shadow-2);
+  box-shadow: var(--shadow-1);
 }
 
 .stat-card::before {
@@ -609,7 +609,7 @@ html, body {
 
 .status-box:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px var(--status-glow);
+  box-shadow: var(--shadow-1);
 }
 
 .status-count {
@@ -693,7 +693,7 @@ html, body {
 .recent-order-icon {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -825,7 +825,6 @@ html, body {
 
 .search-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.1);
 }
 
 .search-input::placeholder {
@@ -884,7 +883,7 @@ html, body {
 
 .order-card:hover {
   border-color: var(--line-strong);
-  box-shadow: var(--shadow-2);
+  box-shadow: var(--shadow-1);
   transform: translateY(-2px);
 }
 
@@ -1099,7 +1098,7 @@ html, body {
   color: rgba(217, 119, 6, 0.5);
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
+  box-shadow: var(--shadow-1);
 }
 
 .action-btn.ready {
@@ -1112,7 +1111,7 @@ html, body {
   color: rgba(22, 163, 74, 0.5);
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
+  box-shadow: var(--shadow-1);
 }
 
 .action-btn.delete {
@@ -1172,7 +1171,6 @@ html, body {
 
 .product-name-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.1);
 }
 
 .product-name-input::placeholder {
@@ -1216,7 +1214,6 @@ html, body {
 
 .price-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.1);
 }
 
 .price-input::placeholder {
@@ -1248,7 +1245,7 @@ html, body {
   color: var(--ink-3);
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
+  box-shadow: var(--shadow-1);
 }
 
 /* ---- Products Grid ---- */
@@ -1349,7 +1346,7 @@ html, body {
 
 .coffee-card:hover {
   border-color: var(--line-strong);
-  box-shadow: var(--shadow-2);
+  box-shadow: var(--shadow-1);
   transform: translateY(-2px);
 }
 
@@ -1484,7 +1481,7 @@ html, body {
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--accent), var(--accent-weak));
-  border-radius: 999px;
+  border-radius: var(--r-pill);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -1711,9 +1708,7 @@ html, body {
 .order-card:hover,
 .coffee-card:hover,
 .admin-product-card:hover {
-  box-shadow:
-    0 10px 35px rgba(0, 0, 0, 0.5),
-    0 0 25px rgba(245, 197, 24, 0.08);
+  box-shadow: var(--shadow-1);
 }
 
 /* Gold Border Glow */
@@ -1791,9 +1786,6 @@ html, body {
 /* Sidebar Active Glow */
 .sidebar-nav-btn.active,
 .mobile-nav-btn.active {
-  box-shadow:
-    0 0 20px rgba(245, 197, 24, 0.08),
-    inset 0 0 12px rgba(245, 197, 24, 0.04);
 }
 
 /* Smooth Appear Animation */

@@ -20,7 +20,7 @@
   position: relative;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
-  border-radius: 40px;
+  border-radius: var(--r-lg);
   padding: 60px 40px;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@
   text-align: center;
   backdrop-filter: blur(20px);
   margin-bottom: 50px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow-1);
   animation: fadeIn 0.8s ease-out;
 }
 
@@ -68,7 +68,7 @@
   background: linear-gradient(135deg, var(--accent), #222);
   cursor: pointer;
   transition: all var(--t-base) var(--ease);
-  box-shadow: 0 15px 35px rgba(197, 138, 92, 0.3);
+  box-shadow: var(--shadow-1);
   position: relative;
 }
 
@@ -122,7 +122,7 @@
   padding: 10px 22px;
   background: var(--accent);
   color: #000;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   border: none;
   cursor: pointer;
   font-weight: 700;
@@ -152,9 +152,9 @@
   background: #141414;
   width: 340px;
   padding: 25px;
-  border-radius: 20px;
+  border-radius: var(--r-lg);
   border: 1px solid var(--line);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  box-shadow: var(--shadow-1);
   animation: modalPop 0.25s ease-out;
 }
 
@@ -181,7 +181,7 @@
 .edit-modal input {
   width: 100%;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   border: 1px solid var(--line);
   background: #0c0c0c;
   color: #fff;
@@ -204,7 +204,7 @@
 .save-edit-btn {
   flex: 1;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   background: var(--accent);
   font-weight: 700;
   border: none;
@@ -221,7 +221,7 @@
 .cancel-edit-btn {
   flex: 1;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   background: #222;
   font-weight: 700;
   border: none;
@@ -244,7 +244,7 @@
   max-width: 400px;
   min-height: 110px;
   padding: 14px 16px;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   border: 1px solid rgba(255,255,255,0.08);
   background: linear-gradient(145deg, #000000, #161414);
   color: #e2e8f0;
@@ -263,8 +263,6 @@
 
 .profil-bio:focus {
   border-color: #c08457;
-  box-shadow: 0 0 0 1px rgba(192,132,87,0.4),
-              0 0 20px rgba(192,132,87,0.15);
 }
 
 /* ===================== */
@@ -342,7 +340,7 @@
 
 .coffee-select-list::-webkit-scrollbar-thumb {
   background: var(--accent);
-  border-radius: 10px;
+  border-radius: var(--r-md);
 }
 
 /* ===== COFFEE SEÇİM WRAPPER ===== */
@@ -356,7 +354,7 @@
 .coffee-select-wrapper.selected .coffee-select-content {
   border: 2px solid var(--accent);
   background: linear-gradient(135deg, rgba(197,138,92,0.18), rgba(0,0,0,0.4));
-  box-shadow: 0 8px 25px rgba(197,138,92,0.25);
+  box-shadow: var(--shadow-1);
 }
 
 /* ===== COFFEE SEÇİM BUTONU ===== */
@@ -365,7 +363,7 @@
   flex: 1;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--r-lg);
   padding: 16px;
 
   display: flex;
@@ -420,7 +418,7 @@
 .detail-tag {
   background: rgba(255, 255, 255, 0.08);
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   font-size: 0.72em;
   color: #aaa;
   border: 1px solid rgba(255,255,255,0.05);
@@ -453,7 +451,7 @@
   background: rgba(255, 215, 0, 0.15);
   color: var(--accent);
   padding: 3px 10px;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   font-weight: 600;
   border: 1px solid rgba(255, 215, 0, 0.2);
 }
@@ -466,7 +464,7 @@
   padding: 0 14px;
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.15);
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   color: #ef4444;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -483,7 +481,7 @@
 .arena-preparation-area {
   margin-top: 15px;
   background: rgba(255,255,255,0.03);
-  border-radius: 18px;
+  border-radius: var(--r-lg);
   padding: 14px;
 }
 
@@ -498,7 +496,7 @@
   flex: 1;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   padding: 12px;
   color: #fff;
   transition: 0.2s;
@@ -518,7 +516,7 @@
 .arena-mini-upload {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   border: 1px dashed var(--line);
   background: var(--paper);
   display: flex;
@@ -542,7 +540,7 @@
 }
 
 .arena-mini-upload img {
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   object-fit: cover;
 }
 
@@ -552,7 +550,7 @@
   margin-top: 14px;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--r-lg);
   padding: 14px;
   color: #fff;
   resize: none;
@@ -588,7 +586,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   background: var(--accent);
   color: #000;
   border: none;
@@ -601,7 +599,7 @@
 .share-btn:hover:not(:disabled) {
   background: var(--accent-weak);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(197,138,92,0.3);
+  box-shadow: var(--shadow-1);
 }
 
 .share-btn.disabled {
@@ -627,16 +625,16 @@
   max-width: 650px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 25px;
+  border-radius: var(--r-lg);
   padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  box-shadow: var(--shadow-1);
   transition: all var(--t-base) var(--ease);
   animation: fadeIn 0.6s ease-out;
 }
 
 .post-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  box-shadow: var(--shadow-1);
 }
 
 .post-header {
@@ -679,7 +677,7 @@
 /* Kahve Görseli */
 .post-main-image-wrapper {
   margin-top: 12px;
-  border-radius: 16px;
+  border-radius: var(--r-lg);
   overflow: hidden;
   border: 1px solid var(--line);
 }
@@ -707,7 +705,7 @@
   color: #888;
   cursor: pointer;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   transition: 0.2s;
   display: flex;
   align-items: center;
@@ -764,7 +762,7 @@
 
   .profil-hero {
     padding: 40px 20px;
-    border-radius: 28px;
+    border-radius: var(--r-lg);
   }
 
   .profil-name {
@@ -786,7 +784,7 @@
 
   .post-box {
     padding: 18px;
-    border-radius: 20px;
+    border-radius: var(--r-lg);
   }
 
   .edit-modal {
@@ -838,7 +836,7 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 3px 10px;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   font-size: 0.72em;
   color: #aaa;
   font-weight: 500;
@@ -854,7 +852,7 @@
   margin-top: 12px;
   padding: 14px 16px;
   background: rgba(197,138,92,0.08);
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   border: 1px solid rgba(197,138,92,0.15);
   display: flex;
   align-items: flex-start;

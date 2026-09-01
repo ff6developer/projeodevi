@@ -31,7 +31,7 @@
   background: rgba(197, 138, 92, 0.2);
   border: 1px solid var(--accent);
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: var(--r-lg);
   color: #ffd59e;
   font-size: 12px;
   font-weight: 700;
@@ -81,7 +81,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 15px 25px;
-  border-radius: 18px;
+  border-radius: var(--r-lg);
   backdrop-filter: blur(10px);
 }
 
@@ -110,7 +110,7 @@
   padding: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   transition: all 0.3s ease;
   z-index: 3;
 }
@@ -137,7 +137,7 @@
   padding: 12px 14px;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   color: #fff;
   font-size: 1em;
   outline: none;
@@ -148,7 +148,6 @@
 .coffee-name-input:focus {
   border-color: #ffd59e;
   background: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 3px rgba(255, 213, 158, 0.1);
 }
 
 .coffee-name-input::placeholder {
@@ -173,7 +172,7 @@
 .locked-coffee-name {
   padding: 10px 14px;
   background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   color: #ffd59e;
   font-weight: 700;
   font-size: 1.05em;
@@ -214,7 +213,7 @@
   backdrop-filter: blur(20px);
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 22px;
+  border-radius: var(--r-lg);
   padding: 26px;
   color: white;
   width: 100%;
@@ -228,7 +227,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 12px;
@@ -244,7 +243,6 @@
 .milk-item.active {
   background: rgba(197, 138, 92, 0.25);
   border-color: var(--accent);
-  box-shadow: 0 0 20px rgba(197, 138, 92, 0.2);
 }
 
 .milk-item span:last-child {
@@ -262,7 +260,7 @@
   gap: 10px;
   padding: 15px 25px;
   background: linear-gradient(90deg, #783c12, #714614);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   color: white;
   border: none;
   cursor: pointer;
@@ -270,7 +268,7 @@
 
 .builder-submit-btn:hover:not(:disabled) {
   transform: scale(1.02);
-  box-shadow: 0 8px 25px rgba(102, 50, 36, 0.4);
+  box-shadow: var(--shadow-1);
 }
 
 .builder-submit-btn:disabled {
@@ -306,7 +304,7 @@
   height: 4px;
   width: 100%;
   background: rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   overflow: hidden;
 }
 
@@ -314,7 +312,7 @@
   display: block;
   height: 100%;
   background: var(--accent);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   transition: width 0.18s ease;
 }
 
@@ -355,7 +353,7 @@
   padding: 16px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+  border-radius: var(--r-lg);
 }
 
 .builder-price-row {
@@ -453,7 +451,7 @@
   gap: 10px;
   background: rgba(255, 213, 158, 0.12);
   border: 1px solid rgba(255, 213, 158, 0.25);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   padding: 12px 16px;
   margin-bottom: 20px;
   color: #ffd59e;

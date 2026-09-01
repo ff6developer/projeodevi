@@ -32,8 +32,8 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--line);
-  border-radius: 60px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-1);
 }
 
 .logo {
@@ -47,7 +47,6 @@
   background: #000;
   padding: 3px;
   border: 1px solid rgba(197, 138, 92, 0.4);
-  box-shadow: 0 0 20px rgba(197, 138, 92, 0.2);
   z-index: 60;
 }
 
@@ -98,7 +97,6 @@
   height: 2px;
   background: var(--accent);
   transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: 0 0 10px rgba(197, 138, 92, 0.8);
 }
 
 .nav a:hover::after {
@@ -120,8 +118,8 @@
   -webkit-backdrop-filter: blur(25px);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 40px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
   z-index: 40;
 }
 
@@ -153,11 +151,11 @@
   position: absolute;
   left: 85px;
   padding: 10px 18px;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   backdrop-filter: blur(20px);
   background: rgba(10, 10, 10, 0.95);
   border: 1px solid var(--accent);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-1);
   color: var(--ink);
   font-size: 12px;
   font-weight: 800;
@@ -269,7 +267,7 @@
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(197, 138, 92, 0.3);
-  border-radius: 10px;
+  border-radius: var(--r-md);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(197, 138, 92, 0.6);
@@ -296,12 +294,12 @@
   align-items: start;
   gap: 10px;
   padding: 12px 12px 12px 14px;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(10, 10, 10, 0.88);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--shadow-1);
   animation: toast-in 160ms ease-out forwards;
 }
 
@@ -314,7 +312,7 @@
 .toast-close {
   width: 28px;
   height: 28px;
-  border-radius: 10px;
+  border-radius: var(--r-md);
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.9);
@@ -335,9 +333,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   pointer-events: none;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.08) inset;
 }
 
 .toast-error { border-color: rgba(239, 68, 68, 0.25); }
@@ -345,9 +342,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   pointer-events: none;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.08) inset;
 }
 
 .toast-warning { border-color: rgba(245, 158, 11, 0.25); }
@@ -355,9 +351,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   pointer-events: none;
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.08) inset;
 }
 
 .toast-info { border-color: rgba(197, 138, 92, 0.28); }
@@ -365,9 +360,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   pointer-events: none;
-  box-shadow: 0 0 0 2px rgba(197, 138, 92, 0.08) inset;
 }
 
 @keyframes toast-in {
@@ -454,7 +448,7 @@
     width: 85%; /* Sadece logo olacağı için barı biraz daha kompakt ve şık yapıyoruz */
     height: 55px;
     padding: 0 20px;
-    border-radius: 30px;
+    border-radius: var(--r-lg);
     display: flex !important;
     flex-direction: row !important;
     justify-content: center !important; /* Logo ve yazıyı tam merkeze al */
@@ -556,10 +550,10 @@
     background: rgba(8, 8, 8, 0.95); 
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    border-radius: 20px 20px 0 0;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
     border-width: 1px 0 0 0;
     border-color: var(--line);
-    box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.8);
+    box-shadow: var(--shadow-1);
     padding: 0 15px;
     z-index: 100;
   }
@@ -631,7 +625,7 @@
 
 .route-state-btn {
   padding: 12px 22px;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: transparent;
   color: var(--ink);
