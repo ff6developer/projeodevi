@@ -9,8 +9,26 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com
 
 export const SITE_NAME = "Elmenes Coffee"
 
-// Ana sayfada da (layout) kullanılan gerçek, mevcut marka açıklaması (footer'dan).
-export const SITE_DESCRIPTION = "Özel kahve deneyimini dijital dünyaya taşıyoruz."
+export const SITE_DESCRIPTION =
+  "Nitelikli çekirdek, ustalıkla kavurma. Menüden sipariş ver ya da kendi kahveni tasarla."
+
+/**
+ * Marka bilgisi — tek kaynak. Footer, iletişim, metadata buradan beslenir.
+ * ÖNEMLİ: `email`, `phone`, `instagram` yer tutucudur; yayına almadan önce
+ * gerçek değerlerle güncelleyin.
+ */
+export const BRAND = {
+  name: SITE_NAME,
+  shortName: "Elmenes",
+  tagline: "Kahvenin en samimi hali",
+  description: SITE_DESCRIPTION,
+  email: "merhaba@elmenescoffee.com", // yer tutucu
+  phone: "", // yer tutucu — boşsa gösterilmez
+  address: "İstanbul, Türkiye", // yer tutucu
+  instagram: "", // yer tutucu — boşsa gösterilmez
+  currency: "TRY" as const,
+  locale: "tr-TR" as const,
+}
 
 // ÖNEMLİ: Bu proje Vercel Services ile deploy ediliyor — frontend (bu Next.js
 // uygulaması, root: /) ve backend (/backend, Express) AYNI Vercel projesinde,

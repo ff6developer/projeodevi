@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Elmenes Coffee
 
-## Getting Started
+Bir kahve markası için Next.js (App Router) uygulaması: menü, kendi kahveni tasarlama
+akışı, sepet/checkout ve topluluk seçkisi.
 
-First, run the development server:
+## Çalıştırma
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+İsteğe bağlı yerel backend (kimlik doğrulama denemesi için):
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+node backend/index.js
+```
 
-## Learn More
+## Yapı
 
-To learn more about Next.js, take a look at the following resources:
+| Yol | İçerik |
+|---|---|
+| `app/` | Route'lar. Her route: `page.tsx` (+ `*Client.tsx`). |
+| `components/ui/` | Paylaşılan tasarım-sistemi bileşenleri. |
+| `components/` | Uygulamaya özel bileşik bileşenler. |
+| `lib/` | Veri katmanı + saf yardımcılar (localStorage erişimi burada). |
+| `styles/` | `tokens.css` (tek token kaynağı), `base.css`, `typography.css`, sayfa CSS'leri. |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Dokümantasyon
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `MASTER_TASK_PLAN.md` — profesyonelleştirme yol haritası ve tasklar.
+- `WORKLOG.md` — tamamlanan tasklar.
+- `docs/CONVENTIONS.md` — kod/stil konvansiyonları ve yasak listesi.
 
-## Deploy on Vercel
+## Ortam değişkenleri
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Bkz. `.env.example`. Yayına almadan önce `NEXT_PUBLIC_SITE_URL` ve
+`app/site-config.ts` içindeki `BRAND` yer tutucularını gerçek değerlerle doldurun.
