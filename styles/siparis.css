@@ -1,192 +1,165 @@
-/* FULL SCREEN PAGE */
-.siparis-page{
-  position:fixed;
-  inset:0;
-  height:100dvh;
-  width:100%;
-  background-image:url("/siparis.jpg");
-  background-size:cover;
-  background-position:center;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow-y:auto;
+/* Sipariş onay ekranı — TASK-008 ile gerçek onay/özet haline getirildi.
+   Görsel refactor (token + component) TASK-090'da. */
+
+.siparis-page {
+  min-height: 100dvh;
+  width: 100%;
+  background: #0c0b0a;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 120px 20px 80px;
 }
 
-/* DARK CINEMATIC OVERLAY */
-.siparis-overlay{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(6px);
+.siparis-content {
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
 }
 
-/* CONTENT WRAPPER */
-.siparis-content{
-  position:relative;
-  z-index:2;
-  text-align:center;
-  max-width:900px;
-  padding:40px;
+.siparis-confirm-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  margin-bottom: 20px;
+  border-radius: 999px;
+  color: #86efac;
+  background: rgba(134, 239, 172, 0.12);
 }
 
-/* HERO TITLE */
-.siparis-hero{
-  color:white;
-  font-size:clamp(34px, 8vw, 80px);
-  font-weight:900;
-  letter-spacing:-2px;
-  margin-bottom:30px;
-  text-shadow:0 30px 90px rgba(0,0,0,0.9);
-  animation:heroFade 1.2s ease;
+.siparis-hero {
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 8px;
 }
 
-/* DESCRIPTION */
-.siparis-desc{
-  color:rgba(255,255,255,0.85);
-  font-size:clamp(15px, 2.5vw, 22px);
-  line-height:1.7;
-  font-weight:400;
-
-  animation:descFade 1.8s ease;
+.siparis-order-id {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
 }
 
-/* ORDER SUMMARY CARD */
-.siparis-order-summary{
-  margin:30px auto 0;
-  max-width:420px;
-  padding:20px 24px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:20px;
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  text-align:left;
-  animation:descFade 1.8s ease;
+.siparis-desc {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: flex-start;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 28px;
 }
 
-.siparis-order-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,0.08);
+.siparis-order-summary {
+  margin: 0 auto;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-align: left;
 }
 
-.siparis-order-row:last-child{
-  border-bottom:none;
+.siparis-order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.siparis-order-label{
-  color:rgba(255,255,255,0.6);
-  font-size:13px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:0.5px;
+.siparis-order-row:last-child {
+  border-bottom: none;
 }
 
-.siparis-order-value{
-  color:#fff;
-  font-size:15px;
-  font-weight:700;
-  text-align:right;
+.siparis-order-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
 }
 
-.siparis-order-discount{
-  display:block;
-  color:#c58a5c;
-  font-size:12px;
-  font-weight:600;
-  margin-top:2px;
+.siparis-order-value {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
-.siparis-fallback-note{
-  margin-top:20px;
-  font-size:16px;
+.siparis-order-discount {
+  color: #86efac;
 }
 
-/* ACTIONS */
-.siparis-actions{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:14px;
-  margin-top:28px;
+.siparis-order-total .siparis-order-label,
+.siparis-order-total .siparis-order-value {
+  font-size: 16px;
+  font-weight: 700;
 }
 
-.siparis-btn{
-  padding:14px 28px;
-  border-radius:14px;
-  border:none;
-  cursor:pointer;
-  font-size:15px;
-  font-weight:700;
-  font-family:inherit;
-  transition:0.25s;
-  min-height:48px;
+.siparis-status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(197, 138, 92, 0.15);
+  border: 1px solid rgba(197, 138, 92, 0.4);
+  color: #ffd59e;
 }
 
-.siparis-btn-primary{
-  background:linear-gradient(135deg, #c58a5c, #8b5e3c);
-  color:#fff;
-  box-shadow:0 10px 30px rgba(197, 138, 92, 0.3);
+.siparis-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
 }
 
-.siparis-btn-primary:hover{
-  transform:translateY(-2px);
-  box-shadow:0 15px 35px rgba(197, 138, 92, 0.4);
+.siparis-btn {
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+  min-height: 48px;
 }
 
-.siparis-btn-secondary{
-  background:rgba(255,255,255,0.08);
-  color:#fff;
-  border:1px solid rgba(255,255,255,0.2);
+.siparis-btn-primary {
+  background: #c58a5c;
+  color: #1a120b;
 }
 
-.siparis-btn-secondary:hover{
-  background:rgba(255,255,255,0.14);
-  transform:translateY(-2px);
+.siparis-btn-primary:hover {
+  background: #d59a6a;
 }
 
-@media (max-width:480px){
-  .siparis-content{
-    padding:24px 16px;
+.siparis-btn-secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.siparis-btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 480px) {
+  .siparis-page {
+    padding: 96px 16px 64px;
   }
 
-  .siparis-order-summary{
-    max-width:100%;
+  .siparis-actions {
+    flex-direction: column;
   }
 
-  .siparis-actions{
-    flex-direction:column;
-  }
-
-  .siparis-btn{
-    width:100%;
-  }
-}
-
-/* HERO ANIMATION */
-@keyframes heroFade{
-  from{
-    opacity:0;
-    transform:translateY(60px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-/* DESC ANIMATION */
-@keyframes descFade{
-  from{
-    opacity:0;
-    transform:translateY(80px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
+  .siparis-btn {
+    width: 100%;
   }
 }

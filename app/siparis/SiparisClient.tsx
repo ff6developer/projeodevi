@@ -1,85 +1,121 @@
 "use client"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import "../../styles/siparis.css"
 
-export default function SiparisClient(){
+import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { CheckCircle2, Clock } from "lucide-react"
+import "../../styles/siparis.css"
+import { getOrder, getOrders, STATUS_LABEL } from "../../lib/orders"
+import type { Order } from "../../lib/types"
+
+const fmtTRY = (kurus: number) =>
+  new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(
+    kurus / 100,
+  )
+
+const ETA: Record<string, string> = {
+  alindi: "Siparişin hazırlanmaya başlanacak. Hazırlık genelde 15–25 dakika sürer.",
+  hazirlaniyor: "Kahven şu anda hazırlanıyor.",
+  hazir: "Siparişin hazır.",
+  teslim: "Siparişin teslim edildi. Afiyet olsun!",
+  iptal: "Bu sipariş iptal edildi.",
+}
+
+export default function SiparisClient() {
   const router = useRouter()
-  const [dots,setDots] = useState(".")
-  const [lastOrder, setLastOrder] = useState<any>(null)
+  const params = useSearchParams()
+  const [order, setOrder] = useState<Order | null>(null)
   const [checked, setChecked] = useState(false)
 
-  useEffect(()=>{
-    const interval = setInterval(()=>{
-      setDots(prev=>{
-        if(prev === "...") return "."
-        return prev + "."
-      })
-    },500)
-    return ()=> clearInterval(interval)
-  },[])
-
   useEffect(() => {
-    try {
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]")
-      setLastOrder(orders.length > 0 ? orders[orders.length - 1] : null)
-    } catch {
-      setLastOrder(null)
-    }
+    const id = params.get("o")
+    const found = id ? getOrder(id) : getOrders()[0]
+    setOrder(found ?? null)
     setChecked(true)
-  }, [])
+  }, [params])
 
   return (
-   <div className="siparis-page">
- <div className="siparis-overlay"></div>
- <div className="siparis-content">
- <h1 className="siparis-hero">
-    Siparişiniz Hazırlanıyor{dots}
- </h1>
-
-        <p className="siparis-desc">
-          Kahveniz hazır olduktan sonra profil bölümünden tasarımınızı paylaşın ve
-          turnuvadaki sürpriz ödülleri kazanma şansını yakalayın!
-        </p>
-
-        {checked && (
+    <div className="siparis-page">
+      <div className="siparis-content">
+        {!checked ? null : order ? (
           <>
-            {lastOrder ? (
-              <div className="siparis-order-summary">
-                <div className="siparis-order-row">
-                  <span className="siparis-order-label">Kahveniz</span>
-                  <span className="siparis-order-value">{lastOrder.coffeeName || "İsimsiz Kahve"}</span>
+            <div className="siparis-confirm-icon" aria-hidden="true">
+              <CheckCircle2 size={40} />
+            </div>
+
+            <h1 className="siparis-hero">Siparişin alındı</h1>
+            <p className="siparis-order-id">Sipariş no: #{order.id}</p>
+
+            <p className="siparis-desc">
+              <Clock size={15} aria-hidden="true" />
+              <span>{ETA[order.status] ?? ETA.alindi}</span>
+            </p>
+
+            <div className="siparis-order-summary">
+              {order.items.map((it, i) => (
+                <div className="siparis-order-row" key={i}>
+                  <span className="siparis-order-label">
+                    {it.name}
+                    {it.qty > 1 ? ` × ${it.qty}` : ""}
+                  </span>
+                  <span className="siparis-order-value">{fmtTRY(it.unitKurus * it.qty)}</span>
                 </div>
+              ))}
+
+              <div className="siparis-order-row">
+                <span className="siparis-order-label">Ara toplam</span>
+                <span className="siparis-order-value">{fmtTRY(order.subtotalKurus)}</span>
+              </div>
+
+              {order.discountKurus > 0 && (
                 <div className="siparis-order-row">
-                  <span className="siparis-order-label">Tutar</span>
-                  <span className="siparis-order-value">
-                    ₺{lastOrder.totalPrice}
-                    {lastOrder.discountApplied ? (
-                      <span className="siparis-order-discount"> (%{lastOrder.discountApplied} indirim uygulandı)</span>
-                    ) : null}
+                  <span className="siparis-order-label">İndirim</span>
+                  <span className="siparis-order-value siparis-order-discount">
+                    − {fmtTRY(order.discountKurus)}
                   </span>
                 </div>
+              )}
+
+              {order.shippingKurus > 0 && (
                 <div className="siparis-order-row">
-                  <span className="siparis-order-label">Durum</span>
-                  <span className="siparis-order-value">{lastOrder.status}</span>
+                  <span className="siparis-order-label">Teslimat</span>
+                  <span className="siparis-order-value">{fmtTRY(order.shippingKurus)}</span>
                 </div>
+              )}
+
+              <div className="siparis-order-row siparis-order-total">
+                <span className="siparis-order-label">Toplam</span>
+                <span className="siparis-order-value">{fmtTRY(order.totalKurus)}</span>
               </div>
-            ) : (
-              <p className="siparis-desc siparis-fallback-note">
-                Görüntülenecek aktif bir sipariş bulunamadı.
-              </p>
-            )}
+
+              <div className="siparis-order-row">
+                <span className="siparis-order-label">Durum</span>
+                <span className="siparis-status-badge">{STATUS_LABEL[order.status]}</span>
+              </div>
+            </div>
 
             <div className="siparis-actions">
               <button className="siparis-btn siparis-btn-primary" onClick={() => router.push("/profil")}>
-                Profilime Git
+                Siparişlerim
               </button>
               <button className="siparis-btn siparis-btn-secondary" onClick={() => router.push("/menu")}>
-                Menüye Dön
+                Alışverişe devam
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h1 className="siparis-hero">Görüntülenecek sipariş bulunamadı</h1>
+            <p className="siparis-desc">
+              <span>Henüz bir siparişin yok ya da bağlantı geçersiz.</span>
+            </p>
+            <div className="siparis-actions">
+              <button className="siparis-btn siparis-btn-primary" onClick={() => router.push("/menu")}>
+                Menüye git
               </button>
             </div>
           </>
         )}
-   </div>
- </div>
-  )}
+      </div>
+    </div>
+  )
+}

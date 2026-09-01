@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import SiparisClient from './SiparisClient';
 
 export const metadata: Metadata = {
-  title: "Siparişiniz Hazırlanıyor",
-  description: "Siparişinizin durumunu görüntüleyin.",
+  title: "Sipariş Onayı",
+  description: "Siparişinin özetini ve durumunu görüntüle.",
   robots: {
     index: false,
     follow: false,
@@ -11,5 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default function SiparisPage() {
-  return <SiparisClient />;
+  return (
+    <Suspense fallback={null}>
+      <SiparisClient />
+    </Suspense>
+  );
 }
