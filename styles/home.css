@@ -1,13 +1,17 @@
-/* Ana sayfa — TASK-019 iskeleti. Token bağlama + tam tasarım TASK-020/084. */
+/* Ana sayfa — TASK-020. Token bağlama + tam tasarım TASK-084'te. */
 
 .home {
   width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px 96px;
 }
 
+/* --- HERO --- */
 .home-hero {
   max-width: 720px;
   margin: 0 auto;
-  padding: 160px 24px 96px;
+  padding: 140px 0 80px;
   text-align: center;
 }
 
@@ -52,6 +56,7 @@
   font-weight: 600;
   text-decoration: none;
   transition: border-color 0.18s ease, background-color 0.18s ease;
+  display: inline-block;
 }
 
 .home-btn:hover {
@@ -66,4 +71,143 @@
 
 .home-btn-primary:hover {
   background: #d59a6a;
+}
+
+/* --- SECTIONS --- */
+.home-section {
+  padding: 48px 0;
+}
+
+.home-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.home-section-head h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.home-section-link {
+  color: #c58a5c;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-section-link:hover {
+  text-decoration: underline;
+}
+
+/* --- PRODUCT GRID --- */
+.home-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.home-product {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-decoration: none;
+  transition: border-color 0.18s ease;
+}
+
+.home-product:hover {
+  border-color: rgba(197, 138, 92, 0.6);
+}
+
+.home-product-image {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.home-product-image img {
+  object-fit: cover;
+}
+
+.home-product-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.home-product-price {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- SPLIT --- */
+.home-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.home-split-card {
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.home-split-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.home-split-card p {
+  margin: 0 0 18px;
+  color: #b3b3b3;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* --- TRUST STRIP --- */
+.home-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  padding: 32px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 24px;
+}
+
+.home-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
+.home-trust-item svg {
+  color: #c58a5c;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .home-hero {
+    padding: 110px 0 56px;
+  }
+
+  .home-split {
+    grid-template-columns: 1fr;
+  }
 }
