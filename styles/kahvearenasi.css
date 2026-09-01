@@ -374,47 +374,13 @@
 .join-right {
   display: flex;
   align-items: center;
-  gap: 15px;
   flex-shrink: 0;
 }
 
-.join-avatars {
-  display: flex;
-  align-items: center;
-}
-
-.join-avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 2px solid var(--dark-bg);
-  margin-left: -12px;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.join-avatar:first-child {
-  margin-left: 0;
-}
-
-.join-avatar:hover {
-  transform: translateY(-5px);
-  z-index: 10;
-}
-
 .join-count {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: var(--primary-coffee);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
   font-size: 0.85rem;
-  margin-left: -12px;
-  border: 2px solid var(--dark-bg);
+  font-weight: 600;
+  color: var(--primary-coffee);
 }
 
 /* --- PODIUM SECTION --- */

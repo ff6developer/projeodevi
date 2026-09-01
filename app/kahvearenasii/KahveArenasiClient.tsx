@@ -177,8 +177,8 @@ export default function KahveArenasiClient() {
     {
       id: 2,
       icon: "/kupon.png", // İndirim kartı görseli
-      title: "%20 İndirim Kuponu",
-      desc: "Tüm kahve çeşitlerinde ve ekipmanlarda geçerli özel indirim fırsatı"
+      title: "%15 İndirim Kuponu",
+      desc: "Tüm kahve çeşitlerinde geçerli özel indirim fırsatı"
     },
     {
       id: 3,
@@ -227,12 +227,8 @@ export default function KahveArenasiClient() {
     }
   ]
 
-  // KATILIMCI AVATARLARI (Örnek)
-  const participants = [
-    "/avatar1.jpg",
-    "/avatar2.jpg", 
-    "/avatar3.jpg"
-  ]
+  // Gerçek katılımcı sayısı (benzersiz kullanıcı)
+  const participantCount = new Set(posts.map((p) => p.userName).filter(Boolean)).size
 
   return (
     <div className="arena-page">
@@ -305,26 +301,18 @@ export default function KahveArenasiClient() {
               <Users size={32} />
             </div>
             <div className="join-text">
-              <h3>SEN DE ARENADA YERİNİ AL!</h3>
-              <p>Oyla, yorum yap, destekle ve kazananlar arasında sen de ol!</p>
+              <h3>Sen de yerini al</h3>
+              <p>Oyla, yorum yap, destekle ve seçkiye katıl.</p>
             </div>
           </div>
 
-          <div className="join-right">
-            <div className="join-avatars">
-              {participants.map((avatar, idx) => (
-                <Image 
-                  key={idx}
-                  src={avatar}
-                  alt="Participant"
-                  width={45}
-                  height={45}
-                  className="join-avatar"
-                />
-              ))}
-              <div className="join-count">+124</div>
+          {participantCount > 0 && (
+            <div className="join-right">
+              <span className="join-count">
+                {participantCount} kişi bu ay tasarım paylaştı
+              </span>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -476,7 +464,10 @@ export default function KahveArenasiClient() {
                   />
                 </div>
                 <h2>@{selectedUser.userName}</h2>
-                <div className="barista-rank"><Star size={14} fill="#ffcc00" color="#ffcc00" /> Master Barista</div>
+                <div className="barista-rank">
+                  <Star size={14} fill="#ffcc00" color="#ffcc00" />
+                  {(selectedUser.arenaScore || 0) >= 50 ? "Usta Barista" : "Barista"}
+                </div>
               </div>
               <div className="drawer-stats-row">
                 <div className="drawer-stat-item"><strong>{selectedUser.likes || 0}</strong><span>OY</span></div>
