@@ -1,20 +1,10 @@
 /* ===== ELMENES COFFEE PREMIUM PROFILE & ARENA THEME ===== */
-:root {
-  --primary-coffee: #c58a5c;
-  --primary-hover: #a36d45;
-  --arena-gold: #ffcc00;
-  --dark-bg: #080808;
-  --card-bg: #111111;
-  --border-light: rgba(255, 255, 255, 0.05);
-  --text-muted: #666666;
-  --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
 
 /* --- GENEL YAPI --- */
 .profil-page {
   width: 100%;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #1a1a1a 0%, #050505 100%);
+  background: radial-gradient(circle at top, var(--surface-2) 0%, var(--paper) 100%);
   color: #fff;
   padding: 140px 20px 60px;
   font-family: var(--font-inter), 'Inter', -apple-system, sans-serif;
@@ -29,7 +19,7 @@
 .profil-hero {
   position: relative;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--line);
   border-radius: 40px;
   padding: 60px 40px;
   display: flex;
@@ -52,7 +42,7 @@
   padding: 12px;
   border-radius: 50%;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,9 +65,9 @@
   height: 165px;
   border-radius: 50%;
   padding: 6px;
-  background: linear-gradient(135deg, var(--primary-coffee), #222);
+  background: linear-gradient(135deg, var(--accent), #222);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
   box-shadow: 0 15px 35px rgba(197, 138, 92, 0.3);
   position: relative;
 }
@@ -99,7 +89,7 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
   border: 4px solid #000;
 }
 
@@ -118,7 +108,7 @@
 
 .profil-email {
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--ink-3);
   letter-spacing: 1px;
   margin-bottom: 25px;
 }
@@ -130,18 +120,18 @@
 .edit-profile-btn {
   margin-top: 10px;
   padding: 10px 22px;
-  background: var(--primary-coffee);
+  background: var(--accent);
   color: #000;
   border-radius: 14px;
   border: none;
   cursor: pointer;
   font-weight: 700;
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
   font-size: 14px;
 }
 
 .edit-profile-btn:hover {
-  background: var(--primary-hover);
+  background: var(--accent-weak);
   transform: translateY(-3px);
 }
 
@@ -163,7 +153,7 @@
   width: 340px;
   padding: 25px;
   border-radius: 20px;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--line);
   box-shadow: 0 15px 40px rgba(0,0,0,0.5);
   animation: modalPop 0.25s ease-out;
 }
@@ -183,7 +173,7 @@
 .edit-modal label {
   display: block;
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--ink-3);
   margin-bottom: 6px;
   margin-top: 12px;
 }
@@ -192,7 +182,7 @@
   width: 100%;
   padding: 12px;
   border-radius: 12px;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--line);
   background: #0c0c0c;
   color: #fff;
   margin-bottom: 12px;
@@ -202,7 +192,7 @@
 }
 
 .edit-modal input:focus {
-  border-color: var(--primary-coffee);
+  border-color: var(--accent);
 }
 
 .edit-buttons {
@@ -215,17 +205,17 @@
   flex: 1;
   padding: 12px;
   border-radius: 12px;
-  background: var(--primary-coffee);
+  background: var(--accent);
   font-weight: 700;
   border: none;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
   color: #000;
   font-size: 14px;
 }
 
 .save-edit-btn:hover {
-  background: var(--primary-hover);
+  background: var(--accent-weak);
 }
 
 .cancel-edit-btn {
@@ -237,7 +227,7 @@
   border: none;
   cursor: pointer;
   color: #aaa;
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
   font-size: 14px;
 }
 
@@ -286,7 +276,7 @@
   gap: 40px;
   margin-top: 25px;
   padding-top: 25px;
-  border-top: 1px solid var(--border-light);
+  border-top: 1px solid var(--line);
 }
 
 .stat-item {
@@ -306,12 +296,12 @@
 }
 
 .stat-icon {
-  color: var(--arena-gold);
+  color: var(--accent);
 }
 
 .stat-item span {
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--ink-3);
   font-weight: 500;
 }
 
@@ -351,7 +341,7 @@
 }
 
 .coffee-select-list::-webkit-scrollbar-thumb {
-  background: var(--primary-coffee);
+  background: var(--accent);
   border-radius: 10px;
 }
 
@@ -364,7 +354,7 @@
 }
 
 .coffee-select-wrapper.selected .coffee-select-content {
-  border: 2px solid var(--primary-coffee);
+  border: 2px solid var(--accent);
   background: linear-gradient(135deg, rgba(197,138,92,0.18), rgba(0,0,0,0.4));
   box-shadow: 0 8px 25px rgba(197,138,92,0.25);
 }
@@ -374,7 +364,7 @@
 .coffee-select-content {
   flex: 1;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 16px;
 
@@ -390,7 +380,7 @@
 }
 
 .coffee-select-content:hover {
-  border-color: var(--primary-coffee);
+  border-color: var(--accent);
   background: rgba(197,138,92,0.08);
   transform: translateY(-2px);
 }
@@ -410,13 +400,13 @@
 }
 
 .coffee-select-score {
-  color: var(--primary-coffee);
+  color: var(--accent);
   font-weight: 700;
   font-size: 14px;
 }
 
 .coffee-select-wrapper.selected .coffee-select-score {
-  color: var(--arena-gold);
+  color: var(--accent);
 }
 
 /* ===== KAHVE DETAY TAGLERİ ===== */
@@ -461,7 +451,7 @@
 .arena-badge {
   font-size: 0.78em;
   background: rgba(255, 215, 0, 0.15);
-  color: var(--arena-gold);
+  color: var(--accent);
   padding: 3px 10px;
   border-radius: 10px;
   font-weight: 600;
@@ -506,8 +496,8 @@
 /* KAHVE İSMİ INPUT */
 .arena-coffee-name-input {
   flex: 1;
-  background: #0a0a0a;
-  border: 1px solid var(--border-light);
+  background: var(--paper);
+  border: 1px solid var(--line);
   border-radius: 12px;
   padding: 12px;
   color: #fff;
@@ -517,7 +507,7 @@
 }
 
 .arena-coffee-name-input:focus {
-  border-color: var(--primary-coffee);
+  border-color: var(--accent);
 }
 
 .arena-coffee-name-input::placeholder {
@@ -529,8 +519,8 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px dashed var(--border-light);
-  background: #0a0a0a;
+  border: 1px dashed var(--line);
+  background: var(--paper);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -542,12 +532,12 @@
 }
 
 .arena-mini-upload:hover {
-  border-color: var(--primary-coffee);
+  border-color: var(--accent);
   background: rgba(197,138,92,0.1);
 }
 
 .arena-mini-upload.has-image {
-  border: 1px solid var(--primary-coffee);
+  border: 1px solid var(--accent);
   border-style: solid;
 }
 
@@ -560,8 +550,8 @@
 .post-input {
   width: 100%;
   margin-top: 14px;
-  background: #0a0a0a;
-  border: 1px solid var(--border-light);
+  background: var(--paper);
+  border: 1px solid var(--line);
   border-radius: 16px;
   padding: 14px;
   color: #fff;
@@ -574,7 +564,7 @@
 }
 
 .post-input:focus {
-  border-color: var(--primary-coffee);
+  border-color: var(--accent);
 }
 
 .post-input::placeholder {
@@ -599,17 +589,17 @@
   gap: 8px;
   padding: 12px 24px;
   border-radius: 14px;
-  background: var(--primary-coffee);
+  background: var(--accent);
   color: #000;
   border: none;
   cursor: pointer;
   font-weight: 700;
   font-size: 14px;
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
 }
 
 .share-btn:hover:not(:disabled) {
-  background: var(--primary-hover);
+  background: var(--accent-weak);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(197,138,92,0.3);
 }
@@ -635,12 +625,12 @@
 .post-card {
   width: 100%;
   max-width: 650px;
-  background: var(--card-bg);
-  border: 1px solid var(--border-light);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 25px;
   padding: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  transition: var(--transition);
+  transition: all var(--t-base) var(--ease);
   animation: fadeIn 0.6s ease-out;
 }
 
@@ -664,7 +654,7 @@
 
 .post-user-avatar {
   border-radius: 50%;
-  border: 2px solid var(--border-light);
+  border: 2px solid var(--line);
 }
 
 .post-user-name {
@@ -675,7 +665,7 @@
 
 .post-date {
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--ink-3);
   margin-top: 2px;
 }
 
@@ -691,7 +681,7 @@
   margin-top: 12px;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--line);
 }
 
 .post-main-image {
@@ -706,7 +696,7 @@
   align-items: center;
   gap: 6px;
   font-weight: 700;
-  color: var(--arena-gold);
+  color: var(--accent);
   font-size: 14px;
 }
 
@@ -734,12 +724,12 @@
 /* ============================ */
 
 .loading-screen {
-  background: radial-gradient(circle at top, #1a1a1a 0%, #050505 100%);
+  background: radial-gradient(circle at top, var(--surface-2) 0%, var(--paper) 100%);
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-coffee);
+  color: var(--accent);
   font-family: var(--font-inter), 'Inter', -apple-system, sans-serif;
 }
 
@@ -874,7 +864,7 @@
 
 .post-coffee-name {
   font-weight: 700;
-  color: var(--primary-coffee);
+  color: var(--accent);
   font-size: 15px;
   display: block;
   margin-bottom: 4px;

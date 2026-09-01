@@ -29,7 +29,7 @@
    yerleşiminden normal doküman akışına alındı. Çakışma/taşma riski kalktı. */
 .lab-badge {
   background: rgba(197, 138, 92, 0.2);
-  border: 1px solid #c58a5c;
+  border: 1px solid var(--accent);
   padding: 8px 16px;
   border-radius: 20px;
   color: #ffd59e;
@@ -243,7 +243,7 @@
 
 .milk-item.active {
   background: rgba(197, 138, 92, 0.25);
-  border-color: #c58a5c;
+  border-color: var(--accent);
   box-shadow: 0 0 20px rgba(197, 138, 92, 0.2);
 }
 
@@ -313,7 +313,7 @@
 .builder-progress-fill {
   display: block;
   height: 100%;
-  background: #c58a5c;
+  background: var(--accent);
   border-radius: 999px;
   transition: width 0.18s ease;
 }

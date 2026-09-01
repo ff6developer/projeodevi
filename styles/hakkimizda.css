@@ -1,6 +1,6 @@
 .about-container {
     width: 100%;
-    background-color: #0b0b0b;
+    background-color: var(--paper);
     padding: 0; /* Boşlukları Grid yönetmeli */
     box-sizing: border-box;
 }
@@ -43,7 +43,7 @@
     justify-content: center; /* Dikeyde ortala */
     gap: 60px; /* Hikayemiz ve Amacımız arası boşluk */
     background-color: #e1c275df; /* Çok koyu kahve */
-    color: #ffffff;
+    color: var(--ink);
 }
 
 .about-text-content {
@@ -59,18 +59,18 @@
 }
 
 .subtitle {
-    color: #d4a373; /* Karamel rengi */
+    color: var(--accent); /* Karamel rengi */
     display: block; /* Çizginin altına inmesi için önemli */
 }
 
 .amacimiz-baslik h2 {
-    color: #8d6e63;
+    color: var(--accent-weak);
 }
 
 .divider {
     width: 60px;
     height: 3px;
-    background-color: #d4a373;
+    background-color: var(--accent);
     margin-top: 5px;    /* Hikayemiz yazısına yakınlığı */
     margin-bottom: 20px; /* Elmenes yazısına olan mesafesi */
 }
@@ -78,7 +78,7 @@
 .brand-title {
     font-size: 100px;
     font-weight: 800;
-    color: #1a1a1a;
+    color: var(--surface);
     margin-top: 0; /* Negatif değerleri ( -150px gibi ) tamamen siliyoruz */
     margin-bottom: 10px;
     line-height: 1.1;
@@ -88,7 +88,7 @@
 .description {
     font-size: 20px; /* Okumayı kolaylaştırmak için büyütüldü */
     line-height: 1.8;
-    color: #444;
+    color: var(--ink-3);
     margin-bottom: 40px;
 }
 
@@ -101,19 +101,19 @@
 
 .feature-item h2 {
     font-size: 30px; /* Alt başlıklar */
-    color: #2c2c2c;
+    color: var(--surface-2);
     margin-bottom: 12px;
 }
 
 .feature-item p {
     font-size: 16px;
-    color: #666;
+    color: var(--ink-3);
 }
 
 .tagline {
     font-style: italic;
     font-size: 24px;
-    color: #8d6e63;
+    color: var(--accent-weak);
     margin-top: 20px;
     margin-bottom: 30px;
     font-family: var(--font-playfair), 'Playfair Display', serif;
@@ -128,7 +128,7 @@
 .amacimiz-cizgi {
     width: 60px;
     height: 3px;
-    background-color: #d4a373;
+    background-color: var(--accent);
     margin: 0 0 40px; /* Sola yaslı */
 }
 
@@ -145,9 +145,9 @@
     flex: 1;
     min-width: 200px; /* Biraz daha dar */
     padding: 30px;
-    background: #ffffff;
+    background: var(--ink);
     border-radius: 15px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid var(--ink-2);
     /* Geçiş efektinin hızı */
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     box-shadow: 0 4px 6px rgba(0,0,0,0.02);
@@ -157,26 +157,26 @@
 /* HOVER EFEKTİ: Üzerine gelince burası çalışır */
 .amac-kart:hover {
     transform: translateY(-10px); /* Yukarı doğru zıplama */
-    background-color: #8d6e63; /* Kahverengi arka plan */
+    background-color: var(--accent-weak); /* Kahverengi arka plan */
     box-shadow: 0 15px 30px rgba(141, 110, 99, 0.2); /* Kahve tonlu gölge */
 }
 
 /* Hover olunca yazı renklerini değiştirme */
 .amac-kart:hover h3,
 .amac-kart:hover p {
-    color: #ffffff !important; /* Yazıları beyaza çevir */
+    color: var(--ink) !important; /* Yazıları beyaza çevir */
 }
 
 .amac-kart h3 {
     font-size: 20px;
-    color: #8d6e63;
+    color: var(--accent-weak);
     margin-bottom: 50px;
     transition: color 0.3s;
 }
 
 .amac-kart p {
     font-size: 15px;
-    color: #5d4037;
+    color: var(--ink-2);
     line-height: 1.6;
     transition: color 0.3s;
 }
@@ -210,20 +210,6 @@
    RESPONSIVE DESIGN - Modern Mobile-First Approach
    ========================================================================== */
 
-/* --- BASE RESPONSIVE VARIABLES --- */
-:root {
-  --spacing-xs: clamp(8px, 2vw, 12px);
-  --spacing-sm: clamp(12px, 3vw, 20px);
-  --spacing-md: clamp(20px, 5vw, 40px);
-  --spacing-lg: clamp(40px, 8vw, 80px);
-  
-  --font-xs: clamp(12px, 2.5vw, 14px);
-  --font-sm: clamp(14px, 3vw, 16px);
-  --font-md: clamp(16px, 3.5vw, 20px);
-  --font-lg: clamp(24px, 5vw, 40px);
-  --font-xl: clamp(38px, 8vw, 80px);
-  --font-hero: clamp(48px, 12vw, 100px);
-}
 
 /* --- LARGE TABLETS & SMALL LAPTOPS (max-width: 1200px) --- */
 @media (max-width: 1200px) {
@@ -233,17 +219,17 @@
   }
 
   .text-wrapper {
-    padding: var(--spacing-lg) 6%;
-    gap: var(--spacing-md);
+    padding: var(--s-8) 6%;
+    gap: var(--s-6);
   }
 
   .brand-title {
-    font-size: var(--font-xl);
+    font-size: var(--fs-h1);
     margin-top: 0 !important;
   }
 
   .description {
-    font-size: var(--font-md);
+    font-size: var(--fs-lg);
   }
 
   .amacimiz-kartlar {
@@ -266,8 +252,8 @@
   .about-images-wrapper {
     display: grid !important;
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
+    gap: var(--s-4);
+    padding: var(--s-4);
     height: auto;
     aspect-ratio: 2 / 1;
     max-height: 45vh;
@@ -289,19 +275,19 @@
   }
 
   .text-wrapper {
-    padding: var(--spacing-md) 5%;
-    gap: var(--spacing-md);
-    background-color: #fff !important;
+    padding: var(--s-6) 5%;
+    gap: var(--s-6);
+    background-color: var(--ink) !important;
   }
 
   .brand-title {
-    font-size: var(--font-xl);
+    font-size: var(--fs-h1);
     line-height: 1.05;
     letter-spacing: -0.5px;
   }
 
   .subtitle {
-    font-size: var(--font-sm);
+    font-size: var(--fs-sm);
     letter-spacing: 3px;
   }
 
@@ -313,39 +299,39 @@
 
   .features-grid {
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-sm);
+    gap: var(--s-4);
   }
 
   .feature-item h2 {
-    font-size: var(--font-md);
+    font-size: var(--fs-lg);
   }
 
   .feature-item p {
-    font-size: var(--font-xs);
+    font-size: var(--fs-caption);
   }
 
   .amacimiz-baslik h2 {
-    font-size: var(--font-lg);
+    font-size: var(--fs-h2);
   }
 
   .amacimiz-kartlar {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
-    margin-top: var(--spacing-md);
+    gap: var(--s-4);
+    margin-top: var(--s-6);
   }
 
   .amac-kart {
-    padding: var(--spacing-sm);
+    padding: var(--s-4);
   }
 
   .amac-kart h3 {
     font-size: 18px;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--s-4);
   }
 
   .amac-kart p {
-    font-size: var(--font-xs);
+    font-size: var(--fs-caption);
   }
 
   .tagline {
@@ -358,14 +344,14 @@
   /* Header */
   .header-container {
     width: 100%;
-    padding: 0 var(--spacing-sm);
+    padding: 0 var(--s-4);
     height: 56px;
   }
 
   .logo {
     width: 44px;
     height: 44px;
-    left: var(--spacing-sm);
+    left: var(--s-4);
     top: 6px;
   }
 
@@ -374,7 +360,7 @@
   }
 
   .nav ul {
-    gap: var(--spacing-xs);
+    gap: var(--s-3);
   }
 
   .nav a {
@@ -388,8 +374,8 @@
   /* Görseller: Tek sütun, geniş oran */
   .about-images-wrapper {
     grid-template-columns: 1fr;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-sm);
+    gap: var(--s-3);
+    padding: var(--s-4);
     aspect-ratio: 16 / 10;
     max-height: 35vh;
   }
@@ -405,13 +391,13 @@
 
   /* Metin alanı */
   .text-wrapper {
-    padding: var(--spacing-md) var(--spacing-sm);
-    gap: var(--spacing-md);
+    padding: var(--s-6) var(--s-4);
+    gap: var(--s-6);
   }
 
   .brand-title {
     font-size: clamp(32px, 10vw, 48px);
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: var(--s-3);
   }
 
   .subtitle {
@@ -422,22 +408,22 @@
 
   .divider {
     width: 40px;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: var(--s-3);
   }
 
   .description {
-    font-size: var(--font-sm);
+    font-size: var(--fs-sm);
     line-height: 1.7;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--s-4);
   }
 
   .features-grid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
+    gap: var(--s-4);
   }
 
   .feature-item {
-    padding: var(--spacing-sm);
+    padding: var(--s-4);
     background: rgba(141, 110, 99, 0.05);
     border-radius: 10px;
   }
@@ -453,7 +439,7 @@
 
   .tagline {
     font-size: 16px;
-    margin-top: var(--spacing-sm);
+    margin-top: var(--s-4);
   }
 
   /* Amacımız bölümü */
@@ -463,17 +449,17 @@
 
   .amacimiz-cizgi {
     width: 40px;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--s-4);
   }
 
   .amacimiz-kartlar {
     grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
-    margin-top: var(--spacing-sm);
+    gap: var(--s-4);
+    margin-top: var(--s-4);
   }
 
   .amac-kart {
-    padding: var(--spacing-sm);
+    padding: var(--s-4);
     border-radius: 12px;
     /* Touch feedback */
     -webkit-tap-highlight-color: rgba(141, 110, 99, 0.1);
@@ -491,12 +477,12 @@
   /* Mobilde hover yerine active state */
   .amac-kart:active {
     transform: scale(0.98);
-    background-color: #8d6e63;
+    background-color: var(--accent-weak);
   }
 
   .amac-kart:active h3,
   .amac-kart:active p {
-    color: #ffffff !important;
+    color: var(--ink) !important;
   }
 
   /* Hover efektlerini kaldır (mobilde sorunlu) */
@@ -526,7 +512,7 @@
     -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    padding: 0 var(--spacing-xs);
+    padding: 0 var(--s-3);
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
@@ -685,7 +671,7 @@
     left: 0;
     bottom: auto;
     top: 0;
-    padding: var(--spacing-sm) 0;
+    padding: var(--s-4) 0;
     padding-left: env(safe-area-inset-left, 0);
   }
 
@@ -712,7 +698,7 @@
 /* --- HIGH CONTRAST MODE SUPPORT --- */
 @media (prefers-contrast: high) {
   .amac-kart {
-    border: 2px solid #3e2723;
+    border: 2px solid var(--ink);
   }
 
   .divider,
@@ -723,27 +709,27 @@
   .description,
   .feature-item p,
   .amac-kart p {
-    color: #333;
+    color: var(--line-strong);
   }
 }
 
 /* --- DARK MODE SUPPORT (Bonus) --- */
 @media (prefers-color-scheme: dark) {
   .about-container {
-    background-color: #1a1a1a;
+    background-color: var(--surface);
   }
 
   .text-wrapper {
-    background-color: #1a1a1a !important;
+    background-color: var(--surface) !important;
   }
 
   .brand-title {
-    color: #f5f5f5;
+    color: var(--ink-2);
   }
 
   .description,
   .feature-item p {
-    color: #b0b0b0;
+    color: var(--ink-2);
   }
 
   .feature-item {
@@ -751,11 +737,11 @@
   }
 
   .amac-kart {
-    background: #2a2a2a;
-    border-color: #333;
+    background: var(--surface-2);
+    border-color: var(--line-strong);
   }
 
   .amac-kart p {
-    color: #ccc;
+    color: var(--ink-2);
   }
 }
