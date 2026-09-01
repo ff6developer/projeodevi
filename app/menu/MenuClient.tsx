@@ -142,7 +142,7 @@ export default function MenuClient() {
       },
       {
         id: 3,
-        name: 'Cappicino',
+        name: 'Cappuccino',
         price: '100 TL',
         image: '/cappicino.jpg',
       },
@@ -154,7 +154,7 @@ export default function MenuClient() {
       },
       {
         id: 5,
-        name: 'Filtre',
+        name: 'Filtre Kahve',
         price: '95 TL',
         image: '/Filtre.jpg',
       },
@@ -166,13 +166,13 @@ export default function MenuClient() {
       },
       {
         id: 7,
-        name: 'Macciato',
+        name: 'Macchiato',
         price: '95 TL',
         image: '/macciato.jpg',
       },
       {
         id: 8,
-        name: 'Türk kahvesi',
+        name: 'Türk Kahvesi',
         price: '95 TL',
         image: '/türk kahvesi.jpg',
       },
@@ -211,7 +211,7 @@ export default function MenuClient() {
       },
       {
         id: 14,
-        name: 'Iced caramel Macchiato',
+        name: 'Iced Caramel Macchiato',
         price: '95 TL',
         image: '/Caramel Macchiato.jpg',
       },
@@ -244,25 +244,25 @@ export default function MenuClient() {
       },
       {
         id: 20,
-        name: 'ispanyol creamy',
+        name: 'İspanyol Usulü Cheesecake',
         price: '80 TL',
         image: '/San Sebastian.jpg',
       },
       {
         id: 21,
-        name: 'frambuazlı Cheesecake',
+        name: 'Frambuazlı Cheesecake',
         price: '80 TL',
         image: '/frcheesecake.jpg',
       },
       {
         id: 22,
-        name: 'cookie',
+        name: 'Cookie',
         price: '80 TL',
         image: '/Cookies.jpg',
       },
       {
         id: 23,
-        name: 'Çikolatalı donat',
+        name: 'Çikolatalı Donat',
         price: '80 TL',
         image: '/donat.jpg',
       },
