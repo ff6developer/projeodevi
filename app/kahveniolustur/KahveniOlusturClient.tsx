@@ -57,9 +57,21 @@ export default function KahveniOlusturClient() {
     }
   }, [])
 
-  const allSelected =
-    form.milkType && form.beanType && form.foam && form.cupType && 
-    form.syrup && form.spice && form.sweetener && form.technique
+  // Seçim adımları — ilerleme göstergesi ve eksik-adım listesi için tek kaynak.
+  const SELECTION_STEPS: { field: keyof typeof form; label: string }[] = [
+    { field: "milkType", label: "Süt Tipi" },
+    { field: "beanType", label: "Kahve Çekirdeği" },
+    { field: "foam", label: "Süt Köpüğü" },
+    { field: "cupType", label: "Bardak Tipi" },
+    { field: "syrup", label: "Şurup" },
+    { field: "spice", label: "Baharatlar" },
+    { field: "sweetener", label: "Tatlandırıcı" },
+    { field: "technique", label: "Özel Teknik" },
+  ]
+
+  const selectedCount = SELECTION_STEPS.filter((s) => form[s.field]).length
+  const missingSteps = SELECTION_STEPS.filter((s) => !form[s.field])
+  const allSelected = missingSteps.length === 0
 
   const milkOptions = [
     { name: "Laktozlu Süt", price: 10, power: 5 }, { name: "Laktozsuz Süt", price: 15, power: 7 },
@@ -258,12 +270,40 @@ export default function KahveniOlusturClient() {
         {!started ? (
           <button className="hero-btn" onClick={() => setStarted(true)}>Laboratuvarı Aç</button>
         ) : (
-          allSelected && (
-            <button className="arena-btn" onClick={handleSiparis} style={{width: 'fit-content'}}>
+          <div className="builder-cta">
+            <div className="builder-progress">
+              <span className="builder-progress-count">{selectedCount} / {SELECTION_STEPS.length} seçim tamamlandı</span>
+              <span className="builder-progress-track" aria-hidden="true">
+                <span
+                  className="builder-progress-fill"
+                  style={{ width: `${(selectedCount / SELECTION_STEPS.length) * 100}%` }}
+                />
+              </span>
+            </div>
+
+            {missingSteps.length > 0 && (
+              <p className="builder-missing">
+                Kalan:{" "}
+                {missingSteps.map((s, i) => (
+                  <span key={s.field}>
+                    <a href={`#section-${s.field}`}>{s.label}</a>
+                    {i < missingSteps.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </p>
+            )}
+
+            <button
+              className="arena-btn"
+              onClick={handleSiparis}
+              disabled={!allSelected}
+            >
               <Trophy size={18} /> Siparişi Tamamla
-              {isLocked && <span style={{marginLeft: '8px', fontSize: '0.8em'}}>(%15 İndirim)</span>}
+              {isLocked && allSelected && (
+                <span style={{ marginLeft: "8px", fontSize: "0.8em" }}>(%15 İndirim)</span>
+              )}
             </button>
-          )
+          </div>
         )}
       </div>
         <CoffeeRight

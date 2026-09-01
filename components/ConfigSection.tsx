@@ -24,7 +24,7 @@ export default function ConfigSection({
   onSelect
 }: Props) {
   return (
-    <section className="config-section">
+    <section className="config-section" id={`section-${field}`}>
       <h2 className="section-title">
         {title} <span className="required-star">*</span>
       </h2>
