@@ -2,7 +2,7 @@
 // Tek yetkili kaynak: localStorage["elmenes.orders"]. Bileşenler doğrudan
 // localStorage'a dokunmaz, bu modülü kullanır.
 
-import type { Order, OrderInput, OrderStatus } from "./types"
+import type { CoffeeRecipe, Order, OrderInput, OrderStatus } from "./types"
 
 const KEY = "elmenes.orders"
 const LEGACY_KEY = "orders"
@@ -89,13 +89,14 @@ function migrateLegacy(): Order[] {
   try {
     const raw = window.localStorage.getItem(LEGACY_KEY)
     if (!raw) return []
-    const legacy = JSON.parse(raw) as any[]
+    const legacy = JSON.parse(raw) as Array<Record<string, unknown>>
     if (!Array.isArray(legacy)) return []
     return legacy.map((o, i): Order => {
       const total = Number(o.totalPrice ?? o.total ?? 0)
       const original = Number(o.originalPrice ?? o.originalTotal ?? total)
       const discount = Math.max(0, original - total)
-      const created = parseOrderDate(o.date)?.toISOString() ?? new Date().toISOString()
+      const created =
+        parseOrderDate(String(o.date ?? ""))?.toISOString() ?? new Date().toISOString()
       return {
         id: typeof o.id === "string" ? o.id : `A${1000 + (Number(o.id) % 9000 || i)}`,
         createdAt: created,
@@ -103,11 +104,11 @@ function migrateLegacy(): Order[] {
         items: [
           {
             kind: "recipe",
-            name: o.coffeeName || "İsimsiz Kahve",
-            image: o.image ?? null,
+            name: (o.coffeeName as string) || "İsimsiz Kahve",
+            image: (o.image as string | null) ?? null,
             unitKurus: Math.round(total * 100),
             qty: 1,
-            recipe: o.details,
+            recipe: o.details as CoffeeRecipe | undefined,
             score: Number(o.score ?? 0),
             fromArena: Boolean(o.isFromArena),
           },

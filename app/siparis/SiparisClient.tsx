@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { CheckCircle2, Clock } from "lucide-react"
 import "../../styles/siparis.css"
@@ -23,20 +23,17 @@ const ETA: Record<string, string> = {
 export default function SiparisClient() {
   const router = useRouter()
   const params = useSearchParams()
-  const [order, setOrder] = useState<Order | null>(null)
-  const [checked, setChecked] = useState(false)
+  const orderId = params.get("o")
 
-  useEffect(() => {
-    const id = params.get("o")
-    const found = id ? getOrder(id) : getOrders()[0]
-    setOrder(found ?? null)
-    setChecked(true)
-  }, [params])
+  const order = useMemo<Order | null>(
+    () => (orderId ? getOrder(orderId) : getOrders()[0]) ?? null,
+    [orderId],
+  )
 
   return (
     <div className="siparis-page">
       <div className="siparis-content">
-        {!checked ? null : order ? (
+        {order ? (
           <>
             <div className="siparis-confirm-icon" aria-hidden="true">
               <CheckCircle2 size={40} />
