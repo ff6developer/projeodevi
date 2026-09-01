@@ -31,7 +31,7 @@
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--line);
   border-radius: 60px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
@@ -54,10 +54,10 @@
 .logo-text {
   font-size: 20px;
   font-weight: 900;
-  color: #ffffff; /* Standart renk */
+  color: var(--ink); /* Standart renk */
   letter-spacing: 2px;
   text-transform: uppercase;
-  background: linear-gradient(to right, #fff, #c58a5c);
+  background: linear-gradient(to right, #fff, var(--accent));
   
   /* Düzenlenen Kısım: Her iki versiyonu da ekle */
   background-clip: text;
@@ -86,7 +86,7 @@
 }
 
 .nav a:hover {
-  color: #ffffff;
+  color: var(--ink);
 }
 
 .nav a::after {
@@ -96,7 +96,7 @@
   bottom: -6px;
   width: 0;
   height: 2px;
-  background: #c58a5c;
+  background: var(--accent);
   transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   box-shadow: 0 0 10px rgba(197, 138, 92, 0.8);
 }
@@ -136,7 +136,7 @@
 }
 
 .icon-item:hover .icon-wrapper {
-  color: #c58a5c; /* Hover olunca kahve tonu */
+  color: var(--accent); /* Hover olunca kahve tonu */
   transform: scale(1.25);
   filter: drop-shadow(0 0 12px rgba(197, 138, 92, 0.6));
 }
@@ -156,9 +156,9 @@
   border-radius: 12px;
   backdrop-filter: blur(20px);
   background: rgba(10, 10, 10, 0.95);
-  border: 1px solid #c58a5c;
+  border: 1px solid var(--accent);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  color: #ffffff;
+  color: var(--ink);
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
@@ -181,10 +181,10 @@
 /* ===== FOOTER (TASK-021) ===== */
 .footer {
   margin-top: 64px;
-  background: #050505;
+  background: var(--surface);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding: 40px 24px;
-  color: #b3b3b3;
+  color: var(--ink-2);
 }
 
 .footer-inner {
@@ -201,13 +201,13 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--ink);
 }
 
 .footer-tagline {
   margin: 0;
   font-size: 14px;
-  color: #8a8279;
+  color: var(--ink-3);
 }
 
 .footer-nav {
@@ -218,14 +218,14 @@
 }
 
 .footer-nav a {
-  color: #b3b3b3;
+  color: var(--ink-2);
   text-decoration: none;
   font-size: 14px;
   transition: color 0.18s ease;
 }
 
 .footer-nav a:hover {
-  color: #ffffff;
+  color: var(--ink);
 }
 
 .footer-contact {
@@ -243,21 +243,21 @@
 }
 
 .footer-contact svg {
-  color: #c58a5c;
+  color: var(--accent);
 }
 
 .footer-rule {
   width: 100%;
   max-width: 480px;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid var(--line);
   margin: 4px 0;
 }
 
 .footer-copy {
   margin: 0;
   font-size: 12px;
-  color: #8a8279;
+  color: var(--ink-3);
 }
 
 /* Özel Scrollbar (Tüm sayfalarda premium görünüm) */
@@ -558,7 +558,7 @@
     -webkit-backdrop-filter: blur(25px);
     border-radius: 20px 20px 0 0;
     border-width: 1px 0 0 0;
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--line);
     box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.8);
     padding: 0 15px;
     z-index: 100;
@@ -604,14 +604,14 @@
   gap: 14px;
   padding: 120px 24px 80px;
   text-align: center;
-  color: #b3b3b3;
+  color: var(--ink-2);
 }
 
 .route-state h1 {
   margin: 0;
   font-size: clamp(24px, 4vw, 34px);
   font-weight: 700;
-  color: #ffffff;
+  color: var(--ink);
 }
 
 .route-state p {
@@ -634,7 +634,7 @@
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: transparent;
-  color: #ffffff;
+  color: var(--ink);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -647,7 +647,7 @@
 }
 
 .route-state-btn-primary {
-  background: #c58a5c;
+  background: var(--accent);
   color: #1a120b;
   border-color: transparent;
 }
@@ -661,7 +661,7 @@
   height: 32px;
   border-radius: 50%;
   border: 3px solid rgba(255, 255, 255, 0.15);
-  border-top-color: #c58a5c;
+  border-top-color: var(--accent);
   animation: route-state-spin 0.8s linear infinite;
 }
 

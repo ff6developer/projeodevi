@@ -1,88 +1,46 @@
-/* ===== ELMENES COFFEE - MODERN LOGIN & REGISTER ===== */
-
-:root {
-  --bg-dark: #080808;
-  --card-bg: rgba(255, 255, 255, 0.03); /* Cam efekti için çok şeffaf beyaz */
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --accent-coffee: #c58a5c;
-  --accent-hover: #a36d45;
-  --accent-glow: rgba(197, 138, 92, 0.25);
-  --text-main: #ffffff;
-  --text-dim: #b3b3b3;
-  --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-}
+/* ===== Giriş & Kayıt ===== */
+/* Token'lar: styles/tokens.css. Component migrasyonu TASK-097/098. */
 
 .login-container {
-  min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-dark);
-  /* Arka plana hafif bir kahve dokusu ve karanlık gradyan ekledik */
-  background-image: 
-    radial-gradient(circle at 50% -20%, rgba(197, 138, 92, 0.12) 0%, transparent 50%),
-    linear-gradient(rgba(8, 8, 8, 0.8), rgba(8, 8, 8, 0.9)),
-    url("/giris-kayit.png"); /* Orijinal resmin sadece dokusu kalacak şekilde karartıldı */
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Fokus anında arkadaki blur efekti */
-.login-container.blur-active::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(12px);
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 1;
-  transition: var(--transition);
+  background: var(--paper);
+  padding: var(--s-8) var(--s-4);
 }
 
 .login-card {
-  position: relative;
-  z-index: 10;
-  background: var(--card-bg);
-  backdrop-filter: blur(25px) saturate(150%);
-  -webkit-backdrop-filter: blur(25px) saturate(150%);
-  padding: 50px 40px;
+  background: var(--surface);
+  padding: var(--s-8) var(--s-6);
   width: 100%;
   max-width: 420px;
-  border-radius: 32px;
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
   text-align: center;
-  transition: var(--transition);
 }
 
-/* Kartın etrafına hafif bir parlama ekleyelim */
-.login-card:hover {
-  border-color: rgba(197, 138, 92, 0.4);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(197, 138, 92, 0.1);
-}
-
-.login-card h1, .login-card h2 {
-  color: var(--text-main);
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  margin-bottom: 8px;
-  text-transform: uppercase;
+.login-card h1,
+.login-card h2 {
+  color: var(--ink);
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  margin-bottom: var(--s-2);
 }
 
 .login-sub {
-  color: var(--text-dim);
-  font-size: 15px;
-  margin-bottom: 35px;
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--s-6);
 }
 
-/* FORM ELEMENTLERİ */
+/* FORM */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--s-4);
 }
 
 .input-group {
@@ -91,35 +49,30 @@
 
 .input-group label {
   display: block;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
-  color: var(--accent-coffee);
-  margin-bottom: 8px;
-  margin-left: 4px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  color: var(--ink-2);
+  margin-bottom: var(--s-2);
 }
 
 .input-group input {
   width: 100%;
-  padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  color: var(--text-main);
-  font-size: 15px;
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font-size: var(--fs-sm);
   outline: none;
-  transition: var(--transition);
+  transition: border-color var(--t-base) var(--ease);
 }
 
 .input-group input::placeholder {
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--ink-3);
 }
 
 .input-group input:focus {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: var(--accent-coffee);
-  box-shadow: 0 0 20px var(--accent-glow);
+  border-color: var(--accent);
 }
 
 .password-input-wrapper {
@@ -132,64 +85,53 @@
 
 .password-toggle-btn {
   position: absolute;
-  right: 14px;
+  right: var(--s-3);
   top: 50%;
   transform: translateY(-50%);
-  background: none;
-  border: none;
-  padding: 4px;
+  padding: var(--s-1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-main);
-  opacity: 0.5;
+  color: var(--ink-2);
   cursor: pointer;
-  transition: var(--transition);
+  transition: color var(--t-fast) var(--ease);
 }
 
 .password-toggle-btn:hover {
-  opacity: 0.9;
+  color: var(--ink);
 }
 
 /* BUTON */
 .login-button {
   width: 100%;
-  padding: 16px;
-  margin-top: 10px;
+  padding: var(--s-4);
+  margin-top: var(--s-2);
   border: none;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--accent-coffee), var(--accent-hover));
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: var(--fs-body);
+  font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 10px 20px rgba(197, 138, 92, 0.2);
+  transition: background-color var(--t-base) var(--ease);
 }
 
 .login-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 25px rgba(197, 138, 92, 0.3);
-  filter: brightness(1.1);
-}
-
-.login-button:active:not(:disabled) {
-  transform: translateY(0);
+  background: var(--accent-weak);
 }
 
 .login-button:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 /* LİNKLER */
 .login-links {
-  margin-top: 25px;
+  margin-top: var(--s-5);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: var(--s-3);
 }
 
 .login-link-row {
@@ -197,34 +139,33 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .login-links span {
-  color: var(--text-dim);
-  font-size: 14px;
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
 }
 
-.login-links a, .login-link-anchor {
-  color: var(--accent-coffee);
+.login-links a,
+.login-link-anchor {
+  color: var(--accent);
   text-decoration: none;
-  font-weight: 700;
-  font-size: 14px;
-  transition: 0.3s;
-  border-bottom: 1px solid transparent;
+  font-weight: 600;
+  font-size: var(--fs-sm);
 }
 
-.login-links a:hover, .login-link-anchor:hover {
-  color: var(--text-main);
-  border-color: var(--accent-coffee);
+.login-links a:hover,
+.login-link-anchor:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-/* Sayfa geçişleri için loading ekranı uyumu */
 .loading-screen {
-  background: var(--bg-dark);
-  color: var(--accent-coffee);
+  background: var(--paper);
+  color: var(--accent);
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100dvh;
 }
