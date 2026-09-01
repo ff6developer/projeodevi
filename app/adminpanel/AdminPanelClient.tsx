@@ -2,12 +2,12 @@
 
 import { useEffect, useState, useMemo } from "react"
 import { useRouter } from "next/navigation"
-import "../../styles/adminpanel.css"
-import AdminSidebar from "../../components/AdminSidebar"
-import Dashboard from "../../components/Dashboard"
-import OrdersPanel from "../../components/OrdersPanel"
-import ProductsPanel from "../../components/ProductsPanel"
-import type { Tab } from "../../components/adminTypes"
+import "@/styles/adminpanel.css"
+import AdminSidebar from "@/components/AdminSidebar"
+import Dashboard from "@/components/Dashboard"
+import OrdersPanel from "@/components/OrdersPanel"
+import ProductsPanel from "@/components/ProductsPanel"
+import type { Tab } from "@/components/adminTypes"
 
 
 type OrderDetails = {

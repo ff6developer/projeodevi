@@ -1,5 +1,5 @@
 import type { ReactElement } from "react"
-import OrderCard from "../components/OrderCard"
+import OrderCard from "./OrderCard"
 
 interface Props {
   filteredOrders: any[]

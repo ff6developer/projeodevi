@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import "../../styles/home.css";
-import { BRAND } from "../site-config";
+import "@/styles/home.css";
+import { BRAND } from "@/app/site-config";
 import { Truck, Flame, MessageCircle } from "lucide-react";
 
 // Öne çıkan ürünler — TASK-107'de lib/products'a taşınacak.

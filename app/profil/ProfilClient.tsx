@@ -8,8 +8,8 @@ import {
   Camera, Plus, Share2, Trophy, Zap, X, LogOut, Image as ImageIcon, Trash2
 } from "lucide-react"
 
-import "../../styles/profil.css"
-import { useToast } from "../../components/ToastProvider"
+import "@/styles/profil.css"
+import { useToast } from "@/components/ToastProvider"
 
 
 export default function ProfilClient() {

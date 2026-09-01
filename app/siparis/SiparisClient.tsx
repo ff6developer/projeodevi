@@ -3,9 +3,9 @@
 import { useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { CheckCircle2, Clock } from "lucide-react"
-import "../../styles/siparis.css"
-import { getOrder, getOrders, STATUS_LABEL } from "../../lib/orders"
-import type { Order } from "../../lib/types"
+import "@/styles/siparis.css"
+import { getOrder, getOrders, STATUS_LABEL } from "@/lib/orders"
+import type { Order } from "@/lib/types"
 
 const fmtTRY = (kurus: number) =>
   new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(

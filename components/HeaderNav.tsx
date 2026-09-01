@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { visibleNavItems } from "../lib/nav"
+import { visibleNavItems } from "@/lib/nav"
 
 export default function HeaderNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)

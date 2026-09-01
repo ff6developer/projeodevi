@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
-import { BRAND } from "../app/site-config";
+import { BRAND } from "@/app/site-config";
 
 const FOOTER_LINKS = [
   { href: "/menu", label: "Menü" },

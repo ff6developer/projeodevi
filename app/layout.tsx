@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import "../styles/layout.css";
-import { ToastProvider } from "../components/ToastProvider";
-import HeaderNav from "../components/HeaderNav";
-import SiteFooter from "../components/SiteFooter";
+import "@/styles/layout.css";
+import { ToastProvider } from "@/components/ToastProvider";
+import HeaderNav from "@/components/HeaderNav";
+import SiteFooter from "@/components/SiteFooter";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./site-config";
 
 const inter = Inter({

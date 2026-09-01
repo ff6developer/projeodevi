@@ -1,11 +1,11 @@
 "use client"
 import { useState, useEffect } from "react"
-import "../../styles/kahveniolustur.css"
+import "@/styles/kahveniolustur.css"
 import { useRouter } from "next/navigation"
 import { Beaker, Zap, Trophy, Lock, Unlock } from "lucide-react"
-import CoffeeRight from "../../components/CoffeeRight"
-import { useToast } from "../../components/ToastProvider"
-import { createOrder } from "../../lib/orders"
+import CoffeeRight from "@/components/CoffeeRight"
+import { useToast } from "@/components/ToastProvider"
+import { createOrder } from "@/lib/orders"
 
 type RecipeOption = { name: string; price: number; power: number }
 

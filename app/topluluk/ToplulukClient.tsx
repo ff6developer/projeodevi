@@ -8,8 +8,8 @@ import {
   Flame, X, User, ClipboardCopy, Send, Star, Trash2,
   Sparkles, Coffee, Heart, TrendingUp, Gift, Users
 } from "lucide-react"
-import "../../styles/kahvearenasi.css"
-import { useToast } from "../../components/ToastProvider"
+import "@/styles/kahvearenasi.css"
+import { useToast } from "@/components/ToastProvider"
 
 export default function ToplulukClient() {
   const router = useRouter()

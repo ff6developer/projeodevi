@@ -1,10 +1,10 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import AuthForm from "../../components/AuthForm"
-import "../../styles/login.css"
-import { useToast } from "../../components/ToastProvider"
-import { API_BASE_URL } from "../site-config"
+import AuthForm from "@/components/AuthForm"
+import "@/styles/login.css"
+import { useToast } from "@/components/ToastProvider"
+import { API_BASE_URL } from "@/app/site-config"
 
 export default function LoginClient() {
   const router = useRouter()

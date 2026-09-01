@@ -10,8 +10,8 @@ import {
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-import "../../styles/menu.css";
-import { useToast } from "../../components/ToastProvider";
+import "@/styles/menu.css";
+import { useToast } from "@/components/ToastProvider";
 
 type KategoriTipi = 'sicak' | 'soguk' | 'tatli';
 
