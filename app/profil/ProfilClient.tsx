@@ -1,37 +1,65 @@
 "use client"
 
-import PostCard from "@/components/PostCards"
-import { useState, useEffect, useCallback } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import {
-  Camera, Plus, Share2, Trophy, Zap, X, LogOut, Image as ImageIcon, Trash2
-} from "lucide-react"
-
+import { Camera, LogOut, Trash2, Zap } from "lucide-react"
 import "@/styles/profil.css"
 import { useToast } from "@/components/ToastProvider"
 import { getUser, setUser as setSessionUser, clearSession } from "@/lib/session"
+import { getOrders, STATUS_LABEL } from "@/lib/orders"
+import { formatDateTime } from "@/lib/format"
+import {
+  Button,
+  IconButton,
+  Card,
+  Badge,
+  Input,
+  Textarea,
+  Tabs,
+  Modal,
+  Price,
+  EmptyState,
+  useConfirm,
+} from "@/components/ui"
 
+type Coffee = {
+  id: number
+  name: string
+  image?: string | null
+  score?: number
+  total?: number
+  isFromArena?: boolean
+  details?: Record<string, { name?: string } | null>
+}
+type Post = {
+  id: number
+  text: string
+  date: string
+  arenaScore?: number
+  coffee?: { name?: string; image?: string | null; details?: Record<string, { name?: string } | null> }
+}
+
+const DETAIL_ORDER = ["milkType", "beanType", "foam", "cupType", "syrup", "spice", "sweetener", "technique"] as const
 
 export default function ProfilClient() {
   const router = useRouter()
   const toast = useToast()
+  const confirm = useConfirm()
 
-  const [user, setUser] = useState<{name: string; email: string} | null>(null)
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null)
   const [bio, setBio] = useState("")
   const [avatar, setAvatar] = useState("/profilikon.png")
-  const [posts, setPosts] = useState<any[]>([])
-  const [postText, setPostText] = useState("")
-  const [lastDesign, setLastDesign] = useState<any>(null)
-  const [coffees, setCoffees] = useState<any[]>([])
-  const [selectedCoffee, setSelectedCoffee] = useState<any>(null)
-  const [arenaCoffeeName, setArenaCoffeeName] = useState("")
-  const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
+  const [posts, setPosts] = useState<Post[]>([])
+  const [coffees, setCoffees] = useState<Coffee[]>([])
 
-  // Profil düzenleme modal state
+  const [selectedCoffee, setSelectedCoffee] = useState<Coffee | null>(null)
+  const [postText, setPostText] = useState("")
+
   const [showEdit, setShowEdit] = useState(false)
   const [editName, setEditName] = useState("")
   const [editEmail, setEditEmail] = useState("")
+  const [editBio, setEditBio] = useState("")
 
   useEffect(() => {
     const parsed = getUser()
@@ -39,37 +67,31 @@ export default function ProfilClient() {
       router.push("/giris")
       return
     }
-
     setUser(parsed)
     setEditName(parsed.name)
     setEditEmail(parsed.email)
 
-    const savedPosts = localStorage.getItem("userPosts")
-    if (savedPosts) setPosts(JSON.parse(savedPosts))
-
-    const savedAvatar = localStorage.getItem("userAvatar")
-    if (savedAvatar) setAvatar(savedAvatar)
-      
-    const savedBio = localStorage.getItem("userBio")
-    if (savedBio) setBio(savedBio)
-
-    const savedCoffee = localStorage.getItem("lastCoffeeDesign")
-    if (savedCoffee) setLastDesign(JSON.parse(savedCoffee))
-
-    const savedCoffees = JSON.parse(localStorage.getItem("coffees") || "[]")
-    setCoffees(savedCoffees)
-
+    try {
+      const p = localStorage.getItem("userPosts")
+      if (p) setPosts(JSON.parse(p))
+      const a = localStorage.getItem("userAvatar")
+      if (a) setAvatar(a)
+      const b = localStorage.getItem("userBio")
+      if (b) {
+        setBio(b)
+        setEditBio(b)
+      }
+      setCoffees(JSON.parse(localStorage.getItem("coffees") || "[]"))
+    } catch {
+      /* yoksay */
+    }
   }, [router])
 
-  const handleLogout = () => {
-    clearSession()
-    router.push("/giris")
-  }
+  const orders = useMemo(() => getOrders(), [])
 
-  const handleAvatar = (e: any) => {
+  const handleAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-
     const reader = new FileReader()
     reader.onloadend = () => {
       const base64 = reader.result as string
@@ -79,359 +101,310 @@ export default function ProfilClient() {
     reader.readAsDataURL(file)
   }
 
-  const saveProfileChanges = () => {
+  const saveProfile = () => {
     if (!user) return
-
-    const updatedUser = {
-      ...user,
-      name: editName,
-      email: editEmail
-    }
-
-    setSessionUser(updatedUser)
-    setUser(updatedUser)
+    const updated = { ...user, name: editName, email: editEmail }
+    setSessionUser(updated)
+    setUser(updated)
+    setBio(editBio)
+    localStorage.setItem("userBio", editBio)
     setShowEdit(false)
+    toast.success("Profil güncellendi.")
   }
 
-  const handleCoffeeImageUpload = (e: any) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setArenaCoffeeImage(reader.result as string)
-    }
-    reader.readAsDataURL(file)
-  }
-
-  const handleBioChange = (text: string) => {
-    setBio(text)
-    localStorage.setItem("userBio", text)
+  const persistPosts = (next: Post[]) => {
+    setPosts(next)
+    localStorage.setItem("userPosts", JSON.stringify(next))
   }
 
   const sharePost = () => {
-    if (!postText || !selectedCoffee || !arenaCoffeeName || !arenaCoffeeImage) {
-      toast.warning("Tüm alanları doldurun!")
+    if (!selectedCoffee || !postText.trim()) {
+      toast.warning("Bir kahve seç ve birkaç kelime yaz.")
       return
     }
-
-    const newPost = {
+    const newPost: Post = {
       id: Date.now(),
-      text: postText,
-      date: new Date().toLocaleString("tr-TR", {
-        hour: "2-digit",
-        minute: "2-digit"
-      }),
+      text: postText.trim(),
+      date: new Date().toISOString(),
+      arenaScore: selectedCoffee.score || 0,
       coffee: {
-        ...selectedCoffee,
-        name: arenaCoffeeName,
-        image: arenaCoffeeImage
+        name: selectedCoffee.name,
+        image: selectedCoffee.image,
+        details: selectedCoffee.details,
       },
-      arenaScore: lastDesign?.score || 0
     }
-
-    const updated = [newPost, ...posts]
-    setPosts(updated)
-    localStorage.setItem("userPosts", JSON.stringify(updated))
-
+    persistPosts([newPost, ...posts])
     const arenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
-    const updatedArena = [newPost, ...arenaPosts]
-    localStorage.setItem("arenaPosts", JSON.stringify(updatedArena))
-
+    localStorage.setItem(
+      "arenaPosts",
+      JSON.stringify([{ ...newPost, userName: user?.name, userAvatar: avatar }, ...arenaPosts]),
+    )
     setPostText("")
-    setArenaCoffeeName("")
-    setArenaCoffeeImage(null)
+    setSelectedCoffee(null)
+    toast.success("Tasarımın toplulukta paylaşıldı.")
   }
 
-  const deletePost = useCallback((id: number) => {
-    const confirmDelete = window.confirm("Bu kahveyi silmek istediğine emin misin?")
-    if (!confirmDelete) return
-
-    // PROFİLDEN SİL
-    setPosts(prev => {
-      const filtered = prev.filter(p => p.id !== id)
-      localStorage.setItem("userPosts", JSON.stringify(filtered))
-      return filtered
-    })
-
-    // ARENADAN DA SİL
+  const deletePost = async (id: number) => {
+    const ok = await confirm({ title: "Gönderiyi sil", confirmText: "Sil", tone: "danger" })
+    if (!ok) return
+    persistPosts(posts.filter((p) => p.id !== id))
     const arenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
-    const updatedArena = arenaPosts.filter((p: any) => p.id !== id)
-    localStorage.setItem("arenaPosts", JSON.stringify(updatedArena))
-  }, [])
+    localStorage.setItem(
+      "arenaPosts",
+      JSON.stringify(arenaPosts.filter((p: { id: number }) => p.id !== id)),
+    )
+  }
 
-  // ☕ KAHVE SİLME FONKSİYONU
-  const deleteCoffee = useCallback((coffeeId: number, e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (!confirm("Bu kahveyi silmek istediğine emin misin?")) return
+  const deleteCoffee = async (id: number) => {
+    const ok = await confirm({ title: "Kahveyi sil", confirmText: "Sil", tone: "danger" })
+    if (!ok) return
+    const next = coffees.filter((c) => c.id !== id)
+    setCoffees(next)
+    localStorage.setItem("coffees", JSON.stringify(next))
+    if (selectedCoffee?.id === id) setSelectedCoffee(null)
+  }
 
-    const updatedCoffees = coffees.filter(c => c.id !== coffeeId)
-    localStorage.setItem("coffees", JSON.stringify(updatedCoffees))
-    setCoffees(updatedCoffees)
+  if (!user) {
+    return <div className="profil-page container"><EmptyState title="Yükleniyor…" /></div>
+  }
 
-    if (selectedCoffee?.id === coffeeId) {
-      setSelectedCoffee(null)
-    }
-  }, [coffees, selectedCoffee])
+  const totalScore = posts.reduce((a, p) => a + (p.arenaScore || 0), 0)
 
-  if (!user) return (
-    <div className="loading-screen"><h1>Yükleniyor...</h1></div>
-  )
+  const detailTags = (details?: Record<string, { name?: string } | null>) =>
+    DETAIL_ORDER.map((k) => details?.[k]?.name).filter(Boolean) as string[]
 
-  const isShareDisabled =
-    !postText.trim() ||
-    !arenaCoffeeName.trim() ||
-    !arenaCoffeeImage ||
-    !selectedCoffee
-
-  return (
-    <div className="profil-page">
-      <div className="profil-container">
-
-        {/* HEADER */}
-        <header className="profil-hero">
-
-          <button className="logout-button" onClick={handleLogout} aria-label="Çıkış Yap">
-            <LogOut size={20} />
-          </button>
-
-          <div className="avatar-wrapper">
-            <label className="avatar-upload">
-              <Image
-                src={avatar}
-                alt="Profil"
-                width={160}
-                height={160}
-                className="profil-avatar"
-              />
-              <div className="avatar-overlay">
-                <Camera size={25} />
-              </div>
-              <input hidden type="file" accept="image/*" onChange={handleAvatar} />
-            </label>
-          </div>
-
-          <h1 className="profil-name">{user.name}</h1>
-          <p className="profil-email">{user.email}</p>
-
-          <button className="edit-profile-btn" onClick={() => setShowEdit(true)}>
-            Profili Düzenle
-          </button>
-
-          <textarea
-            className="profil-bio"
-            value={bio}
-            onChange={(e) => handleBioChange(e.target.value)}
-            maxLength={150}
-            placeholder="Kendinden bahset..."
-          />
-
-          <div className="profil-stats">
-            <div className="stat-item">
-              <strong>{posts.length}</strong>
-              <span>Gönderi</span>
-            </div>
-            <div className="stat-item">
-              <strong><Zap size={14} className="stat-icon" /> {posts.reduce((a,p)=>a+(p.arenaScore||0),0)}</strong>
-              <span>Arena Puanı</span>
-            </div>
-          </div>
-
-        </header>
-
-        {/* PROFIL EDIT MODAL */}
-        {showEdit && (
-          <div className="edit-modal-overlay">
-            <div className="edit-modal">
-
-              <h2>Profili Düzenle</h2>
-
-              <label>Ad</label>
-              <input
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-              />
-
-              <label>Email</label>
-              <input
-                value={editEmail}
-                onChange={(e) => setEditEmail(e.target.value)}
-              />
-
-              <label>Profil Fotoğrafı</label>
-              <input type="file" accept="image/*" onChange={handleAvatar} />
-
-              <div className="edit-buttons">
-                <button className="save-edit-btn" onClick={saveProfileChanges}>
-                  Kaydet
-                </button>
-
-                <button className="cancel-edit-btn" onClick={() => setShowEdit(false)}>
-                  İptal
-                </button>
-              </div>
-
-            </div>
-          </div>
-        )}
-
-        {/* POST SECTION */}
-        <section className="post-section">
-          <div className="section-title-wrapper">
-            <h2><Plus size={22} /> Arenada Paylaş</h2>
-          </div>
-
-            <p>Kahve Seç:</p>
-
-            <div className="coffee-select-list">
-              {coffees.map((coffee) => (
-                <div
-                  key={coffee.id}
-                  className={`coffee-select-wrapper ${
-                    selectedCoffee?.id === coffee.id ? "selected" : ""
-                  }`}
-                  style={{ cursor: "pointer", position: "relative" }}
+  const gonderilerTab = (
+    <div className="profil-share">
+      <Card pad="md">
+        <h3>Toplulukta paylaş</h3>
+        {coffees.length === 0 ? (
+          <p className="profil-muted">
+            Önce bir kahve tasarla, sonra buradan toplulukla paylaşabilirsin.
+          </p>
+        ) : (
+          <>
+            <p className="profil-label">Kahve seç</p>
+            <div className="profil-coffee-picker">
+              {coffees.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={`profil-coffee-opt${selectedCoffee?.id === c.id ? " is-active" : ""}`}
+                  onClick={() => setSelectedCoffee(c)}
                 >
-                  <div
-                    className="coffee-select-content"
-                    onClick={() => {
-                      setSelectedCoffee(coffee)
-                    }}
-                  >
-                    <div className="coffee-select-header">
-                      <div className="coffee-select-name">{coffee.name}</div>
-                      <div className="coffee-select-score">
-                        {coffee.score} puan
-                      </div>
-                    </div>
-
-                    <div className="coffee-select-details">
-                      <span className="detail-tag">{coffee.details?.milkType?.name || "Süt yok"}</span>
-                      <span className="detail-tag">{coffee.details?.beanType?.name || "Çekirdek yok"}</span>
-                      <span className="detail-tag">{coffee.details?.foam?.name || "Köpük yok"}</span>
-                      <span className="detail-tag">{coffee.details?.cupType?.name || "Bardak yok"}</span>
-                      <span className="detail-tag">{coffee.details?.syrup?.name || "Şurup yok"}</span>
-                      <span className="detail-tag">{coffee.details?.spice?.name || "Baharat yok"}</span>
-                      <span className="detail-tag">{coffee.details?.sweetener?.name || "Tatlandırıcı yok"}</span>
-                      <span className="detail-tag">{coffee.details?.technique?.name || "Teknik yok"}</span>
-                    </div>
-
-                    <div className="coffee-select-footer">
-                      <span className="coffee-price">{coffee.total} TL</span>
-                      {coffee.isFromArena && <span className="arena-badge">🏆 Arena</span>}
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="delete-coffee-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteCoffee(coffee.id, e);
-                    }}
-                    title="Kahveyi Sil"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-
-                </div>
+                  <strong>{c.name}</strong>
+                  <span>{c.score} puan</span>
+                </button>
               ))}
             </div>
 
             {selectedCoffee && (
-              <div className="arena-preparation-area">
-
-                <div className="arena-form-row">
-
-                  <input
-                    className="arena-coffee-name-input"
-                    placeholder="Kahve İsmi..."
-                    value={arenaCoffeeName}
-                    onChange={(e) => setArenaCoffeeName(e.target.value)}
-                  />
-
-                  <label
-                    className={`arena-mini-upload ${
-                      arenaCoffeeImage ? "has-image" : ""
-                    }`}
-                  >
-
-                    {arenaCoffeeImage ? (
-                      <Image
-                        src={arenaCoffeeImage}
-                        alt="coffee"
-                        width={40}
-                        height={40}
-                      />
-                    ) : (
-                      <ImageIcon size={20} />
-                    )}
-
-                    <input
-                      type="file"
-                      hidden
-                      accept="image/*"
-                      onChange={handleCoffeeImageUpload}
-                    />
-
-                  </label>
-
-                </div>
-
-              </div>
+              <p className="profil-selected-note">
+                <strong>{selectedCoffee.name}</strong> — {detailTags(selectedCoffee.details).join(", ")}
+              </p>
             )}
 
-            <textarea
-              className="post-input"
-              placeholder={
-                selectedCoffee
-                  ? "Karamel şurubu, yulaf sütü..."
-                  : "Kilitli..."
-              }
-              disabled={!selectedCoffee}
+            <Textarea
+              label="Birkaç kelime"
+              placeholder="Bu tarifi neden seviyorsun?"
               value={postText}
               onChange={(e) => setPostText(e.target.value)}
             />
-
-            <div className="post-actions">
-
-              <button
-                type="button"
-                className={`share-btn ${
-                  isShareDisabled ? "disabled" : ""
-                }`}
-                disabled={isShareDisabled}
-                onClick={() => {
-                  try {
-                    sharePost()
-                  } catch (error) {
-                    console.error("sharePost hata:", error)
-                  }
-                }}
-              >
-                <Share2 size={18} /> Paylaş
-              </button>
-
+            <div className="profil-share-actions">
+              <Button onClick={sharePost} disabled={!selectedCoffee || !postText.trim()}>
+                Paylaş
+              </Button>
             </div>
+          </>
+        )}
+      </Card>
 
-          
-
-          {/* POST FEED */}
-          <div className="post-feed">
-            {posts.map((p) => (
-              <PostCard
-                key={p.id}
-                post={p}
-                user={user}
-                avatar={avatar}
-                onDelete={deletePost}
-              />
-            ))}
-          </div>
-
-        </section>
+      <div className="profil-feed">
+        {posts.length === 0 ? (
+          <EmptyState title="Henüz paylaşımın yok" />
+        ) : (
+          posts.map((p) => (
+            <Card key={p.id} pad="md" className="profil-post">
+              <div className="profil-post-head">
+                <span className="profil-post-meta">
+                  {formatDateTime(p.date) || p.date}
+                </span>
+                <IconButton
+                  label="Gönderiyi sil"
+                  tone="danger"
+                  size="sm"
+                  icon={<Trash2 size={16} />}
+                  onClick={() => deletePost(p.id)}
+                />
+              </div>
+              <p className="profil-post-text">{p.text}</p>
+              {p.coffee?.image && (
+                <span className="profil-post-img">
+                  <Image src={p.coffee.image} alt={p.coffee.name || "Kahve"} width={480} height={320} />
+                </span>
+              )}
+              <div className="profil-post-foot">
+                <strong>{p.coffee?.name || "İsimsiz kahve"}</strong>
+                <span className="profil-post-score">
+                  <Zap size={14} aria-hidden="true" /> {p.arenaScore || 0} puan
+                </span>
+              </div>
+              <div className="profil-tags">
+                {detailTags(p.coffee?.details).map((t, i) => (
+                  <span key={i} className="profil-tag">{t}</span>
+                ))}
+              </div>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   )
-}
 
+  const kahvelerimTab =
+    coffees.length === 0 ? (
+      <EmptyState
+        title="Henüz kahve tasarlamadın"
+        action={<Button href="/kahveniolustur">Kahveni tasarla</Button>}
+      />
+    ) : (
+      <div className="profil-coffees">
+        {coffees.map((c) => (
+          <Card key={c.id} pad="md" className="profil-coffee-card">
+            <div className="profil-coffee-card-head">
+              <div>
+                <strong>{c.name}</strong>
+                {c.isFromArena && <Badge tone="accent">Topluluk</Badge>}
+              </div>
+              <IconButton
+                label="Kahveyi sil"
+                tone="danger"
+                size="sm"
+                icon={<Trash2 size={16} />}
+                onClick={() => deleteCoffee(c.id)}
+              />
+            </div>
+            <div className="profil-tags">
+              {detailTags(c.details).map((t, i) => (
+                <span key={i} className="profil-tag">{t}</span>
+              ))}
+            </div>
+            <div className="profil-coffee-card-foot">
+              {typeof c.total === "number" && <Price value={c.total * 100} />}
+              <span className="profil-post-score">
+                <Zap size={14} aria-hidden="true" /> {c.score || 0}
+              </span>
+            </div>
+          </Card>
+        ))}
+      </div>
+    )
+
+  const siparislerimTab =
+    orders.length === 0 ? (
+      <EmptyState
+        title="Henüz siparişin yok"
+        action={<Button href="/menu">Menüye git</Button>}
+      />
+    ) : (
+      <div className="profil-orders">
+        {orders.map((o) => (
+          <Card
+            key={o.id}
+            as="a"
+            href={`/siparis?o=${o.id}`}
+            interactive
+            pad="md"
+            className="profil-order"
+          >
+            <div className="profil-order-head">
+              <strong className="text-mono">#{o.id}</strong>
+              <Badge tone={o.status === "hazir" || o.status === "teslim" ? "success" : "accent"}>
+                {STATUS_LABEL[o.status]}
+              </Badge>
+            </div>
+            <p className="profil-order-items">
+              {o.items.map((it) => it.name).join(", ")}
+            </p>
+            <div className="profil-order-foot">
+              <span className="profil-post-meta">{formatDateTime(o.createdAt)}</span>
+              <Price value={o.totalKurus} />
+            </div>
+          </Card>
+        ))}
+      </div>
+    )
+
+  return (
+    <div className="profil-page container container-narrow">
+      <Card pad="lg" className="profil-hero">
+        <label className="profil-avatar">
+          <Image src={avatar} alt="" width={96} height={96} className="profil-avatar-img" />
+          <span className="profil-avatar-overlay">
+            <Camera size={18} />
+          </span>
+          <input type="file" accept="image/*" hidden onChange={handleAvatar} />
+        </label>
+        <div className="profil-hero-body">
+          <h1 className="profil-name">{user.name}</h1>
+          <p className="profil-email">{user.email}</p>
+          {bio && <p className="profil-bio">{bio}</p>}
+          <div className="profil-hero-actions">
+            <Button variant="secondary" size="md" onClick={() => setShowEdit(true)}>
+              Profili düzenle
+            </Button>
+            <Button variant="ghost" size="md" onClick={() => { clearSession(); router.push("/giris") }}>
+              <LogOut size={16} aria-hidden="true" /> Çıkış
+            </Button>
+          </div>
+        </div>
+        <div className="profil-stats">
+          <div>
+            <strong>{posts.length}</strong>
+            <span>Gönderi</span>
+          </div>
+          <div>
+            <strong>{coffees.length}</strong>
+            <span>Kahve</span>
+          </div>
+          <div>
+            <strong>{totalScore}</strong>
+            <span>Puan</span>
+          </div>
+        </div>
+      </Card>
+
+      <Tabs
+        items={[
+          { id: "posts", label: "Gönderiler", content: gonderilerTab },
+          { id: "coffees", label: "Kahvelerim", content: kahvelerimTab },
+          { id: "orders", label: "Siparişlerim", content: siparislerimTab },
+        ]}
+      />
+
+      <Modal
+        open={showEdit}
+        onClose={() => setShowEdit(false)}
+        title="Profili düzenle"
+        actions={
+          <>
+            <Button variant="secondary" onClick={() => setShowEdit(false)}>Vazgeç</Button>
+            <Button onClick={saveProfile}>Kaydet</Button>
+          </>
+        }
+      >
+        <div className="profil-edit-form">
+          <Input label="Ad" value={editName} onChange={(e) => setEditName(e.target.value)} />
+          <Input label="E-posta" type="email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} />
+          <Textarea
+            label="Hakkında"
+            placeholder="Kendinden kısaca bahset…"
+            maxLength={150}
+            value={editBio}
+            onChange={(e) => setEditBio(e.target.value)}
+          />
+        </div>
+      </Modal>
+    </div>
+  )
+}

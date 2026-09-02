@@ -1,865 +1,263 @@
-/* ===== ELMENES COFFEE PREMIUM PROFILE & ARENA THEME ===== */
+/* Profil — TASK-094/095/096 (component + token). */
 
-/* --- GENEL YAPI --- */
 .profil-page {
-  width: 100%;
-  min-height: 100vh;
-  background: radial-gradient(circle at top, var(--surface-2) 0%, var(--paper) 100%);
-  color: #fff;
-  padding: var(--s-7) var(--s-5) var(--s-8);
-  font-family: var(--font-sans);
+  padding-block: var(--s-7) var(--s-9);
 }
 
-.profil-container {
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-/* --- PROFİL HERO (ÜST KISIM) --- */
 .profil-hero {
-  position: relative;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  padding: var(--s-8) var(--s-7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  backdrop-filter: blur(20px);
-  margin-bottom: 50px;
-  box-shadow: var(--shadow-1);
-  animation: fadeIn 0.8s ease-out;
-}
-
-.logout-button {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #ff4d4d;
-  border: 1px solid rgba(255, 77, 77, 0.2);
-  padding: var(--s-3);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all var(--t-base) var(--ease);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logout-button:hover {
-  background: #ff4d4d;
-  color: white;
-  transform: rotate(90deg);
-}
-
-.avatar-wrapper {
-  position: relative;
-  margin-bottom: 25px;
-}
-
-.avatar-upload {
-  display: block;
-  width: 165px;
-  height: 165px;
-  border-radius: 50%;
-  padding: var(--s-2);
-  background: linear-gradient(135deg, var(--accent), #222);
-  cursor: pointer;
-  transition: all var(--t-base) var(--ease);
-  box-shadow: var(--shadow-1);
-  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--s-5);
+  align-items: start;
+  margin-bottom: var(--s-6);
 }
 
 .profil-avatar {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  cursor: pointer;
+  flex: none;
+}
+.profil-avatar-img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #000;
 }
-
-.avatar-overlay {
+.profil-avatar-overlay {
   position: absolute;
-  inset: 6px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: var(--ink);
   opacity: 0;
-  transition: all var(--t-base) var(--ease);
-  border: 4px solid #000;
+  transition: opacity var(--t-fast) var(--ease);
 }
-
-.avatar-upload:hover { transform: scale(1.03); }
-.avatar-upload:hover .avatar-overlay { opacity: 1; }
+.profil-avatar:hover .profil-avatar-overlay,
+.profil-avatar:focus-within .profil-avatar-overlay {
+  opacity: 1;
+}
 
 .profil-name {
+  margin: 0 0 2px;
   font-size: var(--fs-h2);
-  font-weight: 600;
-  margin-bottom: 5px;
-  color: var(--ink);
 }
-
 .profil-email {
-  font-size: 14px;
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-sm);
   color: var(--ink-3);
-  letter-spacing: normal; margin-bottom: 25px;
 }
-
-/* ===================== */
-/*   ⭐ PROFİL DÜZENLEME ⭐   */
-/* ===================== */
-
-.edit-profile-btn {
-  margin-top: 10px;
-  padding: var(--s-3) var(--s-5);
-  background: var(--accent);
-  color: #000;
-  border-radius: var(--r-lg);
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all var(--t-base) var(--ease);
-  font-size: 14px;
-}
-
-.edit-profile-btn:hover {
-  background: var(--accent-weak);
-  transform: translateY(-3px);
-}
-
-/* Modal arka planı */
-.edit-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 120;
-}
-
-/* Modal kutusu */
-.edit-modal {
-  background: #141414;
-  width: 340px;
-  padding: var(--s-6);
-  border-radius: var(--r-lg);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-1);
-  animation: modalPop 0.25s ease-out;
-}
-
-@keyframes modalPop {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.edit-modal h2 {
-  margin-bottom: 15px;
-  text-align: center;
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.edit-modal label {
-  display: block;
-  font-size: 13px;
-  color: var(--ink-3);
-  margin-bottom: 6px;
-  margin-top: 12px;
-}
-
-.edit-modal input {
-  width: 100%;
-  padding: var(--s-3);
-  border-radius: var(--r-md);
-  border: 1px solid var(--line);
-  background: #0c0c0c;
-  color: #fff;
-  margin-bottom: 12px;
-  outline: none;
-  transition: 0.25s;
-  font-size: 14px;
-}
-
-.edit-modal input:focus {
-  border-color: var(--accent);
-}
-
-.edit-buttons {
-  display: flex;
-  gap: var(--s-3);
-  margin-top: 10px;
-}
-
-.save-edit-btn {
-  flex: 1;
-  padding: var(--s-3);
-  border-radius: var(--r-md);
-  background: var(--accent);
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all var(--t-base) var(--ease);
-  color: #000;
-  font-size: 14px;
-}
-
-.save-edit-btn:hover {
-  background: var(--accent-weak);
-}
-
-.cancel-edit-btn {
-  flex: 1;
-  padding: var(--s-3);
-  border-radius: var(--r-md);
-  background: #222;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  color: #aaa;
-  transition: all var(--t-base) var(--ease);
-  font-size: 14px;
-}
-
-.cancel-edit-btn:hover {
-  background: #333;
-}
-
-/* ===================== */
-/*   ⭐ PROFİL BİO ⭐   */
-/* ===================== */
-
 .profil-bio {
-  width: 100%;
-  max-width: 400px;
-  min-height: 110px;
-  padding: var(--s-4) var(--s-4);
-  border-radius: var(--r-lg);
-  border: 1px solid rgba(255,255,255,0.08);
-  background: linear-gradient(145deg, #000000, #161414);
-  color: #e2e8f0;
-  font-size: 14px;
-  resize: none;
-  outline: none;
-  transition: all 0.25s ease;
-  margin-top: 20px;
-  font-family: inherit;
-  line-height: 1.5;
+  margin: 0 0 var(--s-3);
+  color: var(--ink-2);
+  line-height: var(--lh-body);
 }
-
-.profil-bio::placeholder {
-  color: rgba(255,255,255,0.4);
+.profil-hero-actions {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
 }
-
-.profil-bio:focus {
-  border-color: #c08457;
-}
-
-/* ===================== */
-/*   ⭐ PROFİL İSTATİSTİKLER ⭐   */
-/* ===================== */
 
 .profil-stats {
+  grid-column: 1 / -1;
   display: flex;
-  gap: var(--s-7);
-  margin-top: 25px;
-  padding-top: 25px;
+  gap: var(--s-6);
+  padding-top: var(--s-4);
   border-top: 1px solid var(--line);
 }
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--s-2);
-}
-
-.stat-item strong {
-  font-size: 24px;
-  font-weight: 600;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-}
-
-.stat-icon {
-  color: var(--accent);
-}
-
-.stat-item span {
-  font-size: 13px;
-  color: var(--ink-3);
-  font-weight: 500;
-}
-
-/* ============================ */
-/* ⭐ POST / ARENA BÖLÜMÜ ⭐ */
-/* ============================ */
-
-.post-section {
-  margin-top: 40px;
-}
-
-.section-title-wrapper h2 {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-}
-
-/* ===== COFFEE SEÇİM LİSTESİ ===== */
-.coffee-select-list {
-  max-height: 280px;
-  overflow-y: auto;
-  padding-right: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-3);
-}
-
-.coffee-select-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.coffee-select-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.coffee-select-list::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: var(--r-md);
-}
-
-/* ===== COFFEE SEÇİM WRAPPER ===== */
-.coffee-select-wrapper {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  gap: var(--s-2);
-}
-
-.coffee-select-wrapper.selected .coffee-select-content {
-  border: 2px solid var(--accent);
-  background: linear-gradient(135deg, rgba(197,138,92,0.18), rgba(0,0,0,0.4));
-  box-shadow: var(--shadow-1);
-}
-
-/* ===== COFFEE SEÇİM BUTONU ===== */
-
-.coffee-select-content {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  padding: var(--s-4);
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-3);
-
-  cursor: pointer;
-  transition: 0.2s;
-
-  position: relative;
-  overflow: hidden;
-}
-
-.coffee-select-content:hover {
-  border-color: var(--accent);
-  background: rgba(197,138,92,0.08);
-  transform: translateY(-2px);
-}
-
-/* ===== KAHVE İSİM & SKOR ===== */
-.coffee-select-header {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-}
-
-.coffee-select-name {
-  font-weight: 600;
-  font-size: 1.1em;
-  color: #fff;
-}
-
-.coffee-select-score {
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.coffee-select-wrapper.selected .coffee-select-score {
-  color: var(--accent);
-}
-
-/* ===== KAHVE DETAY TAGLERİ ===== */
-.coffee-select-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-2);
-  width: 100%;
-}
-
-.detail-tag {
-  background: rgba(255, 255, 255, 0.08);
-  padding: var(--s-1) var(--s-3);
-  border-radius: var(--r-md);
-  font-size: 0.72em;
-  color: #aaa;
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: 0.2s;
-}
-
-.coffee-select-wrapper:hover .detail-tag {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-/* ===== KAHVE FİYAT & ARENA BADGE ===== */
-.coffee-select-footer {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-  margin-top: 4px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.coffee-price {
-  font-weight: 600;
-  color: #4ade80;
-  font-size: 0.95em;
-}
-
-.arena-badge {
-  font-size: 0.78em;
-  background: rgba(255, 215, 0, 0.15);
-  color: var(--accent);
-  padding: var(--s-1) var(--s-3);
-  border-radius: var(--r-md);
-  font-weight: 600;
-  border: 1px solid rgba(255, 215, 0, 0.2);
-}
-
-/* ===== KAHVE SİLME BUTONU ===== */
-.delete-coffee-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 14px;
-  background: rgba(239, 68, 68, 0.08);
-  border: 1px solid rgba(239, 68, 68, 0.15);
-  border-radius: var(--r-lg);
-  color: #ef4444;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.delete-coffee-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.3);
-  transform: scale(1.05);
-}
-
-/* ===== ARENA HAZIRLIK ALANI ===== */
-.arena-preparation-area {
-  margin-top: 15px;
-  background: rgba(255,255,255,0.03);
-  border-radius: var(--r-lg);
-  padding: var(--s-4);
-}
-
-.arena-form-row {
-  display: flex;
-  gap: var(--s-3);
-  align-items: center;
-}
-
-/* KAHVE İSMİ INPUT */
-.arena-coffee-name-input {
-  flex: 1;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: var(--s-3);
-  color: #fff;
-  transition: 0.2s;
-  font-size: 14px;
-  outline: none;
-}
-
-.arena-coffee-name-input:focus {
-  border-color: var(--accent);
-}
-
-.arena-coffee-name-input::placeholder {
-  color: rgba(255,255,255,0.3);
-}
-
-/* GÖRSEL YÜKLEME BUTONU */
-.arena-mini-upload {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--r-md);
-  border: 1px dashed var(--line);
-  background: var(--paper);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.2s;
-  flex-shrink: 0;
-  overflow: hidden;
-  position: relative;
-}
-
-.arena-mini-upload:hover {
-  border-color: var(--accent);
-  background: rgba(197,138,92,0.1);
-}
-
-.arena-mini-upload.has-image {
-  border: 1px solid var(--accent);
-  border-style: solid;
-}
-
-.arena-mini-upload img {
-  border-radius: var(--r-sm);
-  object-fit: cover;
-}
-
-/* ===== POST TEXTAREA ===== */
-.post-input {
-  width: 100%;
-  margin-top: 14px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  padding: var(--s-4);
-  color: #fff;
-  resize: none;
-  min-height: 90px;
-  transition: 0.2s;
-  font-family: inherit;
-  font-size: 14px;
-  outline: none;
-}
-
-.post-input:focus {
-  border-color: var(--accent);
-}
-
-.post-input::placeholder {
-  color: rgba(255,255,255,0.3);
-}
-
-.post-input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ===== PAYLAŞ BUTONU ===== */
-.post-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 14px;
-}
-
-.share-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  padding: var(--s-3) var(--s-5);
-  border-radius: var(--r-lg);
-  background: var(--accent);
-  color: #000;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all var(--t-base) var(--ease);
-}
-
-.share-btn:hover:not(:disabled) {
-  background: var(--accent-weak);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-1);
-}
-
-.share-btn.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* ============================ */
-/* ⭐ POST FEED / GÖNDERİ AKIŞI ⭐ */
-/* ============================ */
-
-.post-feed {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--s-6);
-  margin-top: 40px;
-}
-
-.post-card {
-  width: 100%;
-  max-width: 650px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  padding: var(--s-5);
-  box-shadow: var(--shadow-1);
-  transition: all var(--t-base) var(--ease);
-  animation: fadeIn 0.6s ease-out;
-}
-
-.post-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-1);
-}
-
-.post-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.post-user-info {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-}
-
-.post-user-avatar {
-  border-radius: 50%;
-  border: 2px solid var(--line);
-}
-
-.post-user-name {
-  font-weight: 600;
+.profil-stats strong {
   display: block;
-  font-size: 15px;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--ink);
 }
-
-.post-date {
-  font-size: 12px;
+.profil-stats span {
+  font-size: var(--fs-caption);
   color: var(--ink-3);
-  margin-top: 2px;
 }
 
-.post-text {
-  margin: 14px 0;
-  line-height: 1.6;
-  color: #e2e8f0;
-  font-size: 14px;
+/* --- Gönderiler tab --- */
+.profil-share {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
 }
-
-/* Kahve Görseli */
-.post-main-image-wrapper {
-  margin-top: 12px;
-  border-radius: var(--r-lg);
-  overflow: hidden;
+.profil-share h3 {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-h3);
+}
+.profil-muted {
+  margin: 0;
+  color: var(--ink-3);
+  font-size: var(--fs-sm);
+}
+.profil-label {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.profil-coffee-picker {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--s-3);
+}
+.profil-coffee-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--s-2) var(--s-3);
   border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+}
+.profil-coffee-opt strong {
+  color: var(--ink);
+}
+.profil-coffee-opt span {
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+.profil-coffee-opt.is-active {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.profil-selected-note {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+.profil-share-actions {
+  margin-top: var(--s-3);
 }
 
-.post-main-image {
+.profil-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+.profil-post-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.profil-post-meta {
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+.profil-post-text {
+  margin: var(--s-3) 0;
+  color: var(--ink);
+  line-height: var(--lh-body);
+}
+.profil-post-img {
+  display: block;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin-bottom: var(--s-3);
+}
+.profil-post-img :where(img) {
   width: 100%;
   height: auto;
   object-fit: cover;
-  display: block;
 }
-
-.post-arena-score {
+.profil-post-foot {
   display: flex;
   align-items: center;
-  gap: var(--s-2);
-  font-weight: 600;
-  color: var(--accent);
-  font-size: 14px;
-}
-
-/* Silme Butonu */
-.delete-post {
-  background: transparent;
-  border: none;
-  color: #888;
-  cursor: pointer;
-  padding: var(--s-2);
-  border-radius: var(--r-sm);
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.delete-post:hover {
-  color: #ff4d4d;
-  background: rgba(255, 77, 77, 0.1);
-}
-
-/* ============================ */
-/* ⭐ YÜKLENİYOR EKRANI ⭐ */
-/* ============================ */
-
-.loading-screen {
-  background: radial-gradient(circle at top, var(--surface-2) 0%, var(--paper) 100%);
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-  font-family: var(--font-sans);
-}
-
-.loading-screen h1 {
-  font-size: 24px;
-  font-weight: 600;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-/* ============================ */
-/* ⭐ ANİMASYONLAR ⭐ */
-/* ============================ */
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ============================ */
-/* ⭐ RESPONSIVE TASARIM ⭐ */
-/* ============================ */
-
-@media (max-width: 768px) {
-  .profil-page {
-    padding: 100px 15px 80px;
-  }
-
-  .profil-hero {
-    padding: var(--s-7) var(--s-5);
-    border-radius: var(--r-lg);
-  }
-
-  .profil-name {
-    font-size: 32px;
-  }
-
-  .avatar-upload {
-    width: 140px;
-    height: 140px;
-  }
-
-  .profil-stats {
-    gap: var(--s-6);
-  }
-
-  .stat-item strong {
-    font-size: 20px;
-  }
-
-  .post-box {
-    padding: var(--s-5);
-    border-radius: var(--r-lg);
-  }
-
-  .edit-modal {
-    width: 90%;
-    max-width: 340px;
-  }
-}
-
-@media (max-width: 480px) {
-  .profil-name {
-    font-size: 28px;
-  }
-
-  .profil-hero {
-    padding: var(--s-6) var(--s-4);
-  }
-
-  .logout-button {
-    top: 15px;
-    right: 15px;
-    padding: var(--s-3);
-  }
-
-  .arena-form-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .arena-mini-upload {
-    align-self: flex-end;
-  }
-}
-
-/* ===== POST KART İÇERİKLERİ ===== */
-.post-coffee-details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-2);
-  flex: 1;
-}
-
-.post-ingredients {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-2);
-}
-
-.post-ingredient-tag {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: var(--s-1) var(--s-3);
-  border-radius: var(--r-md);
-  font-size: 0.72em;
-  color: #aaa;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.post-ingredient-tag:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-.post-coffee-info {
-  margin-top: 12px;
-  padding: var(--s-4) var(--s-4);
-  background: rgba(197,138,92,0.08);
-  border-radius: var(--r-lg);
-  border: 1px solid rgba(197,138,92,0.15);
-  display: flex;
-  align-items: flex-start;
   justify-content: space-between;
   gap: var(--s-3);
 }
+.profil-post-score {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
 
-.post-coffee-name {
+.profil-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+.profil-tag {
+  padding: 2px var(--s-2);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--tint);
+  font-size: var(--fs-caption);
+  color: var(--ink-2);
+}
+
+/* --- Kahvelerim / Siparişlerim --- */
+.profil-coffees,
+.profil-orders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+.profil-coffee-card-head,
+.profil-order-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-3);
+}
+.profil-coffee-card-head div {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+.profil-coffee-card-head strong {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--ink);
+}
+.profil-coffee-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-top: var(--s-3);
+  font-size: var(--fs-lg);
   font-weight: 600;
-  color: var(--accent);
-  font-size: 15px;
-  display: block;
-  margin-bottom: 4px;
+}
+.profil-order-items {
+  margin: 0 0 var(--s-2);
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+}
+.profil-order-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  font-weight: 600;
+}
+
+.profil-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+@media (max-width: 560px) {
+  .profil-hero {
+    grid-template-columns: 1fr;
+  }
+  .profil-stats {
+    gap: var(--s-4);
+  }
 }
