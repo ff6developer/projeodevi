@@ -57,7 +57,7 @@ export default function Home() {
         </div>
         <div className="home-product-grid">
           {FEATURED.map((p) => (
-            <Card key={p.name} as={Link} href="/menu" interactive pad="sm">
+            <Card key={p.name} as={Link} href={`/menu/${p.slug}`} interactive pad="sm">
               <span className="home-product-image">
                 <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 50vw, 260px" />
               </span>

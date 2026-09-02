@@ -1,63 +1,26 @@
 "use client"
 
-import { useEffect, useMemo, useState, type ChangeEvent } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { Star, ImagePlus, X, SearchX } from "lucide-react"
+import { SearchX } from "lucide-react"
 import "@/styles/menu.css"
 import { useToast } from "@/components/ToastProvider"
 import {
   Button,
   Card,
   Badge,
-  Modal,
-  Textarea,
   Select,
   Price,
   RoastMeter,
   OriginTag,
-  TastingNotes,
   EmptyState,
 } from "@/components/ui"
 import { CATEGORY_LABEL, getByCategory } from "@/lib/products"
 import type { Product, ProductCategory } from "@/lib/types"
 import { addProduct } from "@/lib/cart"
-import { FREE_SHIPPING_THRESHOLD_KURUS } from "@/lib/pricing"
-import { formatPrice } from "@/lib/format"
-import { getReviews, addReview, type Review as Yorum } from "@/lib/reviews"
 import { getChampion } from "@/lib/community"
-
-function StarRating({
-  value,
-  onChange,
-  readOnly = false,
-}: {
-  value: number
-  onChange?: (v: number) => void
-  readOnly?: boolean
-}) {
-  return (
-    <span className="star-rating" role={readOnly ? "img" : "radiogroup"} aria-label={`Puan: ${value}/5`}>
-      {[1, 2, 3, 4, 5].map((s) => (
-        <button
-          key={s}
-          type="button"
-          className="star-btn"
-          aria-label={`${s} yıldız`}
-          aria-pressed={!readOnly && s <= value}
-          disabled={readOnly}
-          onClick={() => onChange?.(s)}
-        >
-          <Star
-            size={readOnly ? 14 : 20}
-            fill={s <= value ? "var(--accent)" : "none"}
-            color={s <= value ? "var(--accent)" : "var(--line-strong)"}
-          />
-        </button>
-      ))}
-    </span>
-  )
-}
 
 const CATEGORIES: ProductCategory[] = ["sicak", "soguk", "tatli"]
 
@@ -84,11 +47,6 @@ export default function MenuClient() {
     const s = searchParams.get("sirala")
     return SORT_KEYS.includes(s as SortKey) ? (s as SortKey) : "onerilen"
   })
-  const [detay, setDetay] = useState<Product | null>(null)
-  const [yorumlar, setYorumlar] = useState<Record<number, Yorum[]>>(() => getReviews())
-  const [yeniMetin, setYeniMetin] = useState("")
-  const [yeniPuan, setYeniPuan] = useState(5)
-  const [yeniGorsel, setYeniGorsel] = useState<string>("")
   const [sampiyon, setSampiyon] = useState<Sampiyon | null>(null)
 
   // Yalnızca istemcide, hidrasyondan sonra oku (SSR uyuşmazlığını önlemek için).
@@ -119,36 +77,6 @@ export default function MenuClient() {
         return list
     }
   }, [kategori, sirala])
-
-  const resetForm = () => {
-    setYeniMetin("")
-    setYeniPuan(5)
-    setYeniGorsel("")
-  }
-
-  const gorselSec = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (file.size > 2 * 1024 * 1024) {
-      toast.warning("Görsel 2 MB'dan küçük olmalı.")
-      return
-    }
-    const reader = new FileReader()
-    reader.onloadend = () => setYeniGorsel(reader.result as string)
-    reader.readAsDataURL(file)
-  }
-
-  const yorumGonder = () => {
-    if (!detay || (!yeniMetin.trim() && !yeniGorsel)) return
-    const next = addReview(detay.id, {
-      puan: yeniPuan,
-      metin: yeniMetin.trim(),
-      gorsel: yeniGorsel || undefined,
-    })
-    setYorumlar(next)
-    resetForm()
-    toast.success("Yorumun eklendi.")
-  }
 
   const sepeteEkle = (p: Product) => {
     addProduct({ productId: p.id, slug: p.slug, name: p.name, image: p.image, unitKurus: p.priceKurus })
@@ -222,17 +150,12 @@ export default function MenuClient() {
           <div className="menu-grid">
             {urunler.map((p) => (
               <Card key={p.id} className="menu-card" pad="sm">
-                <button
-                  type="button"
-                  className="menu-card-open"
-                  onClick={() => setDetay(p)}
-                  aria-label={`${p.name} — detayları incele`}
-                >
+                <Link href={`/menu/${p.slug}`} className="menu-card-open">
                   <span className="menu-card-img">
                     <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 50vw, 280px" />
                   </span>
                   <h2 className="menu-card-name">{p.name}</h2>
-                </button>
+                </Link>
                 <div className="menu-card-spec">
                   {p.roast && <RoastMeter level={p.roast} />}
                   {p.origin && <OriginTag origin={p.origin} />}
@@ -248,88 +171,6 @@ export default function MenuClient() {
           </div>
         )}
       </div>
-
-      {detay && (
-        <Modal open onClose={() => setDetay(null)} title={detay.name} wide>
-          <div className="menu-detail">
-            <span className="menu-detail-img">
-              <Image src={detay.image} alt={detay.name} fill sizes="(max-width: 720px) 92vw, 400px" />
-            </span>
-            <div className="menu-detail-body">
-              {detay.description && <p className="menu-detail-desc">{detay.description}</p>}
-              <div className="menu-detail-spec">
-                {detay.roast && <RoastMeter level={detay.roast} />}
-                {detay.origin && <OriginTag origin={detay.origin} />}
-                {detay.notes && <TastingNotes notes={detay.notes} />}
-              </div>
-              <div className="menu-detail-buy">
-                <Price value={detay.priceKurus} />
-                <Button onClick={() => sepeteEkle(detay)}>Sepete ekle</Button>
-              </div>
-              <p className="menu-detail-ship">
-                Siparişe göre taze hazırlanır · {formatPrice(FREE_SHIPPING_THRESHOLD_KURUS)} üzeri
-                ücretsiz kargo
-              </p>
-            </div>
-          </div>
-
-          <section className="menu-comments">
-            <h3 className="menu-comments-title">
-              Yorumlar ({yorumlar[detay.id]?.length ?? 0})
-            </h3>
-
-            <div className="menu-comments-list">
-              {(yorumlar[detay.id] ?? []).map((y, i) => (
-                <div key={i} className="menu-comment">
-                  <StarRating value={y.puan} readOnly />
-                  {y.metin && <p className="menu-comment-text">{y.metin}</p>}
-                  {y.gorsel && (
-                    <span className="menu-comment-img">
-                      <Image src={y.gorsel} alt="Yorum görseli" width={220} height={150} />
-                    </span>
-                  )}
-                </div>
-              ))}
-              {!(yorumlar[detay.id]?.length) && (
-                <p className="menu-comments-empty">İlk yorumu sen yaz.</p>
-              )}
-            </div>
-
-            <div className="menu-comment-form">
-              <StarRating value={yeniPuan} onChange={setYeniPuan} />
-              <Textarea
-                label="Yorumun"
-                placeholder="Kahve nasıldı?"
-                value={yeniMetin}
-                onChange={(e) => setYeniMetin(e.target.value)}
-              />
-              <div className="menu-comment-form-row">
-                <label className="menu-comment-upload">
-                  <ImagePlus size={16} aria-hidden="true" />
-                  Görsel ekle
-                  <input type="file" accept="image/*" hidden onChange={gorselSec} />
-                </label>
-                {yeniGorsel && (
-                  <span className="menu-comment-preview">
-                    <Image src={yeniGorsel} alt="Önizleme" width={56} height={42} />
-                    <button
-                      type="button"
-                      className="menu-comment-preview-x"
-                      aria-label="Görseli kaldır"
-                      onClick={() => setYeniGorsel("")}
-                    >
-                      <X size={14} />
-                    </button>
-                  </span>
-                )}
-                <Button size="md" onClick={yorumGonder} disabled={!yeniMetin.trim() && !yeniGorsel}>
-                  Gönder
-                </Button>
-              </div>
-            </div>
-          </section>
-        </Modal>
-      )}
     </div>
   )
 }

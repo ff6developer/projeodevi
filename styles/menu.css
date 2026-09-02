@@ -306,8 +306,51 @@
   cursor: default;
 }
 
+/* --- Ürün detay sayfası (/menu/[slug]) --- */
+.urun-detay {
+  padding-block: var(--s-6) var(--s-8);
+}
+.urun-detay-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-5);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.urun-detay-back:hover {
+  color: var(--ink);
+}
+.urun-detay-grid {
+  grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+  align-items: start;
+}
+.urun-detay-grid .menu-detail-img {
+  aspect-ratio: 4 / 3;
+}
+.urun-detay-title {
+  margin: var(--s-1) 0 var(--s-3);
+  font-size: var(--fs-h1);
+}
+.urun-detay-buy {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  margin-top: var(--s-2);
+}
+.urun-detay-price {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--ink);
+}
+
 @media (max-width: 640px) {
   .menu-detail {
+    grid-template-columns: 1fr;
+  }
+  .urun-detay-grid {
     grid-template-columns: 1fr;
   }
 }
