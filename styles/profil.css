@@ -80,6 +80,21 @@
   font-size: var(--fs-caption);
   color: var(--ink-3);
 }
+.profil-stats-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+.profil-stats-empty a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.profil-stats-empty a:hover {
+  text-decoration: underline;
+}
 
 /* --- Gönderiler tab --- */
 .profil-share {

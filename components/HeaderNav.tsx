@@ -3,15 +3,16 @@
 import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Menu as MenuIcon, ShoppingBag } from "lucide-react"
 import { visibleNavItems } from "@/lib/nav"
-import { isLoggedIn as sessionLoggedIn, subscribe } from "@/lib/session"
+import { isLoggedIn as sessionLoggedIn, clearSession, subscribe } from "@/lib/session"
 import { useCart } from "./CartProvider"
 import NavDrawer from "./NavDrawer"
 
 export default function HeaderNav() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -28,6 +29,10 @@ export default function HeaderNav() {
   }, [pathname])
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), [])
+  const handleLogout = useCallback(() => {
+    clearSession()
+    router.push("/")
+  }, [router])
 
   const items = visibleNavItems(isLoggedIn)
   const { count } = useCart()
@@ -84,6 +89,8 @@ export default function HeaderNav() {
         onClose={closeDrawer}
         items={items}
         currentPath={pathname}
+        isLoggedIn={isLoggedIn}
+        onLogout={handleLogout}
       />
     </header>
   )

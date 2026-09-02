@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Camera, LogOut, Trash2, Zap } from "lucide-react"
 import "@/styles/profil.css"
@@ -163,8 +164,6 @@ export default function ProfilClient() {
   if (!user) {
     return <div className="profil-page container"><EmptyState title="Yükleniyor…" /></div>
   }
-
-  const totalScore = posts.reduce((a, p) => a + (p.arenaScore || 0), 0)
 
   const detailTags = (details?: Record<string, { name?: string } | null>) =>
     DETAIL_ORDER.map((k) => details?.[k]?.name).filter(Boolean) as string[]
@@ -357,20 +356,26 @@ export default function ProfilClient() {
             </Button>
           </div>
         </div>
-        <div className="profil-stats">
-          <div>
-            <strong>{posts.length}</strong>
-            <span>Gönderi</span>
+        {posts.length + coffees.length + orders.length === 0 ? (
+          <p className="profil-stats-empty">
+            Henüz bir hareket yok. <Link href="/kahveniolustur">Kahveni tasarlayarak</Link> başla.
+          </p>
+        ) : (
+          <div className="profil-stats">
+            <div>
+              <strong>{coffees.length}</strong>
+              <span>Kahve</span>
+            </div>
+            <div>
+              <strong>{posts.length}</strong>
+              <span>Gönderi</span>
+            </div>
+            <div>
+              <strong>{orders.length}</strong>
+              <span>Sipariş</span>
+            </div>
           </div>
-          <div>
-            <strong>{coffees.length}</strong>
-            <span>Kahve</span>
-          </div>
-          <div>
-            <strong>{totalScore}</strong>
-            <span>Puan</span>
-          </div>
-        </div>
+        )}
       </Card>
 
       <Tabs

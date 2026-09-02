@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type ChangeEvent } from "react"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
-import { Star, ImagePlus, X } from "lucide-react"
+import { Star, ImagePlus, X, SearchX } from "lucide-react"
 import "@/styles/menu.css"
 import { useToast } from "@/components/ToastProvider"
 import {
@@ -152,7 +152,7 @@ export default function MenuClient() {
 
   const sepeteEkle = (p: Product) => {
     addProduct({ productId: p.id, slug: p.slug, name: p.name, image: p.image, unitKurus: p.priceKurus })
-    toast.success(`${p.name} sepete eklendi.`)
+    toast.success(`${p.name} sepete eklendi.`, { action: { label: "Sepete git", href: "/sepet" } })
   }
 
   return (
@@ -213,7 +213,11 @@ export default function MenuClient() {
         </div>
 
         {urunler.length === 0 ? (
-          <EmptyState title="Bu kategoride ürün yok" />
+          <EmptyState
+            icon={<SearchX size={30} />}
+            title="Bu kategoride ürün yok"
+            description="Başka bir kategoriye göz atabilirsin."
+          />
         ) : (
           <div className="menu-grid">
             {urunler.map((p) => (

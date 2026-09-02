@@ -2,17 +2,27 @@
 
 import { useEffect, useRef } from "react"
 import Link from "next/link"
-import { X } from "lucide-react"
+import { LogOut, X } from "lucide-react"
 import type { NavItem } from "@/lib/nav"
+import { BRAND } from "@/app/site-config"
 
 type Props = {
   open: boolean
   onClose: () => void
   items: NavItem[]
   currentPath: string
+  isLoggedIn: boolean
+  onLogout: () => void
 }
 
-export default function NavDrawer({ open, onClose, items, currentPath }: Props) {
+export default function NavDrawer({
+  open,
+  onClose,
+  items,
+  currentPath,
+  isLoggedIn,
+  onLogout,
+}: Props) {
   const panelRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -77,6 +87,8 @@ export default function NavDrawer({ open, onClose, items, currentPath }: Props) 
           <X size={22} />
         </button>
 
+        <p className="nav-drawer-brand">{BRAND.name}</p>
+
         <nav className="nav-drawer-list" aria-label="Ana menü">
           {items.map((item) => {
             const active = currentPath === item.href
@@ -95,6 +107,20 @@ export default function NavDrawer({ open, onClose, items, currentPath }: Props) 
             )
           })}
         </nav>
+
+        {isLoggedIn && (
+          <button
+            type="button"
+            className="nav-drawer-logout"
+            onClick={() => {
+              onClose()
+              onLogout()
+            }}
+          >
+            <LogOut size={20} aria-hidden="true" />
+            Çıkış yap
+          </button>
+        )}
       </div>
     </div>
   )

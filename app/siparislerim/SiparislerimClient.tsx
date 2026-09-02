@@ -7,6 +7,7 @@ import { getOrders, STATUS_LABEL } from "@/lib/orders"
 import { getUser, isLoggedIn, subscribe as subscribeAuth } from "@/lib/session"
 import { formatDateTime } from "@/lib/format"
 import type { OrderStatus } from "@/lib/types"
+import { Package } from "lucide-react"
 import { Button, Card, Badge, Price, EmptyState, LoadingState } from "@/components/ui"
 
 const TONE: Record<OrderStatus, "neutral" | "accent" | "success" | "warning" | "danger"> = {
@@ -55,8 +56,9 @@ export default function SiparislerimClient() {
 
       {orders.length === 0 ? (
         <EmptyState
+          icon={<Package size={30} />}
           title="Henüz siparişin yok"
-          description="İlk siparişini verdiğinde burada takip edebilirsin."
+          description="İlk siparişini verdiğinde durumu buradan takip edebilirsin."
           action={<Button href="/menu">Menüye git</Button>}
         />
       ) : (

@@ -1,22 +1,28 @@
 "use client"
 
 import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from "react"
+import Link from "next/link"
 
 type ToastType = "success" | "error" | "info" | "warning"
+
+type ToastAction = { label: string; href: string }
+
+type ToastOpts = { type?: ToastType; durationMs?: number; action?: ToastAction }
 
 type Toast = {
   id: string
   type: ToastType
   message: string
   durationMs: number
+  action?: ToastAction
 }
 
 type ToastApi = {
-  show: (message: string, opts?: { type?: ToastType; durationMs?: number }) => void
-  success: (message: string, opts?: { durationMs?: number }) => void
-  error: (message: string, opts?: { durationMs?: number }) => void
-  info: (message: string, opts?: { durationMs?: number }) => void
-  warning: (message: string, opts?: { durationMs?: number }) => void
+  show: (message: string, opts?: ToastOpts) => void
+  success: (message: string, opts?: Omit<ToastOpts, "type">) => void
+  error: (message: string, opts?: Omit<ToastOpts, "type">) => void
+  info: (message: string, opts?: Omit<ToastOpts, "type">) => void
+  warning: (message: string, opts?: Omit<ToastOpts, "type">) => void
 }
 
 const ToastContext = createContext<ToastApi | null>(null)
@@ -24,7 +30,14 @@ const ToastContext = createContext<ToastApi | null>(null)
 function ToastItem({ toast, onClose }: { toast: Toast; onClose: (id: string) => void }) {
   return (
     <div className={`toast toast-${toast.type}`} role="status" aria-live="polite">
-      <div className="toast-message">{toast.message}</div>
+      <div className="toast-body">
+        <div className="toast-message">{toast.message}</div>
+        {toast.action && (
+          <Link href={toast.action.href} className="toast-action" onClick={() => onClose(toast.id)}>
+            {toast.action.label}
+          </Link>
+        )}
+      </div>
       <button className="toast-close" onClick={() => onClose(toast.id)} aria-label="Kapat">
         ×
       </button>
@@ -46,13 +59,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const show = useCallback(
-    (message: string, opts?: { type?: ToastType; durationMs?: number }) => {
+    (message: string, opts?: ToastOpts) => {
       const id = `${Date.now()}_${Math.random().toString(16).slice(2)}`
       const toast: Toast = {
         id,
         type: opts?.type ?? "info",
         message,
-        durationMs: opts?.durationMs ?? 3000
+        durationMs: opts?.durationMs ?? (opts?.action ? 5000 : 3000),
+        action: opts?.action,
       }
 
       setToasts(prev => [toast, ...prev].slice(0, 4))
@@ -67,10 +81,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const api = useMemo<ToastApi>(
     () => ({
       show,
-      success: (message, opts) => show(message, { type: "success", durationMs: opts?.durationMs }),
-      error: (message, opts) => show(message, { type: "error", durationMs: opts?.durationMs }),
-      info: (message, opts) => show(message, { type: "info", durationMs: opts?.durationMs }),
-      warning: (message, opts) => show(message, { type: "warning", durationMs: opts?.durationMs })
+      success: (message, opts) => show(message, { ...opts, type: "success" }),
+      error: (message, opts) => show(message, { ...opts, type: "error" }),
+      info: (message, opts) => show(message, { ...opts, type: "info" }),
+      warning: (message, opts) => show(message, { ...opts, type: "warning" }),
     }),
     [show]
   )
@@ -92,4 +106,3 @@ export function useToast(): ToastApi {
   if (!ctx) throw new Error("useToast must be used within ToastProvider")
   return ctx
 }
-
