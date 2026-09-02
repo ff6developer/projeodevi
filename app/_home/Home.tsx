@@ -17,20 +17,31 @@ const FEATURED = FEATURED_SLUGS
 export default function Home() {
   return (
     <div className="home">
-      <section className="home-hero container container-narrow">
-        <p className="eyebrow">{BRAND.tagline}</p>
-        <h1 className="home-title">Günün kahvesi, senin seçtiğin gibi.</h1>
-        <p className="home-lede">
-          Nitelikli çekirdek, ustalıkla kavurma. Menüden hazır bir kahve seç ya da
-          süt, çekirdek ve şuruba kadar her ayrıntıyı kendin tasarla.
-        </p>
-        <div className="cluster home-cta-row">
-          <Button href="/menu" size="lg">
-            Menüye göz at
-          </Button>
-          <Button href="/kahveniolustur" size="lg" variant="secondary">
-            Kendi kahveni tasarla
-          </Button>
+      <section className="home-hero container">
+        <div className="home-hero-copy">
+          <p className="eyebrow">İstanbul&apos;da kavrulur · 2–3 günde kapında</p>
+          <h1 className="home-title">Günün kahvesi, senin seçtiğin gibi.</h1>
+          <p className="home-lede">
+            Menüden hazır bir kahve seç ya da süt, çekirdek ve şurubu kendin ayarla.
+            Siparişe göre taze kavrulur, kapına gelir.
+          </p>
+          <div className="cluster home-cta-row">
+            <Button href="/menu" size="lg">
+              Menüye göz at
+            </Button>
+            <Button href="/kahveniolustur" size="lg" variant="secondary">
+              Kendi kahveni tasarla
+            </Button>
+          </div>
+        </div>
+        <div className="home-hero-media">
+          <Image
+            src="/espresso.jpg"
+            alt="Yeşil fincanda taze demlenmiş espresso, yanında kahve çekirdekleri"
+            fill
+            priority
+            sizes="(max-width: 900px) 100vw, 460px"
+          />
         </div>
       </section>
 
