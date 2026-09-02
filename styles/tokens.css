@@ -11,7 +11,7 @@
   --surface-2: #2a251d;      /* input / yükseltilmiş */
   --ink: #f2ede3;            /* ana metin — sıcak beyaz */
   --ink-2: #b3aa9b;          /* ikincil metin */
-  --ink-3: #837a6b;          /* soluk / caption */
+  --ink-3: #948b7a;          /* soluk / caption — WCAG AA ≥4.5:1 (paper/surface) */
   --line: #322c23;           /* hairline border */
   --line-strong: #453d31;    /* belirgin border */
   --tint: #241f18;           /* çok hafif dolgu */
@@ -97,7 +97,7 @@
     --surface-2: #efece5;
     --ink: #1f1c19;
     --ink-2: #57514a;
-    --ink-3: #8a8279;
+    --ink-3: #6e665b;
     --line: #e4dfd6;
     --line-strong: #d3ccc0;
     --tint: #ece7e2;
@@ -123,7 +123,7 @@
   --surface-2: #efece5;
   --ink: #1f1c19;
   --ink-2: #57514a;
-  --ink-3: #8a8279;
+  --ink-3: #6e665b;
   --line: #e4dfd6;
   --line-strong: #d3ccc0;
   --tint: #ece7e2;
@@ -148,7 +148,7 @@
   --surface-2: #2a251d;
   --ink: #f2ede3;
   --ink-2: #b3aa9b;
-  --ink-3: #837a6b;
+  --ink-3: #948b7a;
   --line: #322c23;
   --line-strong: #453d31;
   --tint: #241f18;

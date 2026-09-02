@@ -19,7 +19,8 @@
   cursor: not-allowed;
 }
 
-.sm { width: 36px; height: 36px; }
+/* sm: yoğun satır/araç çubuğu içi ikincil aksiyonlar. md: birincil/tekil. */
+.sm { width: 40px; height: 40px; }
 .md { width: 44px; height: 44px; }
 
 .danger {

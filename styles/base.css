@@ -132,6 +132,9 @@ hr {
   top: var(--s-2);
   left: var(--s-2);
   z-index: var(--z-toast);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: var(--s-2) var(--s-4);
   background: var(--accent);
   color: var(--accent-contrast);

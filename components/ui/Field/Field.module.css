@@ -22,12 +22,14 @@
 
 .control {
   width: 100%;
+  min-height: 44px;
   padding: var(--s-3) var(--s-4);
   background: var(--surface-2);
   border: 1px solid var(--line-strong);
   border-radius: var(--r-sm);
   color: var(--ink);
-  font-size: var(--fs-sm);
+  /* 16px: iOS Safari'de odakta otomatik yakınlaştırmayı önler + dokunma hedefi. */
+  font-size: var(--fs-body);
   outline: none;
   transition: border-color var(--t-base) var(--ease);
 }
@@ -56,15 +58,15 @@ textarea.control {
   position: relative;
 }
 .passwordWrap .control {
-  padding-right: 44px;
+  padding-right: 48px;
 }
 .passwordToggle {
   position: absolute;
-  right: var(--s-2);
+  right: var(--s-1);
   top: 50%;
   transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;

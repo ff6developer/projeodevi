@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
@@ -25,6 +25,8 @@ export default function HeaderNav() {
   useEffect(() => {
     setDrawerOpen(false)
   }, [pathname])
+
+  const closeDrawer = useCallback(() => setDrawerOpen(false), [])
 
   const items = visibleNavItems(isLoggedIn)
   const { count } = useCart()
@@ -78,7 +80,7 @@ export default function HeaderNav() {
 
       <NavDrawer
         open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
+        onClose={closeDrawer}
         items={items}
         currentPath={pathname}
       />

@@ -19,6 +19,7 @@ export default function NavDrawer({ open, onClose, items, currentPath }: Props) 
   useEffect(() => {
     if (!open) return
 
+    const opener = document.activeElement as HTMLElement | null
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = "hidden"
     closeRef.current?.focus()
@@ -48,6 +49,8 @@ export default function NavDrawer({ open, onClose, items, currentPath }: Props) 
     return () => {
       document.removeEventListener("keydown", onKey)
       document.body.style.overflow = prevOverflow
+      // Kapanışta odağı menüyü açan öğeye geri ver.
+      opener?.focus?.()
     }
   }, [open, onClose])
 
@@ -57,6 +60,7 @@ export default function NavDrawer({ open, onClose, items, currentPath }: Props) 
     <div className="nav-drawer-overlay" onClick={onClose}>
       <div
         ref={panelRef}
+        id="nav-drawer"
         className="nav-drawer"
         role="dialog"
         aria-modal="true"

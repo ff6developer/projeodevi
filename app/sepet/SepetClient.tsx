@@ -60,7 +60,6 @@ export default function SepetClient() {
                 <IconButton
                   label={`${l.name} ürününü sepetten çıkar`}
                   tone="danger"
-                  size="sm"
                   icon={<Trash2 size={16} />}
                   onClick={() => removeLine(l.lineId)}
                 />
