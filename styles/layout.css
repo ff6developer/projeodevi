@@ -365,33 +365,12 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==========================================================================
-   RESPONSIVE — hakkımızda sayfası artıkları (TASK-099'da hakkimizda.css'e taşınacak)
-   ========================================================================== */
-@media (max-width: 1024px) {
-  .about-content { grid-template-columns: 1fr; min-height: auto; }
-  .about-images-wrapper {
-    grid-row-start: auto; grid-row-end: auto;
-    flex-direction: row !important; height: 400px; padding: var(--s-5) 4%;
-  }
-  .about-img { width: 50%; height: 100% !important; }
-  .first-img { margin-top: 0 !important; }
-  .text-wrapper { padding: var(--s-8) 6%; gap: var(--s-7); }
-  .brand-title { font-size: clamp(45px, 7vw, 75px); margin-top: 0 !important; }
-  .amacimiz-kartlar { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5); }
-}
-
 @media (max-width: 768px) {
-  .about-images-wrapper { height: 280px; padding: var(--s-4) 4%; gap: var(--s-3); }
-  .text-wrapper { padding: var(--s-7) 5%; gap: var(--s-6); }
-  .brand-title { font-size: 36px; line-height: 1.2; margin-bottom: var(--s-4); }
-  .description { font-size: var(--fs-body); line-height: 1.6; margin-bottom: var(--s-5); }
-  .features-grid, .amacimiz-kartlar { display: grid; grid-template-columns: 1fr; gap: var(--s-4); }
-  .amac-kart { padding: var(--s-5); }
-
   .toast-viewport {
     top: calc(var(--header-h) + var(--s-2));
-    right: var(--s-3); left: var(--s-3); width: auto;
+    right: var(--s-3);
+    left: var(--s-3);
+    width: auto;
   }
 }
 

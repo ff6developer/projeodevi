@@ -1,739 +1,83 @@
-.about-container {
-    width: 100%;
-    background-color: var(--paper);
-    padding: 0; /* Boşlukları Grid yönetmeli */
-    box-sizing: border-box;
+/* Hakkımızda — TASK-099 (component + token). */
+
+.about {
+  padding-block: var(--s-7) var(--s-9);
 }
 
-.about-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Sol ve Sağ eşit genişlikte */
-    width: 100%;
-    min-height: 100vh; /* Ekranın tam yüksekliğini kaplasın (opsiyonel) */
-    align-items: stretch;
+.about-head {
+  max-width: 640px;
+  margin-bottom: var(--s-7);
+}
+.about-head .eyebrow {
+  display: block;
+  margin-bottom: var(--s-2);
+}
+.about-head h1 {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-h1);
+}
+.about-lede {
+  margin: 0;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-body);
+  color: var(--ink-2);
 }
 
-.about-images-wrapper {
-    display: flex !important;
-    flex-direction: column !important; /* Üst üste dizilimi zorla */
-    width: 100%;
-    height: 100%; /* Dikeyde tam boyut */
-    overflow: hidden; /* Taşmayı engelle */
-    padding: 30px 0 0 0; /* Üstte 30px, diğerleri 0 */
-    gap: var(--s-4); /* İki görsel arasındaki hafif boşluk */
-    grid-row-start: 1;
-    grid-row-end: -1;
+.about-media {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+  margin-bottom: var(--s-7);
+}
+.about-media-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-lg);
+  background: var(--tint);
+  border: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  color: var(--ink-3);
+}
+.about-media-block--alt {
+  background: var(--surface-2);
 }
 
-.about-img {
-    flex: 1; /* İki görsel de eşit genişlik alsın */
-    width: 100%;
-    height: 100%; /* Dikeyde tam boyut */
-    object-fit: cover; /* Görseli bozmadan sığdır */
-    object-position: center; /* Merkeze odaklan */
-    filter: brightness(0.9); /* Metinlerin öne çıkması için hafif karartma */
-    display: block;
-    border-radius: var(--r-sm); /* Hafif yuvarlak köşeler */
+.about-body {
+  max-width: 640px;
+  margin-bottom: var(--s-7);
+}
+.about-body p {
+  margin: 0 0 var(--s-4);
+  line-height: var(--lh-body);
+  color: var(--ink-2);
+}
+.about-tagline {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  color: var(--ink);
 }
 
-.text-wrapper {
-    padding: 60px 8%; /* İç boşluklar */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Dikeyde ortala */
-    gap: var(--s-8); /* Hikayemiz ve Amacımız arası boşluk */
-    background-color: #e1c275df; /* Çok koyu kahve */
-    color: var(--ink);
+.about-values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--s-4);
+}
+.about-values h2 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-h3);
+}
+.about-values p {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--ink-2);
 }
 
-.about-text-content {
-    text-align: left;
-}
-
-.subtitle,
-.amacimiz-baslik h2 {
-    font-size: 16px;
-    letter-spacing: normal; margin-bottom: 10px;
-}
-
-.subtitle {
-    color: var(--accent); /* Karamel rengi */
-    display: block; /* Çizginin altına inmesi için önemli */
-}
-
-.amacimiz-baslik h2 {
-    color: var(--accent-weak);
-}
-
-.divider {
-    width: 60px;
-    height: 3px;
-    background-color: var(--accent);
-    margin-top: 5px;    /* Hikayemiz yazısına yakınlığı */
-    margin-bottom: 20px; /* Elmenes yazısına olan mesafesi */
-}
-
-.brand-title {
-    font-size: 100px;
-    font-weight: 600;
-    color: var(--surface);
-    margin-top: 0; /* Negatif değerleri ( -150px gibi ) tamamen siliyoruz */
-    margin-bottom: 10px;
-    line-height: 1.1;
-    letter-spacing: normal; }
-
-.description {
-    font-size: 20px; /* Okumayı kolaylaştırmak için büyütüldü */
-    line-height: 1.8;
-    color: var(--ink-3);
-    margin-bottom: 40px;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-5);
-    margin-bottom: 30px;
-}
-
-.feature-item h2 {
-    font-size: 30px; /* Alt başlıklar */
-    color: var(--surface-2);
-    margin-bottom: 12px;
-}
-
-.feature-item p {
-    font-size: 16px;
-    color: var(--ink-3);
-}
-
-.tagline {
-    font-style: italic;
-    font-size: 24px;
-    color: var(--accent-weak);
-    margin-top: 20px;
-    margin-bottom: 30px;
-    font-family: var(--font-display);
-}
-
-.amacimiz-konteyner {
-    text-align: left; /* Sola yasla */
-    padding: 0;
-    background-color: transparent; /* text-wrapper'ın rengini kullan */
-}
-
-.amacimiz-cizgi {
-    width: 60px;
-    height: 3px;
-    background-color: var(--accent);
-    margin: 0 0 40px; /* Sola yaslı */
-}
-
-.amacimiz-kartlar {
-    display: flex;
-    justify-content: flex-start; /* Sola yasla */
-    gap: var(--s-6);
-    flex-wrap: wrap;
-    max-width: 1000px;
-    margin-top: 50px;
-}
-
-.amac-kart {
-    flex: 1;
-    min-width: 200px; /* Biraz daha dar */
-    padding: var(--s-6);
-    background: var(--ink);
-    border-radius: var(--r-lg);
-    border: 1px solid var(--ink-2);
-    /* Geçiş efektinin hızı */
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    box-shadow: var(--shadow-1);
-    cursor: pointer;
-}
-
-/* HOVER EFEKTİ: Üzerine gelince burası çalışır */
-.amac-kart:hover {
-    transform: translateY(-10px); /* Yukarı doğru zıplama */
-    background-color: var(--accent-weak); /* Kahverengi arka plan */
-    box-shadow: var(--shadow-1); /* Kahve tonlu gölge */
-}
-
-/* Hover olunca yazı renklerini değiştirme */
-.amac-kart:hover h3,
-.amac-kart:hover p {
-    color: var(--ink) !important; /* Yazıları beyaza çevir */
-}
-
-.amac-kart h3 {
-    font-size: 20px;
-    color: var(--accent-weak);
-    margin-bottom: 50px;
-    transition: color 0.3s;
-}
-
-.amac-kart p {
-    font-size: 15px;
-    color: var(--ink-2);
-    line-height: 1.6;
-    transition: color 0.3s;
-}
-
-/* Üstteki görsel (hafif aşağı kaysın) */
-.first-img {
-    height: calc(50% - 7.5px - 30px); /* İlk başta yarım yükseklik alacak, padding ve gap'in yarısı çıkarılacak */
-    margin-top: 30px; /* Üstten 30px daha aşağı kaydır */
-}
-
-/* Alttaki görsel (aşağıyı full kaplasın) */
-.second-img {
-    /* Esnek dikey boşluğu kaplaması için flex-grow: 1 kullanıyoruz */
-    flex-grow: 1;
-    /* Dikeyde en az %50 yükseklik almasını garanti et */
-    min-height: 50%;
-    height: auto; /* Yüksekliği flex'in belirlemesine izin ver */
-}
-
-/* Mobil için görsellerin kaybolmaması için: */
-@media (max-width: 768px) {
-    .about-content {
-        grid-template-columns: 1fr;
-    }
-    .about-images-wrapper {
-        height: 400px;
-    }
-}
-
-/* ==========================================================================
-   RESPONSIVE DESIGN - Modern Mobile-First Approach
-   ========================================================================== */
-
-/* --- LARGE TABLETS & SMALL LAPTOPS (max-width: 1200px) --- */
-@media (max-width: 1200px) {
-  .about-content {
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-
-  .text-wrapper {
-    padding: var(--s-8) 6%;
-    gap: var(--s-6);
-  }
-
-  .brand-title {
-    font-size: var(--fs-h1);
-    margin-top: 0 !important;
-  }
-
-  .description {
-    font-size: var(--fs-lg);
-  }
-
-  .amacimiz-kartlar {
-    gap: var(--s-4);
-  }
-
-  .amac-kart {
-    padding: var(--s-6);
-  }
-}
-
-/* --- TABLETS (max-width: 1024px) --- */
-@media (max-width: 1024px) {
-  .about-content {
+@media (max-width: 560px) {
+  .about-media {
     grid-template-columns: 1fr;
-    min-height: auto;
-  }
-
-  /* Görseller: Yatay düzen, sabit oran */
-  .about-images-wrapper {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-4);
-    padding: var(--s-4);
-    height: auto;
-    aspect-ratio: 2 / 1;
-    max-height: 45vh;
-  }
-
-  .about-img {
-    width: 100% !important;
-    height: 100% !important;
-    aspect-ratio: 1 / 1.2;
-    object-fit: cover;
-    border-radius: var(--r-md);
-  }
-
-  .first-img,
-  .second-img {
-    margin: 0;
-    flex-grow: unset;
-    min-height: unset;
-  }
-
-  .text-wrapper {
-    padding: var(--s-6) 5%;
-    gap: var(--s-6);
-    background-color: var(--ink) !important;
-  }
-
-  .brand-title {
-    font-size: var(--fs-h1);
-    line-height: 1.05;
-    letter-spacing: normal; }
-
-  .subtitle {
-    font-size: var(--fs-sm);
-    letter-spacing: normal; }
-
-  .divider {
-    width: 50px;
-    height: 2px;
-    margin-bottom: 15px;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-4);
-  }
-
-  .feature-item h2 {
-    font-size: var(--fs-lg);
-  }
-
-  .feature-item p {
-    font-size: var(--fs-caption);
-  }
-
-  .amacimiz-baslik h2 {
-    font-size: var(--fs-h2);
-  }
-
-  .amacimiz-kartlar {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--s-4);
-    margin-top: var(--s-6);
-  }
-
-  .amac-kart {
-    padding: var(--s-4);
-  }
-
-  .amac-kart h3 {
-    font-size: 18px;
-    margin-bottom: var(--s-4);
-  }
-
-  .amac-kart p {
-    font-size: var(--fs-caption);
-  }
-
-  .tagline {
-    font-size: 18px;
-  }
-}
-
-/* --- LARGE PHONES / SMALL TABLETS (max-width: 768px) --- */
-@media (max-width: 768px) {
-  /* Header */
-  .header-container {
-    width: 100%;
-    padding: 0 var(--s-4);
-    height: 56px;
-  }
-
-  .logo {
-    width: 44px;
-    height: 44px;
-    left: var(--s-4);
-    top: 6px;
-  }
-
-  .logo-text {
-    font-size: 14px;
-  }
-
-  .nav ul {
-    gap: var(--s-3);
-  }
-
-  .nav a {
-    font-size: 11px;
-    padding: var(--s-2) var(--s-3);
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-  }
-
-  /* Görseller: Tek sütun, geniş oran */
-  .about-images-wrapper {
-    grid-template-columns: 1fr;
-    gap: var(--s-3);
-    padding: var(--s-4);
-    aspect-ratio: 16 / 10;
-    max-height: 35vh;
-  }
-
-  .about-img {
-    aspect-ratio: 16 / 9;
-    border-radius: var(--r-md);
-  }
-
-  .about-img:nth-child(2) {
-    display: none; /* Mobilde tek görsel */
-  }
-
-  /* Metin alanı */
-  .text-wrapper {
-    padding: var(--s-6) var(--s-4);
-    gap: var(--s-6);
-  }
-
-  .brand-title {
-    font-size: clamp(32px, 10vw, 48px);
-    margin-bottom: var(--s-3);
-  }
-
-  .subtitle {
-    font-size: 12px;
-    letter-spacing: normal; margin-bottom: 5px;
-  }
-
-  .divider {
-    width: 40px;
-    margin-bottom: var(--s-3);
-  }
-
-  .description {
-    font-size: var(--fs-sm);
-    line-height: 1.7;
-    margin-bottom: var(--s-4);
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: var(--s-4);
-  }
-
-  .feature-item {
-    padding: var(--s-4);
-    background: rgba(141, 110, 99, 0.05);
-    border-radius: var(--r-md);
-  }
-
-  .feature-item h2 {
-    font-size: 18px;
-    margin-bottom: 8px;
-  }
-
-  .feature-item p {
-    font-size: 14px;
-  }
-
-  .tagline {
-    font-size: 16px;
-    margin-top: var(--s-4);
-  }
-
-  /* Amacımız bölümü */
-  .amacimiz-baslik h2 {
-    font-size: 24px;
-  }
-
-  .amacimiz-cizgi {
-    width: 40px;
-    margin-bottom: var(--s-4);
-  }
-
-  .amacimiz-kartlar {
-    grid-template-columns: 1fr;
-    gap: var(--s-4);
-    margin-top: var(--s-4);
-  }
-
-  .amac-kart {
-    padding: var(--s-4);
-    border-radius: var(--r-md);
-    /* Touch feedback */
-    -webkit-tap-highlight-color: rgba(141, 110, 99, 0.1);
-  }
-
-  .amac-kart h3 {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-
-  .amac-kart p {
-    font-size: 14px;
-  }
-
-  /* Mobilde hover yerine active state */
-  .amac-kart:active {
-    transform: scale(0.98);
-    background-color: var(--accent-weak);
-  }
-
-  .amac-kart:active h3,
-  .amac-kart:active p {
-    color: var(--ink) !important;
-  }
-
-  /* Hover efektlerini kaldır (mobilde sorunlu) */
-  .amac-kart:hover {
-    transform: none;
-    background-color: white;
-    box-shadow: var(--shadow-1);
-  }
-
-  /* ==========================================================================
-     BOTTOM NAVIGATION BAR
-     ========================================================================== */
-  .iconbar {
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 64px;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: var(--r-lg) var(--r-lg) 0 0;
-    background: rgba(15, 15, 15, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-1);
-    z-index: 1000;
-    padding: 0 var(--s-3);
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-
-  .icon-label {
-    display: none !important;
-  }
-
-  .icon-wrapper {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .icon-item {
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  .icon-item:active .icon-wrapper {
-    transform: scale(0.9);
-    opacity: 0.7;
-  }
-
-  /* Safe area padding */
-  body {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0));
-  }
-
-  .about-container {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 20px));
-  }
-}
-
-/* --- SMALL PHONES (max-width: 480px) --- */
-@media (max-width: 480px) {
-  .header-container {
-    padding: 0 12px;
-    height: 52px;
-  }
-
-  .logo {
-    width: 40px;
-    height: 40px;
-  }
-
-  .nav a {
-    font-size: 10px;
-    padding: var(--s-2) var(--s-2);
-  }
-
-  .about-images-wrapper {
-    padding: var(--s-3);
-    aspect-ratio: 16 / 9;
-    max-height: 30vh;
-  }
-
-  .about-img {
-    border-radius: var(--r-sm);
-  }
-
-  .text-wrapper {
-    padding: var(--s-5) var(--s-4);
-    gap: var(--s-5);
-  }
-
-  .brand-title {
-    font-size: clamp(28px, 9vw, 38px);
-  }
-
-  .subtitle {
-    font-size: 11px;
-    letter-spacing: normal; }
-
-  .description {
-    font-size: 15px;
-  }
-
-  .features-grid {
-    gap: var(--s-3);
-  }
-
-  .feature-item {
-    padding: var(--s-4);
-  }
-
-  .feature-item h2 {
-    font-size: 16px;
-  }
-
-  .feature-item p {
-    font-size: 13px;
-  }
-
-  .amacimiz-baslik h2 {
-    font-size: 20px;
-  }
-
-  .amac-kart {
-    padding: var(--s-4);
-  }
-
-  .amac-kart h3 {
-    font-size: 15px;
-  }
-
-  .amac-kart p {
-    font-size: 13px;
-  }
-
-  .iconbar {
-    height: 58px;
-    border-radius: var(--r-lg) var(--r-lg) 0 0;
-  }
-
-  body {
-    padding-bottom: calc(58px + env(safe-area-inset-bottom, 0));
-  }
-}
-
-/* --- LANDSCAPE MODE ON PHONES --- */
-@media (max-width: 896px) and (orientation: landscape) {
-  .about-content {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .about-images-wrapper {
-    grid-template-columns: 1fr;
-    max-height: 100%;
-    aspect-ratio: auto;
-    height: 100%;
-  }
-
-  .about-img:nth-child(2) {
-    display: block;
-  }
-
-  .about-img {
-    aspect-ratio: 4 / 3;
-  }
-
-  .text-wrapper {
-    max-height: 100vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .iconbar {
-    width: 60px;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 0 16px 16px 0;
-    left: 0;
-    bottom: auto;
-    top: 0;
-    padding: var(--s-4) 0;
-    padding-left: env(safe-area-inset-left, 0);
-  }
-
-  body {
-    padding-bottom: 0;
-    padding-left: calc(60px + env(safe-area-inset-left, 0));
-  }
-}
-
-/* --- ACCESSIBILITY: Reduced Motion --- */
-@media (prefers-reduced-motion: reduce) {
-  .amac-kart,
-  .icon-wrapper,
-  .icon-item {
-    transition: none !important;
-  }
-
-  .amac-kart:hover,
-  .amac-kart:active {
-    transform: none !important;
-  }
-}
-
-/* --- HIGH CONTRAST MODE SUPPORT --- */
-@media (prefers-contrast: high) {
-  .amac-kart {
-    border: 2px solid var(--ink);
-  }
-
-  .divider,
-  .amacimiz-cizgi {
-    height: 4px;
-  }
-
-  .description,
-  .feature-item p,
-  .amac-kart p {
-    color: var(--line-strong);
-  }
-}
-
-/* --- DARK MODE SUPPORT (Bonus) --- */
-@media (prefers-color-scheme: dark) {
-  .about-container {
-    background-color: var(--surface);
-  }
-
-  .text-wrapper {
-    background-color: var(--surface) !important;
-  }
-
-  .brand-title {
-    color: var(--ink-2);
-  }
-
-  .description,
-  .feature-item p {
-    color: var(--ink-2);
-  }
-
-  .feature-item {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .amac-kart {
-    background: var(--surface-2);
-    border-color: var(--line-strong);
-  }
-
-  .amac-kart p {
-    color: var(--ink-2);
   }
 }
