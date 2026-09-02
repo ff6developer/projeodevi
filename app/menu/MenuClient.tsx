@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type ChangeEvent } from "react"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { Star, ImagePlus, X } from "lucide-react"
 import "@/styles/menu.css"
 import { useToast } from "@/components/ToastProvider"
@@ -11,6 +12,7 @@ import {
   Badge,
   Modal,
   Textarea,
+  Select,
   Price,
   RoastMeter,
   OriginTag,
@@ -20,6 +22,8 @@ import {
 import { CATEGORY_LABEL, getByCategory } from "@/lib/products"
 import type { Product, ProductCategory } from "@/lib/types"
 import { addProduct } from "@/lib/cart"
+import { FREE_SHIPPING_THRESHOLD_KURUS } from "@/lib/pricing"
+import { formatPrice } from "@/lib/format"
 
 type Yorum = { puan: number; metin: string; gorsel?: string }
 const YORUM_KEY = "menuYorumlar"
@@ -58,10 +62,27 @@ function StarRating({
 
 const CATEGORIES: ProductCategory[] = ["sicak", "soguk", "tatli"]
 
+type SortKey = "onerilen" | "fiyat-artan" | "fiyat-azalan" | "isim"
+const SORT_KEYS: SortKey[] = ["onerilen", "fiyat-artan", "fiyat-azalan", "isim"]
+const SORT_LABEL: Record<SortKey, string> = {
+  onerilen: "Önerilen",
+  "fiyat-artan": "Fiyat: artan",
+  "fiyat-azalan": "Fiyat: azalan",
+  isim: "İsim (A–Z)",
+}
+
 export default function MenuClient() {
   const toast = useToast()
+  const searchParams = useSearchParams()
 
-  const [kategori, setKategori] = useState<ProductCategory>("sicak")
+  const [kategori, setKategori] = useState<ProductCategory>(() => {
+    const k = searchParams.get("kategori")
+    return CATEGORIES.includes(k as ProductCategory) ? (k as ProductCategory) : "sicak"
+  })
+  const [sirala, setSirala] = useState<SortKey>(() => {
+    const s = searchParams.get("sirala")
+    return SORT_KEYS.includes(s as SortKey) ? (s as SortKey) : "onerilen"
+  })
   const [detay, setDetay] = useState<Product | null>(null)
   const [yorumlar, setYorumlar] = useState<Record<number, Yorum[]>>({})
   const [yeniMetin, setYeniMetin] = useState("")
@@ -84,7 +105,28 @@ export default function MenuClient() {
     }
   }, [])
 
-  const urunler = useMemo(() => getByCategory(kategori), [kategori])
+  // Kategori/sıralama değişince URL'i güncelle (paylaşılabilir bağlantı).
+  useEffect(() => {
+    const q = new URLSearchParams()
+    if (kategori !== "sicak") q.set("kategori", kategori)
+    if (sirala !== "onerilen") q.set("sirala", sirala)
+    const qs = q.toString()
+    window.history.replaceState(null, "", qs ? `/menu?${qs}` : "/menu")
+  }, [kategori, sirala])
+
+  const urunler = useMemo(() => {
+    const list = [...getByCategory(kategori)]
+    switch (sirala) {
+      case "fiyat-artan":
+        return list.sort((a, b) => a.priceKurus - b.priceKurus)
+      case "fiyat-azalan":
+        return list.sort((a, b) => b.priceKurus - a.priceKurus)
+      case "isim":
+        return list.sort((a, b) => a.name.localeCompare(b.name, "tr"))
+      default:
+        return list
+    }
+  }, [kategori, sirala])
 
   const resetForm = () => {
     setYeniMetin("")
@@ -153,19 +195,33 @@ export default function MenuClient() {
           </Card>
         )}
 
-        <div className="menu-cats" role="tablist" aria-label="Kategoriler">
-          {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              type="button"
-              role="tab"
-              aria-selected={kategori === c}
-              className={`menu-cat${kategori === c ? " is-active" : ""}`}
-              onClick={() => setKategori(c)}
-            >
-              {CATEGORY_LABEL[c]}
-            </button>
-          ))}
+        <div className="menu-toolbar">
+          <div className="menu-cats" role="tablist" aria-label="Kategoriler">
+            {CATEGORIES.map((c) => (
+              <button
+                key={c}
+                type="button"
+                role="tab"
+                aria-selected={kategori === c}
+                className={`menu-cat${kategori === c ? " is-active" : ""}`}
+                onClick={() => setKategori(c)}
+              >
+                {CATEGORY_LABEL[c]}
+              </button>
+            ))}
+          </div>
+          <Select
+            label="Sırala"
+            className="menu-sort"
+            value={sirala}
+            onChange={(e) => setSirala(e.target.value as SortKey)}
+          >
+            {SORT_KEYS.map((k) => (
+              <option key={k} value={k}>
+                {SORT_LABEL[k]}
+              </option>
+            ))}
+          </Select>
         </div>
 
         {urunler.length === 0 ? (
@@ -216,6 +272,10 @@ export default function MenuClient() {
                 <Price value={detay.priceKurus} />
                 <Button onClick={() => sepeteEkle(detay)}>Sepete ekle</Button>
               </div>
+              <p className="menu-detail-ship">
+                Siparişe göre taze hazırlanır · {formatPrice(FREE_SHIPPING_THRESHOLD_KURUS)} üzeri
+                ücretsiz kargo
+              </p>
             </div>
           </div>
 

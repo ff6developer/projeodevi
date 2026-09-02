@@ -2,16 +2,17 @@ import Link from "next/link"
 import Image from "next/image"
 import "@/styles/home.css"
 import { BRAND } from "@/app/site-config"
-import { Truck, Flame, Mail } from "lucide-react"
+import { Truck, Flame, Mail, PackageCheck } from "lucide-react"
 import { Button, Card, Price, RoastMeter, OriginTag } from "@/components/ui"
+import { getProducts } from "@/lib/products"
+import { FREE_SHIPPING_THRESHOLD_KURUS } from "@/lib/pricing"
+import { formatPrice } from "@/lib/format"
 
-// Öne çıkan ürünler — TASK-107'de lib/products'a taşınacak.
-const FEATURED = [
-  { name: "Latte", priceKurus: 11000, image: "/latte.jpg", roast: 3 as const, origin: "Brezilya" },
-  { name: "Filtre Kahve", priceKurus: 9500, image: "/Filtre.jpg", roast: 2 as const, origin: "Etiyopya" },
-  { name: "Mocha", priceKurus: 9500, image: "/mocha.jpg", roast: 4 as const, origin: "Kolombiya" },
-  { name: "Türk Kahvesi", priceKurus: 9500, image: "/türk kahvesi.jpg", roast: 5 as const, origin: "Harman" },
-]
+// Öne çıkanlar — tek ürün kaynağı lib/products.
+const FEATURED_SLUGS = ["latte", "filtre-kahve", "cold-brew", "turk-kahvesi"]
+const FEATURED = FEATURED_SLUGS
+  .map((slug) => getProducts().find((p) => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p))
 
 export default function Home() {
   return (
@@ -48,8 +49,8 @@ export default function Home() {
               </span>
               <span className="home-product-name">{p.name}</span>
               <span className="home-product-meta">
-                <RoastMeter level={p.roast} />
-                <OriginTag origin={p.origin} />
+                {p.roast && <RoastMeter level={p.roast} />}
+                {p.origin && <OriginTag origin={p.origin} />}
               </span>
               <Price value={p.priceKurus} className="home-product-price" />
             </Card>
@@ -82,6 +83,10 @@ export default function Home() {
         <div className="home-trust-item">
           <Truck size={20} aria-hidden="true" />
           <span>Aynı gün hazırlık, hızlı teslimat</span>
+        </div>
+        <div className="home-trust-item">
+          <PackageCheck size={20} aria-hidden="true" />
+          <span>{formatPrice(FREE_SHIPPING_THRESHOLD_KURUS)} üzeri ücretsiz kargo</span>
         </div>
         <div className="home-trust-item">
           <Flame size={20} aria-hidden="true" />
