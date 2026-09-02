@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import "@/styles/kahveniolustur.css"
 import { useRouter } from "next/navigation"
 import { Zap, Lock } from "lucide-react"
@@ -7,7 +7,8 @@ import CoffeeRight from "@/components/CoffeeRight"
 import { useToast } from "@/components/ToastProvider"
 import { Button, Card, Input, Progress, Price, IntensityDots } from "@/components/ui"
 import { formatPrice } from "@/lib/format"
-import { createOrder } from "@/lib/orders"
+import { useCart } from "@/components/CartProvider"
+import { BASE_COFFEE_KURUS, priceRecipe } from "@/lib/pricing"
 import { isLoggedIn } from "@/lib/session"
 
 type RecipeOption = { name: string; price: number; power: number }
@@ -71,45 +72,54 @@ const DEFAULT_FORM = {
   technique: TECHNIQUE_OPTIONS[5], // Değişiklik Yok
 }
 
+/** Arena "tarifi kopyala" ile bırakılan taslağı bir kez okur (ve temizler). */
+function readCopiedRecipe(): Record<string, RecipeOption | string | boolean> | null {
+  if (typeof window === "undefined") return null
+  try {
+    const raw = window.localStorage.getItem("copiedRecipe")
+    if (!raw) return null
+    window.localStorage.removeItem("copiedRecipe")
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
 export default function KahveniOlusturClient() {
-  const [arenaCoffeeName, setArenaCoffeeName] = useState("")
-  const [arenaCoffeeImage, setArenaCoffeeImage] = useState<string | null>(null)
-  const [customCoffeeName, setCustomCoffeeName] = useState("")
   const router = useRouter()
   const toast = useToast()
+  const { addRecipe } = useCart()
 
-  // Arena'dan gelen kilitli tarif durumu
-  const [isLocked, setIsLocked] = useState(false)
+  const [customCoffeeName, setCustomCoffeeName] = useState("")
 
-  const [form, setForm] = useState({ ...DEFAULT_FORM })
+  // Arena taslağı (varsa) — render sırasında bir kez, effect'siz.
+  const [copied] = useState(readCopiedRecipe)
+  const fromArena =
+    !!copied && copied.fromArena === true && copied.locked === true
 
-  useEffect(() => {
-    const copied = localStorage.getItem("copiedRecipe")
-    if (copied) {
-      const parsed = JSON.parse(copied)
+  const [isLocked] = useState(fromArena)
+  const [arenaCoffeeName] = useState(() =>
+    fromArena && typeof copied?.name === "string" ? copied.name : "",
+  )
+  const [arenaCoffeeImage] = useState<string | null>(() =>
+    fromArena && typeof copied?.image === "string" ? copied.image : null,
+  )
 
-      // Arena'dan gelen tarif — eksik alan varsa varsayılanla tamamla.
-      setForm({
-        milkType: parsed.milkType || DEFAULT_FORM.milkType,
-        beanType: parsed.beanType || DEFAULT_FORM.beanType,
-        foam: parsed.foam || DEFAULT_FORM.foam,
-        cupType: parsed.cupType || DEFAULT_FORM.cupType,
-        syrup: parsed.syrup || DEFAULT_FORM.syrup,
-        spice: parsed.spice || DEFAULT_FORM.spice,
-        sweetener: parsed.sweetener || DEFAULT_FORM.sweetener,
-        technique: parsed.technique || DEFAULT_FORM.technique,
-      })
-
-      // 🔒 ARENA KONTROLÜ: Eğer arena'dan geliyorsa kilitle
-      if (parsed.fromArena === true && parsed.locked === true) {
-        setIsLocked(true)
-        if (parsed.name) setArenaCoffeeName(parsed.name)
-        if (parsed.image) setArenaCoffeeImage(parsed.image)
-      }
-
-      localStorage.removeItem("copiedRecipe")
+  const [form, setForm] = useState(() => {
+    if (!copied) return { ...DEFAULT_FORM }
+    const pick = (k: keyof typeof DEFAULT_FORM) =>
+      (copied[k] as RecipeOption) || DEFAULT_FORM[k]
+    return {
+      milkType: pick("milkType"),
+      beanType: pick("beanType"),
+      foam: pick("foam"),
+      cupType: pick("cupType"),
+      syrup: pick("syrup"),
+      spice: pick("spice"),
+      sweetener: pick("sweetener"),
+      technique: pick("technique"),
     }
-  }, [])
+  })
 
   // Seçim adımları — ilerleme göstergesi ve eksik-adım listesi için tek kaynak.
   const SELECTION_STEPS: { field: keyof typeof form; label: string }[] = [
@@ -132,96 +142,67 @@ export default function KahveniOlusturClient() {
     (form.syrup?.power || 0) + (form.technique?.power || 0) + 
     (form.spice?.power || 0);
 
-  // Fiyat: temel kahve + seçilen eklentiler (varsa Arena indirimi eklentilere uygulanır)
-  const subtotal =
-    (form.milkType?.price || 0) + (form.beanType?.price || 0) +
-    (form.foam?.price || 0) + (form.cupType?.price || 0) +
-    (form.syrup?.price || 0) + (form.spice?.price || 0) +
-    (form.sweetener?.price || 0) + (form.technique?.price || 0)
-
-  const basePrice = 100
-  const discountAmount = isLocked ? Math.round(subtotal * 0.15) : 0
-  const total = basePrice + subtotal - discountAmount
-  const originalTotal = basePrice + subtotal
+  // Fiyat: tek kaynak lib/pricing.priceRecipe (temel kahve + ücretli eklentiler,
+  // Arena kilidi varsa eklentilere %15 indirim). Tutarlar kuruş.
+  const { subtotalKurus, discountKurus, totalKurus } = priceRecipe(form, {
+    arenaLocked: isLocked,
+  })
 
   // Fiyat dökümü satırları — sadece ücretli eklentiler gösterilir
   const priceRows = SELECTION_STEPS
     .map((s) => ({ label: s.label, price: (form[s.field]?.price as number) || 0, name: form[s.field]?.name as string }))
     .filter((r) => r.price > 0)
 
-  // 🔒 YENİ: Kilit kontrollü seçim
-  const handleOptionSelect = (field: string, item: any) => {
+  // Kilitli tarifte seçim değiştirilemez.
+  const handleOptionSelect = (field: string, item: RecipeOption) => {
     if (isLocked) return
     setForm({ ...form, [field]: item })
   }
 
-  const handleSiparis = () => {
-    if (!allSelected) return;
+  const handleAddToCart = () => {
+    if (!allSelected) return
     if (!isLoggedIn()) {
-      toast.warning("Sipariş vermek için önce giriş yapmalısın!")
-      router.push("/giris");
-      return;
+      toast.warning("Sepete eklemek için önce giriş yap.")
+      router.push("/giris?next=/kahveniolustur")
+      return
     }
 
     // Kahve ismi: kullanıcı girdiyse onu, arena'dan geldiyse onu, yoksa İsimsiz
     const finalCoffeeName = customCoffeeName.trim() || arenaCoffeeName || "İsimsiz Kahve"
 
-    // Kanonik sipariş kaydı (lib/orders → elmenes.orders)
-    const order = createOrder({
-      items: [
-        {
-          kind: "recipe",
-          name: finalCoffeeName,
-          image: arenaCoffeeImage,
-          unitKurus: Math.round(total * 100),
-          qty: 1,
-          recipe: form,
-          score: creativityScore,
-          fromArena: isLocked,
-        },
-      ],
-      subtotalKurus: Math.round(originalTotal * 100),
-      discountKurus: Math.round(discountAmount * 100),
-      shippingKurus: 0,
-      totalKurus: Math.round(total * 100),
+    // Tasarlanan tarif → sepet satırı (sipariş, ödeme akışında oluşturulur)
+    addRecipe({
+      name: finalCoffeeName,
+      image: arenaCoffeeImage,
+      unitKurus: totalKurus,
+      recipe: form,
+      score: creativityScore,
+      fromArena: isLocked,
     })
 
-    // Geçiş dönemi: Admin paneli hâlâ eski "orders" anahtarını okuyor (TASK-122'de
-    // lib/orders'a taşınacak). O güne kadar eski formatta bir kopya da yazılır.
-    const legacyOrder = {
-      id: order.id,
-      coffeeName: finalCoffeeName,
-      details: form,
-      totalPrice: total,
-      originalPrice: originalTotal,
-      discountApplied: isLocked ? 15 : 0,
-      isFromArena: isLocked,
-      score: creativityScore,
-      status: "Bekliyor",
-      date: new Date().toLocaleString("tr-TR"),
-    }
-    const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]")
-    localStorage.setItem("orders", JSON.stringify([...existingOrders, legacyOrder]))
-
+    // "Kahvelerim" galerisi (profil sekmesi) — tasarım kaydı
     const coffeeData = {
       id: Date.now(),
       name: finalCoffeeName,
       image: arenaCoffeeImage,
       details: form,
       score: creativityScore,
-      total: total,
-      originalTotal: originalTotal,
+      total: Math.round(totalKurus / 100),
+      originalTotal: Math.round(subtotalKurus / 100),
       isFromArena: isLocked,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
     }
+    const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]")
+    localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]))
 
-    const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]");
-    localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]));
-
-    toast.success(isLocked ? "Siparişin alındı — %15 Arena indirimi uygulandı." : "Siparişin alındı.")
+    toast.success(
+      isLocked
+        ? "Kahven sepete eklendi — %15 Arena indirimi uygulandı."
+        : "Kahven sepete eklendi.",
+    )
 
     setCustomCoffeeName("")
-    router.push(`/siparis?o=${order.id}`)
+    router.push("/sepet")
   }
 
   
@@ -249,7 +230,7 @@ export default function KahveniOlusturClient() {
           <div className="coffee-price">
             <div className="coffee-price-row">
               <span>Temel kahve</span>
-              <span>{formatPrice(basePrice * 100)}</span>
+              <span>{formatPrice(BASE_COFFEE_KURUS)}</span>
             </div>
             {priceRows.map((r) => (
               <div className="coffee-price-row" key={r.label}>
@@ -260,15 +241,18 @@ export default function KahveniOlusturClient() {
                 <span>+ {formatPrice(r.price * 100)}</span>
               </div>
             ))}
-            {isLocked && discountAmount > 0 && (
+            {isLocked && discountKurus > 0 && (
               <div className="coffee-price-row coffee-price-discount">
                 <span>Arena indirimi (%15)</span>
-                <span>− {formatPrice(discountAmount * 100)}</span>
+                <span>− {formatPrice(discountKurus)}</span>
               </div>
             )}
             <div className="coffee-price-row coffee-price-total">
               <span>Toplam</span>
-              <Price value={total * 100} original={isLocked && discountAmount > 0 ? originalTotal * 100 : undefined} />
+              <Price
+                value={totalKurus}
+                original={isLocked && discountKurus > 0 ? subtotalKurus : undefined}
+              />
             </div>
           </div>
 
@@ -312,8 +296,8 @@ export default function KahveniOlusturClient() {
                 ))}
               </p>
             )}
-            <Button block size="lg" onClick={handleSiparis} disabled={!allSelected}>
-              Siparişi tamamla
+            <Button block size="lg" onClick={handleAddToCart} disabled={!allSelected}>
+              Sepete ekle
               {isLocked && allSelected ? " (%15 indirim)" : ""}
             </Button>
           </div>
