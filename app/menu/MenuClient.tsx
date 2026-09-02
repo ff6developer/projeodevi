@@ -1,798 +1,281 @@
-'use client';
+"use client"
 
+import { useEffect, useMemo, useState, type ChangeEvent } from "react"
+import Image from "next/image"
+import { Star, ImagePlus, X } from "lucide-react"
+import "@/styles/menu.css"
+import { useToast } from "@/components/ToastProvider"
 import {
-  useState,
-  useRef,
-  useEffect,
-  ChangeEvent,
-  MouseEvent,
-} from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+  Button,
+  Card,
+  Badge,
+  Modal,
+  Textarea,
+  Price,
+  RoastMeter,
+  OriginTag,
+  TastingNotes,
+  EmptyState,
+} from "@/components/ui"
+import { CATEGORY_LABEL, getByCategory } from "@/lib/products"
+import type { Product, ProductCategory } from "@/lib/types"
+import { addProduct } from "@/lib/cart"
 
-import "@/styles/menu.css";
-import { useToast } from "@/components/ToastProvider";
-
-type KategoriTipi = 'sicak' | 'soguk' | 'tatli';
-
-interface Yorum {
-  kullanici: string;
-  puan: number;
-  metin: string;
-  gorsel?: string;
-}
-interface MenuItem {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
-}
+type Yorum = { puan: number; metin: string; gorsel?: string }
+const YORUM_KEY = "menuYorumlar"
 
 function StarRating({
-  rating,
-  onRatingChange,
-  saltOkunur = false,
+  value,
+  onChange,
+  readOnly = false,
 }: {
-  rating: number;
-  onRatingChange?: (newRating: number) => void;
-  saltOkunur?: boolean;
+  value: number
+  onChange?: (v: number) => void
+  readOnly?: boolean
 }) {
   return (
-    <div
-      className="star-rating"
-      style={{
-        display: 'flex',
-        gap: '4px',
-        fontSize: saltOkunur ? '1rem' : '1.6rem',
-        cursor: saltOkunur ? 'default' : 'pointer',
-        justifyContent: 'center',
-      }}
-    >
-      {[1, 2, 3, 4, 5].map((star) => (
-        <span
-          key={star}
-          onClick={() =>
-            !saltOkunur &&
-            onRatingChange &&
-            onRatingChange(star)
-          }
-          style={{
-            color: star <= rating ? '#facc15' : '#d1d5db',
-            transition: 'all 0.1s',
-          }}
+    <span className="star-rating" role={readOnly ? "img" : "radiogroup"} aria-label={`Puan: ${value}/5`}>
+      {[1, 2, 3, 4, 5].map((s) => (
+        <button
+          key={s}
+          type="button"
+          className="star-btn"
+          aria-label={`${s} yıldız`}
+          aria-pressed={!readOnly && s <= value}
+          disabled={readOnly}
+          onClick={() => onChange?.(s)}
         >
-          ★
-        </span>
+          <Star
+            size={readOnly ? 14 : 20}
+            fill={s <= value ? "var(--accent)" : "none"}
+            color={s <= value ? "var(--accent)" : "var(--line-strong)"}
+          />
+        </button>
       ))}
-    </div>
-  );
+    </span>
+  )
 }
 
+const CATEGORIES: ProductCategory[] = ["sicak", "soguk", "tatli"]
+
 export default function MenuClient() {
-  const router = useRouter();
-  const toast = useToast();
+  const toast = useToast()
 
-  const [kategori, setKategori] =
-    useState<KategoriTipi>('sicak');
-
-  const [tumYorumlar, setTumYorumlar] =
-    useState<Record<number, Yorum[]>>({});
-
-  const [yeniYorum, setYeniYorum] = useState('');
-  const [yeniPuan, setYeniPuan] = useState(5);
-  const [aktifUrunId, setAktifUrunId] =
-    useState<number | null>(null);
-
-  const [modalUrunId, setModalUrunId] =
-    useState<number | null>(null);
-
-  const [yeniGorsel, setYeniGorsel] =
-    useState<string>('');
-
-  const [yeniGorselAdi, setYeniGorselAdi] =
-    useState<string>('');
-
-  const menuBaslangicRef =
-    useRef<HTMLDivElement>(null);
-
-  const dosyaInputRef =
-    useRef<HTMLInputElement>(null);
-
-  const [arenaSampiyonu, setArenaSampiyonu] =
-    useState<any>(null);
+  const [kategori, setKategori] = useState<ProductCategory>("sicak")
+  const [detay, setDetay] = useState<Product | null>(null)
+  const [yorumlar, setYorumlar] = useState<Record<number, Yorum[]>>({})
+  const [yeniMetin, setYeniMetin] = useState("")
+  const [yeniPuan, setYeniPuan] = useState(5)
+  const [yeniGorsel, setYeniGorsel] = useState<string>("")
+  const [sampiyon, setSampiyon] = useState<{ name: string; creator: string; image?: string } | null>(null)
 
   useEffect(() => {
-    const data = localStorage.getItem('arenaChampion');
-
-    if (data) {
-      setArenaSampiyonu(JSON.parse(data));
+    try {
+      const raw = localStorage.getItem(YORUM_KEY)
+      if (raw) setYorumlar(JSON.parse(raw))
+    } catch {
+      /* yoksay */
     }
-  }, []);
+    try {
+      const c = localStorage.getItem("arenaChampion")
+      if (c) setSampiyon(JSON.parse(c))
+    } catch {
+      /* yoksay */
+    }
+  }, [])
 
-  useEffect(() => {
-    if (!modalUrunId) return;
+  const urunler = useMemo(() => getByCategory(kategori), [kategori])
 
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setModalUrunId(null);
-    };
+  const resetForm = () => {
+    setYeniMetin("")
+    setYeniPuan(5)
+    setYeniGorsel("")
+  }
 
-    document.addEventListener('keydown', onKeyDown);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [modalUrunId]);
-
-  const menuVerisi: Record<KategoriTipi, MenuItem[]> = {
-    sicak: [
-      {
-        id: 1,
-        name: 'Espresso',
-        price: '80 TL',
-        image: '/espresso.jpg',
-      },
-      {
-        id: 2,
-        name: 'Latte',
-        price: '110 TL',
-        image: '/latte.jpg',
-      },
-      {
-        id: 3,
-        name: 'Cappuccino',
-        price: '100 TL',
-        image: '/cappicino.jpg',
-      },
-      {
-        id: 4,
-        name: 'Americano',
-        price: '95 TL',
-        image: '/amerikano.jpg',
-      },
-      {
-        id: 5,
-        name: 'Filtre Kahve',
-        price: '95 TL',
-        image: '/Filtre.jpg',
-      },
-      {
-        id: 6,
-        name: 'Mocha',
-        price: '95 TL',
-        image: '/mocha.jpg',
-      },
-      {
-        id: 7,
-        name: 'Macchiato',
-        price: '95 TL',
-        image: '/macciato.jpg',
-      },
-      {
-        id: 8,
-        name: 'Türk Kahvesi',
-        price: '95 TL',
-        image: '/türk kahvesi.jpg',
-      },
-      {
-        id: 9,
-        name: 'Flat White',
-        price: '95 TL',
-        image: '/Flat White.jpg',
-      },
-    ],
-
-    soguk: [
-      {
-        id: 10,
-        name: 'Iced Latte',
-        price: '120 TL',
-        image: '/Iced Latte.jpg',
-      },
-      {
-        id: 11,
-        name: 'Cold Brew',
-        price: '115 TL',
-        image: '/cod brew.jpg',
-      },
-      {
-        id: 12,
-        name: 'Frappe',
-        price: '130 TL',
-        image: '/frappe.jpg',
-      },
-      {
-        id: 13,
-        name: 'Iced Americano',
-        price: '100 TL',
-        image: '/Iced Americano.jpg',
-      },
-      {
-        id: 14,
-        name: 'Iced Caramel Macchiato',
-        price: '95 TL',
-        image: '/Caramel Macchiato.jpg',
-      },
-      {
-        id: 15,
-        name: 'Iced Mocha',
-        price: '95 TL',
-        image: '/ıceMocha.jpg',
-      },
-      {
-        id: 16,
-        name: 'White Mocha',
-        price: '95 TL',
-        image: '/white mocha.jpg',
-      },
-    ],
-
-    tatli: [
-      {
-        id: 18,
-        name: 'Sufle',
-        price: '80 TL',
-        image: '/sufle.jpg',
-      },
-      {
-        id: 19,
-        name: 'Limonlu Cheesecake',
-        price: '80 TL',
-        image: '/lmchasecake.jpg',
-      },
-      {
-        id: 20,
-        name: 'İspanyol Usulü Cheesecake',
-        price: '80 TL',
-        image: '/San Sebastian.jpg',
-      },
-      {
-        id: 21,
-        name: 'Frambuazlı Cheesecake',
-        price: '80 TL',
-        image: '/frcheesecake.jpg',
-      },
-      {
-        id: 22,
-        name: 'Cookie',
-        price: '80 TL',
-        image: '/Cookies.jpg',
-      },
-      {
-        id: 23,
-        name: 'Çikolatalı Donat',
-        price: '80 TL',
-        image: '/donat.jpg',
-      },
-      {
-        id: 24,
-        name: 'Brownie',
-        price: '80 TL',
-        image: '/Brownie.jpg',
-      },
-    ],
-  };
-
-  const gorselSec = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0];
-
-    if (!file) return;
-
+  const gorselSec = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
     if (file.size > 2 * 1024 * 1024) {
-      toast.warning(
-        "Görsel boyutu 2MB'dan küçük olmalıdır."
-      );
-      return;
+      toast.warning("Görsel 2 MB'dan küçük olmalı.")
+      return
     }
+    const reader = new FileReader()
+    reader.onloadend = () => setYeniGorsel(reader.result as string)
+    reader.readAsDataURL(file)
+  }
 
-    setYeniGorselAdi(file.name);
-
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setYeniGorsel(reader.result as string);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  const gorselKaldir = () => {
-    setYeniGorsel('');
-    setYeniGorselAdi('');
-
-    if (dosyaInputRef.current) {
-      dosyaInputRef.current.value = '';
+  const yorumGonder = () => {
+    if (!detay || (!yeniMetin.trim() && !yeniGorsel)) return
+    const next = {
+      ...yorumlar,
+      [detay.id]: [...(yorumlar[detay.id] ?? []), { puan: yeniPuan, metin: yeniMetin.trim(), gorsel: yeniGorsel || undefined }],
     }
-  };
-
-  const yorumGonder = (id: number) => {
-    if (!yeniYorum.trim() && !yeniGorsel) return;
-
-    const yorumObjesi: Yorum = {
-      kullanici: 'Müşteri',
-      puan: yeniPuan,
-      metin: yeniYorum,
-      gorsel: yeniGorsel || undefined,
-    };
-
-    setTumYorumlar((onceki) => ({
-      ...onceki,
-      [id]: [...(onceki[id] || []), yorumObjesi],
-    }));
-
-    setYeniYorum('');
-    setYeniPuan(5);
-    setYeniGorsel('');
-    setYeniGorselAdi('');
-    setAktifUrunId(null);
-
-    if (dosyaInputRef.current) {
-      dosyaInputRef.current.value = '';
+    setYorumlar(next)
+    try {
+      localStorage.setItem(YORUM_KEY, JSON.stringify(next))
+    } catch {
+      /* yoksay */
     }
-  };
+    resetForm()
+    toast.success("Yorumun eklendi.")
+  }
 
-  const yorumIptal = () => {
-    setYeniYorum('');
-    setYeniPuan(5);
-    setYeniGorsel('');
-    setYeniGorselAdi('');
-    setAktifUrunId(null);
-
-    if (dosyaInputRef.current) {
-      dosyaInputRef.current.value = '';
-    }
-  };
-
-  const urunKartTikla = (
-    e: MouseEvent<HTMLElement>,
-    id: number
-  ) => {
-    const target = e.target as HTMLElement | null;
-
-    if (
-      target?.closest(
-        'button, textarea, input, label, a'
-      )
-    ) {
-      return;
-    }
-
-    setModalUrunId(id);
-  };
+  const sepeteEkle = (p: Product) => {
+    addProduct({ productId: p.id, slug: p.slug, name: p.name, image: p.image, unitKurus: p.priceKurus })
+    toast.success(`${p.name} sepete eklendi.`)
+  }
 
   return (
     <div className="menu-page">
-      <p className="menu-subtitle">Menü</p>
+      <div className="container">
+        <p className="eyebrow">{CATEGORY_LABEL[kategori]}</p>
+        <h1 className="menu-title">Menü</h1>
 
-      <h1 className="menu-title">
-        ELMENES COFFEE
-      </h1>
-
-      {arenaSampiyonu && (
-        <div className="arena-champion">
-          <div className="arena-champion-inner">
-            <div className="arena-trophy">🏆</div>
-
-            <div className="arena-info">
-              <p className="arena-label">
-                Ayın öne çıkan tasarımı
-              </p>
-
-              <h2 className="arena-name">
-                {arenaSampiyonu?.name}
-              </h2>
-
-              <p className="arena-creator">
-                Tasarlayan: <strong>{arenaSampiyonu?.creator}</strong>
-              </p>
-            </div>
-
-            {arenaSampiyonu?.image && (
-              <div className="arena-image-wrapper">
-                <Image
-                  src={arenaSampiyonu.image}
-                  alt={arenaSampiyonu?.name}
-                  width={150}
-                  height={150}
-                  className="arena-image"
-                />
+        {sampiyon && (
+          <Card className="menu-champion" pad="md">
+            <div className="menu-champion-row">
+              <Badge tone="accent">Ayın öne çıkan tasarımı</Badge>
+              <div className="menu-champion-body">
+                <p className="menu-champion-name">{sampiyon.name}</p>
+                <p className="menu-champion-creator">
+                  Tasarlayan: <strong>{sampiyon.creator}</strong>
+                </p>
               </div>
-            )}
+              {sampiyon.image && (
+                <span className="menu-champion-img">
+                  <Image src={sampiyon.image} alt={sampiyon.name} width={72} height={72} />
+                </span>
+              )}
+              <Button href="/topluluk" variant="secondary" size="md">
+                Topluluğa git
+              </Button>
+            </div>
+          </Card>
+        )}
 
+        <div className="menu-cats" role="tablist" aria-label="Kategoriler">
+          {CATEGORIES.map((c) => (
             <button
-              onClick={() =>
-                router.push('/topluluk')
-              }
-              className="menu-champion-btn"
+              key={c}
+              type="button"
+              role="tab"
+              aria-selected={kategori === c}
+              className={`menu-cat${kategori === c ? " is-active" : ""}`}
+              onClick={() => setKategori(c)}
             >
-              Detaylara Git →
+              {CATEGORY_LABEL[c]}
             </button>
-          </div>
+          ))}
         </div>
-      )}
 
-      <div
-        ref={menuBaslangicRef}
-        className="category-buttons"
-      >
-        {(['sicak', 'soguk', 'tatli'] as const).map(
-          (kat) => (
-            <button
-              key={kat}
-              onClick={() => setKategori(kat)}
-              className={`category-btn ${
-                kategori === kat ? 'active' : ''
-              }`}
-            >
-              {kat === 'sicak'
-                ? 'Sıcaklar'
-                : kat === 'soguk'
-                ? 'Soğuklar'
-                : 'Tatlılar'}
-            </button>
-          )
+        {urunler.length === 0 ? (
+          <EmptyState title="Bu kategoride ürün yok" />
+        ) : (
+          <div className="menu-grid">
+            {urunler.map((p) => (
+              <Card key={p.id} className="menu-card" pad="sm">
+                <span className="menu-card-img">
+                  <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 50vw, 280px" />
+                </span>
+                <h2 className="menu-card-name">{p.name}</h2>
+                <div className="menu-card-spec">
+                  {p.roast && <RoastMeter level={p.roast} />}
+                  {p.origin && <OriginTag origin={p.origin} />}
+                </div>
+                <div className="menu-card-foot">
+                  <Price value={p.priceKurus} className="menu-card-price" />
+                  <div className="menu-card-actions">
+                    <Button variant="ghost" size="md" onClick={() => setDetay(p)}>
+                      İncele
+                    </Button>
+                    <Button size="md" onClick={() => sepeteEkle(p)}>
+                      Sepete ekle
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
         )}
       </div>
 
-      <div className="products-grid">
-        {menuVerisi[kategori].map((item) => (
-          <div
-            key={item.id}
-            className="product-card"
-            role="button"
-            tabIndex={0}
-            aria-haspopup="dialog"
-            onClick={(e) => urunKartTikla(e, item.id)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setModalUrunId(item.id);
-              }
-            }}
-          >
-            <div className="product-image-wrapper">
-              <Image
-                src={item.image}
-                alt={item.name}
-                fill
-                className="product-image"
-                sizes="(max-width: 768px) 100vw, 285px"
-              />
+      {detay && (
+        <Modal open onClose={() => setDetay(null)} title={detay.name} wide>
+          <div className="menu-detail">
+            <span className="menu-detail-img">
+              <Image src={detay.image} alt={detay.name} fill sizes="(max-width: 720px) 92vw, 400px" />
+            </span>
+            <div className="menu-detail-body">
+              {detay.description && <p className="menu-detail-desc">{detay.description}</p>}
+              <div className="menu-detail-spec">
+                {detay.roast && <RoastMeter level={detay.roast} />}
+                {detay.origin && <OriginTag origin={detay.origin} />}
+                {detay.notes && <TastingNotes notes={detay.notes} />}
+              </div>
+              <div className="menu-detail-buy">
+                <Price value={detay.priceKurus} />
+                <Button onClick={() => sepeteEkle(detay)}>Sepete ekle</Button>
+              </div>
             </div>
+          </div>
 
-            <h3 className="product-name">
-              {item.name}
+          <section className="menu-comments">
+            <h3 className="menu-comments-title">
+              Yorumlar ({yorumlar[detay.id]?.length ?? 0})
             </h3>
 
-            <p className="product-price">
-              {item.price}
-            </p>
-
-            <div className="comments-section">
-              <h4 className="comments-title">
-                Yorumlar (
-                {tumYorumlar[item.id]?.length || 0})
-              </h4>
-
-              <div className="comments-list">
-                {tumYorumlar[item.id]?.map(
-                  (y, index) => (
-                    <div
-                      key={index}
-                      className="comment-item"
-                    >
-                      <StarRating
-                        rating={y.puan}
-                        saltOkunur
-                      />
-
-                      <p className="comment-text">
-                        {y.metin}
-                      </p>
-
-                      {y.gorsel && (
-                        <div className="comment-image-wrapper">
-                          <Image
-                            src={y.gorsel}
-                            alt="Yorum görseli"
-                            width={200}
-                            height={150}
-                            className="comment-image"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )
-                )}
-              </div>
-
-              {aktifUrunId === item.id ? (
-                <div className="comment-form">
-                  <StarRating
-                    rating={yeniPuan}
-                    onRatingChange={setYeniPuan}
-                  />
-
-                  <textarea
-                    value={yeniYorum}
-                    onChange={(e) =>
-                      setYeniYorum(
-                        e.target.value
-                      )
-                    }
-                    placeholder="Yazın..."
-                    className="comment-textarea"
-                  />
-
-                  <div className="image-upload-area">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={gorselSec}
-                      ref={dosyaInputRef}
-                      id={`gorsel-input-${item.id}`}
-                      className="image-upload-input"
-                    />
-
-                    <label
-                      htmlFor={`gorsel-input-${item.id}`}
-                      className="image-upload-label"
-                    >
-                      📷 Görsel Ekle
-                    </label>
-
-                    {yeniGorsel && (
-                      <div className="image-preview-area">
-                        <div className="image-preview-wrapper">
-                          <Image
-                            src={yeniGorsel}
-                            alt="Önizleme"
-                            width={120}
-                            height={90}
-                            className="image-preview"
-                          />
-                        </div>
-
-                        <div className="image-preview-info">
-                          <span className="image-preview-name">
-                            {yeniGorselAdi}
-                          </span>
-
-                          <button
-                            onClick={
-                              gorselKaldir
-                            }
-                            className="image-remove-btn"
-                            type="button"
-                          >
-                            ❌ Kaldır
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="comment-form-buttons">
-                    <button
-                      onClick={() =>
-                        yorumGonder(item.id)
-                      }
-                      className="comment-submit-btn"
-                    >
-                      Gönder
-                    </button>
-
-                    <button
-                      onClick={yorumIptal}
-                      className="comment-cancel-btn"
-                    >
-                      İptal
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() =>
-                    setAktifUrunId(item.id)
-                  }
-                  className="comment-toggle-btn"
-                >
-                  Yorum Yap
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {modalUrunId && (
-        <div
-          className="menu-modal-backdrop"
-          role="dialog"
-          aria-modal="true"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) {
-              setModalUrunId(null);
-            }
-          }}
-        >
-          <div className="menu-modal">
-            <button
-              className="menu-modal-close"
-              onClick={() => setModalUrunId(null)}
-              aria-label="Kapat"
-              type="button"
-            >
-              ✕
-            </button>
-
-            {menuVerisi[kategori]
-              .filter((x) => x.id === modalUrunId)
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className="product-card is-modal"
-                >
-                  <div className="product-image-wrapper">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      className="product-image"
-                      sizes="(max-width: 768px) 92vw, 680px"
-                    />
-                  </div>
-
-                  <h3 className="product-name">
-                    {item.name}
-                  </h3>
-
-                  <p className="product-price">
-                    {item.price}
-                  </p>
-
-                  <div className="comments-section">
-                    <h4 className="comments-title">
-                      Yorumlar (
-                      {tumYorumlar[item.id]?.length ||
-                        0}
-                      )
-                    </h4>
-
-                    <div className="comments-list">
-                      {tumYorumlar[item.id]?.map(
-                        (y, index) => (
-                          <div
-                            key={index}
-                            className="comment-item"
-                          >
-                            <StarRating
-                              rating={y.puan}
-                              saltOkunur
-                            />
-
-                            <p className="comment-text">
-                              {y.metin}
-                            </p>
-
-                            {y.gorsel && (
-                              <div className="comment-image-wrapper">
-                                <Image
-                                  src={y.gorsel}
-                                  alt="Yorum görseli"
-                                  width={260}
-                                  height={180}
-                                  className="comment-image"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        )
-                      )}
-                    </div>
-
-                    {aktifUrunId === item.id ? (
-                      <div className="comment-form">
-                        <StarRating
-                          rating={yeniPuan}
-                          onRatingChange={setYeniPuan}
-                        />
-
-                        <textarea
-                          value={yeniYorum}
-                          onChange={(e) =>
-                            setYeniYorum(
-                              e.target.value
-                            )
-                          }
-                          placeholder="Yazın..."
-                          className="comment-textarea"
-                        />
-
-                        <div className="image-upload-area">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={gorselSec}
-                            ref={dosyaInputRef}
-                            id={`gorsel-input-modal-${item.id}`}
-                            className="image-upload-input"
-                          />
-
-                          <label
-                            htmlFor={`gorsel-input-modal-${item.id}`}
-                            className="image-upload-label"
-                          >
-                            📷 Görsel Ekle
-                          </label>
-
-                          {yeniGorsel && (
-                            <div className="image-preview-area">
-                              <div className="image-preview-wrapper">
-                                <Image
-                                  src={yeniGorsel}
-                                  alt="Önizleme"
-                                  width={120}
-                                  height={90}
-                                  className="image-preview"
-                                />
-                              </div>
-
-                              <div className="image-preview-info">
-                                <span className="image-preview-name">
-                                  {yeniGorselAdi}
-                                </span>
-
-                                <button
-                                  onClick={gorselKaldir}
-                                  className="image-remove-btn"
-                                  type="button"
-                                >
-                                  ❌ Kaldır
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="comment-form-buttons">
-                          <button
-                            onClick={() =>
-                              yorumGonder(item.id)
-                            }
-                            className="comment-submit-btn"
-                          >
-                            Gönder
-                          </button>
-
-                          <button
-                            onClick={yorumIptal}
-                            className="comment-cancel-btn"
-                          >
-                            İptal
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() =>
-                          setAktifUrunId(item.id)
-                        }
-                        className="comment-toggle-btn"
-                      >
-                        Yorum Yap
-                      </button>
-                    )}
-                  </div>
+            <div className="menu-comments-list">
+              {(yorumlar[detay.id] ?? []).map((y, i) => (
+                <div key={i} className="menu-comment">
+                  <StarRating value={y.puan} readOnly />
+                  {y.metin && <p className="menu-comment-text">{y.metin}</p>}
+                  {y.gorsel && (
+                    <span className="menu-comment-img">
+                      <Image src={y.gorsel} alt="Yorum görseli" width={220} height={150} />
+                    </span>
+                  )}
                 </div>
               ))}
-          </div>
-        </div>
+              {!(yorumlar[detay.id]?.length) && (
+                <p className="menu-comments-empty">İlk yorumu sen yaz.</p>
+              )}
+            </div>
+
+            <div className="menu-comment-form">
+              <StarRating value={yeniPuan} onChange={setYeniPuan} />
+              <Textarea
+                label="Yorumun"
+                placeholder="Kahve nasıldı?"
+                value={yeniMetin}
+                onChange={(e) => setYeniMetin(e.target.value)}
+              />
+              <div className="menu-comment-form-row">
+                <label className="menu-comment-upload">
+                  <ImagePlus size={16} aria-hidden="true" />
+                  Görsel ekle
+                  <input type="file" accept="image/*" hidden onChange={gorselSec} />
+                </label>
+                {yeniGorsel && (
+                  <span className="menu-comment-preview">
+                    <Image src={yeniGorsel} alt="Önizleme" width={56} height={42} />
+                    <button
+                      type="button"
+                      className="menu-comment-preview-x"
+                      aria-label="Görseli kaldır"
+                      onClick={() => setYeniGorsel("")}
+                    >
+                      <X size={14} />
+                    </button>
+                  </span>
+                )}
+                <Button size="md" onClick={yorumGonder} disabled={!yeniMetin.trim() && !yeniGorsel}>
+                  Gönder
+                </Button>
+              </div>
+            </div>
+          </section>
+        </Modal>
       )}
     </div>
-  );
+  )
 }
