@@ -1,20 +1,7 @@
-/* Sipariş onay ekranı — TASK-008 ile gerçek onay/özet haline getirildi.
-   Görsel refactor (token + component) TASK-090'da. */
+/* Sipariş onayı — TASK-090 (component + token). */
 
 .siparis-page {
-  min-height: 100dvh;
-  width: 100%;
-  background: #0c0b0a;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: var(--s-7) var(--s-5) var(--s-8);
-}
-
-.siparis-content {
-  width: 100%;
-  max-width: 460px;
+  padding-block: var(--s-8) var(--s-9);
   text-align: center;
 }
 
@@ -22,144 +9,75 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  height: 68px;
-  margin-bottom: 20px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--s-4);
   border-radius: var(--r-pill);
-  color: #86efac;
-  background: rgba(134, 239, 172, 0.12);
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 14%, transparent);
 }
 
 .siparis-hero {
-  font-size: clamp(26px, 5vw, 38px);
-  font-weight: 600;
-  line-height: 1.15;
-  margin: 0 0 8px;
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-h2);
 }
 
 .siparis-order-id {
-  margin: 0 0 20px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.55);
-  font-variant-numeric: tabular-nums;
+  margin: 0 0 var(--s-5);
+  color: var(--ink-3);
 }
 
-.siparis-desc {
+.siparis-eta {
   display: flex;
   gap: var(--s-2);
   justify-content: center;
   align-items: flex-start;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 15px;
-  line-height: 1.6;
-  margin: 0 0 28px;
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  margin: 0 0 var(--s-6);
 }
 
-.siparis-order-summary {
-  margin: 0 auto;
-  padding: var(--s-2) var(--s-5);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--r-lg);
+.siparis-summary {
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
 }
 
-.siparis-order-row {
+.siparis-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: var(--s-3);
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
 }
-
-.siparis-order-row:last-child {
-  border-bottom: none;
+.siparis-row-discount {
+  color: var(--success);
 }
-
-.siparis-order-label {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-}
-
-.siparis-order-value {
-  color: #fff;
-  font-size: 14px;
+.siparis-row-total {
+  margin-top: var(--s-1);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-lg);
   font-weight: 600;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.siparis-order-discount {
-  color: #86efac;
-}
-
-.siparis-order-total .siparis-order-label,
-.siparis-order-total .siparis-order-value {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.siparis-status-badge {
-  display: inline-block;
-  padding: var(--s-1) var(--s-3);
-  border-radius: var(--r-pill);
-  font-size: 12px;
-  font-weight: 600;
-  background: rgba(197, 138, 92, 0.15);
-  border: 1px solid rgba(197, 138, 92, 0.4);
-  color: #ffd59e;
+  color: var(--ink);
 }
 
 .siparis-actions {
   display: flex;
+  gap: var(--s-3);
   justify-content: center;
   flex-wrap: wrap;
-  gap: var(--s-3);
-  margin-top: 28px;
-}
-
-.siparis-btn {
-  padding: var(--s-4) var(--s-5);
-  border-radius: var(--r-lg);
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: inherit;
-  transition: background-color 0.18s ease, border-color 0.18s ease;
-  min-height: 48px;
-}
-
-.siparis-btn-primary {
-  background: var(--accent);
-  color: #1a120b;
-}
-
-.siparis-btn-primary:hover {
-  background: #d59a6a;
-}
-
-.siparis-btn-secondary {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.siparis-btn-secondary:hover {
-  border-color: rgba(255, 255, 255, 0.5);
+  margin-top: var(--s-6);
 }
 
 @media (max-width: 480px) {
-  .siparis-page {
-    padding: 96px 16px 64px;
-  }
-
   .siparis-actions {
     flex-direction: column;
   }
-
-  .siparis-btn {
+  .siparis-actions > * {
     width: 100%;
   }
 }
