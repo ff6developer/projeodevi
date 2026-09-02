@@ -6,13 +6,23 @@ import type { CartLine, CoffeeRecipe } from "./types"
 const KEY = "elmenes.cart"
 const EVENT = "cartChanged"
 
+/** Boş sepet için sabit referans — useSyncExternalStore döngüye girmesin. */
+export const EMPTY_CART: readonly CartLine[] = Object.freeze([])
+
+// Snapshot önbelleği: localStorage string'i değişmedikçe aynı dizi referansı döner.
+let cacheRaw: string | null = null
+let cache: CartLine[] = EMPTY_CART as CartLine[]
+
 function read(): CartLine[] {
-  if (typeof window === "undefined") return []
+  if (typeof window === "undefined") return EMPTY_CART as CartLine[]
   try {
     const raw = window.localStorage.getItem(KEY)
-    return raw ? (JSON.parse(raw) as CartLine[]) : []
+    if (raw === cacheRaw) return cache
+    cacheRaw = raw
+    cache = raw ? (JSON.parse(raw) as CartLine[]) : (EMPTY_CART as CartLine[])
+    return cache
   } catch {
-    return []
+    return EMPTY_CART as CartLine[]
   }
 }
 

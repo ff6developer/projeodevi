@@ -1,15 +1,23 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import AuthForm from "@/components/AuthForm"
 import "@/styles/login.css"
 import { useToast } from "@/components/ToastProvider"
 import { API_BASE_URL } from "@/app/site-config"
 import { setUser } from "@/lib/session"
 
+/** Yalnızca site içi göreli yolları kabul et (açık yönlendirme koruması). */
+function safeNext(raw: string | null): string | null {
+  if (!raw) return null
+  if (!raw.startsWith("/") || raw.startsWith("//")) return null
+  return raw
+}
+
 export default function LoginClient() {
   const router = useRouter()
   const toast = useToast()
+  const nextPath = safeNext(useSearchParams().get("next"))
 
   return (
     <AuthForm
@@ -32,7 +40,7 @@ export default function LoginClient() {
         const u = (data as { user: { name: string; email: string } }).user
         setUser(u)
         toast.success(`Hoş geldin, ${u.name}.`)
-        router.push("/profil")
+        router.push(nextPath ?? "/profil")
       }}
       onError={(data) => data.message || "Giriş yapılamadı."}
       links={[{ text: "Hesabın yok mu?", href: "/kayit", label: "Kayıt ol" }]}

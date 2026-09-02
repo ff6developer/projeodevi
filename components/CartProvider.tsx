@@ -2,11 +2,9 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react"
 import * as cart from "@/lib/cart"
@@ -16,6 +14,8 @@ type CartApi = {
   lines: CartLine[]
   count: number
   subtotalKurus: number
+  /** true olduğunda sepet tarayıcıdan okunmuştur (ilk client render'ında da). */
+  hydrated: boolean
   addProduct: typeof cart.addProduct
   addRecipe: typeof cart.addRecipe
   setQty: (lineId: string, qty: number) => void
@@ -25,28 +25,29 @@ type CartApi = {
 
 const CartContext = createContext<CartApi | null>(null)
 
+const serverLines = () => cart.EMPTY_CART as CartLine[]
+
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [lines, setLines] = useState<CartLine[]>([])
-
-  const sync = useCallback(() => setLines(cart.getCart()), [])
-
-  useEffect(() => {
-    sync()
-    return cart.subscribeCart(sync)
-  }, [sync])
+  const lines = useSyncExternalStore(cart.subscribeCart, cart.getCart, serverLines)
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
 
   const api = useMemo<CartApi>(
     () => ({
       lines,
       count: lines.reduce((n, l) => n + l.qty, 0),
       subtotalKurus: lines.reduce((n, l) => n + l.unitKurus * l.qty, 0),
+      hydrated,
       addProduct: cart.addProduct,
       addRecipe: cart.addRecipe,
       setQty: cart.setQty,
       removeLine: cart.removeLine,
       clear: cart.clearCart,
     }),
-    [lines],
+    [lines, hydrated],
   )
 
   return <CartContext.Provider value={api}>{children}</CartContext.Provider>
