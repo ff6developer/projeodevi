@@ -175,9 +175,9 @@
 
 /* ===== FOOTER (TASK-021) ===== */
 .footer {
-  margin-top: 64px;
+  margin-top: var(--s-8);
   background: var(--surface);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--line);
   padding: var(--s-7) var(--s-5);
   color: var(--ink-2);
 }
@@ -255,64 +255,62 @@
   color: var(--ink-3);
 }
 
-/* Özel Scrollbar (Tüm sayfalarda premium görünüm) */
+/* Özel scrollbar — token'lı, sade */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #080808;
+  background: var(--paper);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(197, 138, 92, 0.3);
+  background: var(--line-strong);
   border-radius: var(--r-md);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(197, 138, 92, 0.6);
+  background: var(--ink-3);
 }
 
-/* ===== TOAST (Custom Alerts) ===== */
+/* ===== TOAST ===== */
 .toast-viewport {
   position: fixed;
-  top: 100px;
-  right: 18px;
-  z-index: 9999;
+  top: calc(var(--header-h) + var(--s-4));
+  right: var(--s-4);
+  z-index: var(--z-toast);
   display: flex;
   flex-direction: column;
   gap: var(--s-3);
-  width: min(420px, calc(100vw - 36px));
+  width: min(420px, calc(100vw - 2 * var(--s-5)));
   pointer-events: none;
 }
 
 .toast {
-  position: relative;
   pointer-events: auto;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: start;
   gap: var(--s-3);
-  padding: 12px 12px 12px 14px;
-  border-radius: var(--r-lg);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background: rgba(10, 10, 10, 0.88);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: var(--shadow-1);
+  padding: var(--s-3) var(--s-3) var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--ink-3);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
   animation: toast-in 160ms ease-out forwards;
 }
 
 .toast-message {
-  font-size: 13px;
-  line-height: 1.35;
-  color: rgba(255, 255, 255, 0.90);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  color: var(--ink);
 }
 
 .toast-close {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--r-md);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.9);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--tint);
+  color: var(--ink-2);
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
@@ -322,44 +320,14 @@
 }
 
 .toast-close:hover {
-  background: rgba(255, 255, 255, 0.10);
+  color: var(--ink);
+  background: var(--surface-2);
 }
 
-.toast-success { border-color: rgba(34, 197, 94, 0.22); }
-.toast-success::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-  pointer-events: none;
-}
-
-.toast-error { border-color: rgba(239, 68, 68, 0.25); }
-.toast-error::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-  pointer-events: none;
-}
-
-.toast-warning { border-color: rgba(245, 158, 11, 0.25); }
-.toast-warning::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-  pointer-events: none;
-}
-
-.toast-info { border-color: rgba(197, 138, 92, 0.28); }
-.toast-info::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-  pointer-events: none;
-}
+.toast-success { border-left-color: var(--success); }
+.toast-error { border-left-color: var(--danger); }
+.toast-warning { border-left-color: var(--warning); }
+.toast-info { border-left-color: var(--accent); }
 
 @keyframes toast-in {
   from { opacity: 0; transform: translateY(-8px); }
@@ -375,84 +343,15 @@
   }
 }
 
-/* ===== ROUTE STATES (404 / loading / error) — TASK-018 =====
-   Token'lara TASK-028+ ile bağlanacak. */
+/* ===== ROUTE STATES (404 / loading / error) =====
+   İçerik ui/States + ui/Button; burada yalnız dikey ortalama kabuğu. */
 .route-state {
   min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--s-4);
-  padding: 120px 24px 80px;
-  text-align: center;
-  color: var(--ink-2);
-}
-
-.route-state h1 {
-  margin: 0;
-  font-size: clamp(24px, 4vw, 34px);
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.route-state p {
-  margin: 0;
-  max-width: 42ch;
-  line-height: 1.6;
-  font-size: 15px;
-}
-
-.route-state-actions {
-  display: flex;
-  gap: var(--s-3);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 8px;
-}
-
-.route-state-btn {
-  padding: var(--s-3) var(--s-5);
-  border-radius: var(--r-lg);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: border-color 0.18s ease;
-}
-
-.route-state-btn:hover {
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-.route-state-btn-primary {
-  background: var(--accent);
-  color: #1a120b;
-  border-color: transparent;
-}
-
-.route-state-btn-primary:hover {
-  background: #d59a6a;
-}
-
-.route-state-spinner {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.15);
-  border-top-color: var(--accent);
-  animation: route-state-spin 0.8s linear infinite;
-}
-
-@keyframes route-state-spin {
-  to { transform: rotate(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .route-state-spinner { animation-duration: 2s; }
+  padding: var(--s-9) var(--s-5);
 }
 
 /* Header sağ blok + sepet (TASK-110) */

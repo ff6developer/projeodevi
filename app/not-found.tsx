@@ -1,18 +1,20 @@
-import Link from "next/link"
+import { Button, EmptyState } from "@/components/ui"
 
 export default function NotFound() {
   return (
     <div className="route-state">
-      <h1>Bu sayfa bulunamadı</h1>
-      <p>Aradığın sayfa taşınmış ya da hiç var olmamış olabilir.</p>
-      <div className="route-state-actions">
-        <Link href="/" className="route-state-btn route-state-btn-primary">
-          Ana sayfa
-        </Link>
-        <Link href="/menu" className="route-state-btn">
-          Menüye göz at
-        </Link>
-      </div>
+      <EmptyState
+        title="Bu sayfa bulunamadı"
+        description="Aradığın sayfa taşınmış ya da hiç var olmamış olabilir."
+        action={
+          <div className="cluster">
+            <Button href="/">Ana sayfa</Button>
+            <Button href="/menu" variant="secondary">
+              Menüye göz at
+            </Button>
+          </div>
+        }
+      />
     </div>
   )
 }
