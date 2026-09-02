@@ -1,5 +1,22 @@
 import { Lock } from "lucide-react"
 import ConfigSection from "./ConfigSection"
+import type { RecipeOption } from "@/lib/types"
+
+type BuilderForm = Record<string, RecipeOption>
+
+type CoffeeRightProps = {
+  isLocked: boolean
+  form: BuilderForm
+  handleOptionSelect: (field: string, item: RecipeOption) => void
+  milkOptions: RecipeOption[]
+  beanOptions: RecipeOption[]
+  foamOptions: RecipeOption[]
+  cupOptions: RecipeOption[]
+  syrupOptions: RecipeOption[]
+  spiceOptions: RecipeOption[]
+  sweetenerOptions: RecipeOption[]
+  techniqueOptions: RecipeOption[]
+}
 
 export default function CoffeeRight({
   isLocked,
@@ -12,8 +29,8 @@ export default function CoffeeRight({
   syrupOptions,
   spiceOptions,
   sweetenerOptions,
-  techniqueOptions
-}: any) {
+  techniqueOptions,
+}: CoffeeRightProps) {
 
   return (
     <div className="coffee-right">

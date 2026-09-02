@@ -21,8 +21,9 @@ export default function HeaderNav() {
     return subscribe(sync)
   }, [])
 
-  // Rota değişince drawer'ı kapat
+  // Rota değişince drawer'ı kapat (pathname harici bir sistem — router).
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDrawerOpen(false)
   }, [pathname])
 

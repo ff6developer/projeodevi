@@ -3,20 +3,15 @@
 import { useRef } from "react"
 import { Lock } from "lucide-react"
 import { formatPrice } from "@/lib/format"
-
-interface OptionItem {
-  name: string
-  price: number
-  power: number
-}
+import type { RecipeOption } from "@/lib/types"
 
 interface Props {
   title: string
   field: string
-  options: OptionItem[]
-  selectedValue: OptionItem | null
+  options: RecipeOption[]
+  selectedValue: RecipeOption | null
   isLocked: boolean
-  onSelect: (field: string, item: OptionItem) => void
+  onSelect: (field: string, item: RecipeOption) => void
 }
 
 export default function ConfigSection({

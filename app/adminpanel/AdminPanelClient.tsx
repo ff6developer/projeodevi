@@ -53,6 +53,8 @@ export default function AdminPanelClient() {
   const [newName, setNewName] = useState("")
   const [newPrice, setNewPrice] = useState("")
 
+  // Mount: yetki kontrolü + tarayıcıdan veri hidrasyonu (SSR sonrası, tek sefer).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!isAdmin()) {
       router.push("/giris")
@@ -74,6 +76,7 @@ export default function AdminPanelClient() {
       /* yoksay */
     }
   }, [router])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const stats = useMemo(() => {
     const todayStr = new Date().toDateString()

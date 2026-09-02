@@ -61,6 +61,8 @@ export default function ProfilClient() {
   const [editEmail, setEditEmail] = useState("")
   const [editBio, setEditBio] = useState("")
 
+  // Mount: oturum kontrolü + tarayıcıdan veri hidrasyonu (SSR sonrası, tek sefer).
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     const parsed = getUser()
     if (!parsed) {
@@ -86,6 +88,7 @@ export default function ProfilClient() {
       /* yoksay */
     }
   }, [router])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const orders = useMemo(() => getOrders(), [])
 

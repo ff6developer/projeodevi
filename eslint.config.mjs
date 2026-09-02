@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Eski Express prototipi — Next uygulamasının parçası değil (client-side veri katmanı kullanılıyor).
+    "backend/**",
   ]),
 ]);
 

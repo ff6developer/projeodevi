@@ -62,6 +62,18 @@ function StarRating({
 
 const CATEGORIES: ProductCategory[] = ["sicak", "soguk", "tatli"]
 
+type Sampiyon = { name: string; creator: string; image?: string }
+
+function readJSON<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback
+  try {
+    const raw = window.localStorage.getItem(key)
+    return raw ? (JSON.parse(raw) as T) : fallback
+  } catch {
+    return fallback
+  }
+}
+
 type SortKey = "onerilen" | "fiyat-artan" | "fiyat-azalan" | "isim"
 const SORT_KEYS: SortKey[] = ["onerilen", "fiyat-artan", "fiyat-azalan", "isim"]
 const SORT_LABEL: Record<SortKey, string> = {
@@ -84,25 +96,18 @@ export default function MenuClient() {
     return SORT_KEYS.includes(s as SortKey) ? (s as SortKey) : "onerilen"
   })
   const [detay, setDetay] = useState<Product | null>(null)
-  const [yorumlar, setYorumlar] = useState<Record<number, Yorum[]>>({})
+  const [yorumlar, setYorumlar] = useState<Record<number, Yorum[]>>(() =>
+    readJSON<Record<number, Yorum[]>>(YORUM_KEY, {}),
+  )
   const [yeniMetin, setYeniMetin] = useState("")
   const [yeniPuan, setYeniPuan] = useState(5)
   const [yeniGorsel, setYeniGorsel] = useState<string>("")
-  const [sampiyon, setSampiyon] = useState<{ name: string; creator: string; image?: string } | null>(null)
+  const [sampiyon, setSampiyon] = useState<Sampiyon | null>(null)
 
+  // Yalnızca istemcide, hidrasyondan sonra oku (SSR uyuşmazlığını önlemek için).
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(YORUM_KEY)
-      if (raw) setYorumlar(JSON.parse(raw))
-    } catch {
-      /* yoksay */
-    }
-    try {
-      const c = localStorage.getItem("arenaChampion")
-      if (c) setSampiyon(JSON.parse(c))
-    } catch {
-      /* yoksay */
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSampiyon(readJSON<Sampiyon | null>("arenaChampion", null))
   }, [])
 
   // Kategori/sıralama değişince URL'i güncelle (paylaşılabilir bağlantı).
