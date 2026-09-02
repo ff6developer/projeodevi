@@ -121,7 +121,7 @@ Sakin, kesin, "biz" dili. Türkçe. Developer terimi yok. Hype yok. Örn: "Sepet
 | 4 | Typography & spacing | TASK-043 … TASK-052 | ✅ COMPLETE |
 | 5 | Navigation | TASK-053 … TASK-061 | ✅ COMPLETE |
 | 6 | Ortak componentler | TASK-062 … TASK-083 | ✅ COMPLETE |
-| 7 | Sayfa sayfa refactor | TASK-084 … TASK-106 | ⬜ |
+| 7 | Sayfa sayfa refactor | TASK-084 … TASK-106 | ✅ COMPLETE |
 | 8 | E-ticaret | TASK-107 … TASK-127 | ⬜ |
 | 9 | Responsive + accessibility | TASK-128 … TASK-141 | ⬜ |
 | 10 | Final professional polish | TASK-142 … TASK-151 | ⬜ |

@@ -53,7 +53,7 @@ export default function About() {
           ortaya çıkan bir zanaat. Menüdeki her içecek bu özenle hazırlanıyor; kendi
           kahveni tasarladığında da aynı çekirdekler ve aynı standart geçerli.
         </p>
-        <p className="about-tagline">"{BRAND.tagline}"</p>
+        <p className="about-tagline">{`“${BRAND.tagline}”`}</p>
       </div>
 
       <div className="about-values">
