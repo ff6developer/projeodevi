@@ -1,11 +1,14 @@
 "use client"
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react"
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react"
 import { useRouter } from "next/navigation"
 import "@/styles/odeme.css"
 import { useCart } from "@/components/CartProvider"
-import { isLoggedIn, subscribe as subscribeAuth } from "@/lib/session"
+import { useToast } from "@/components/ToastProvider"
+import { getUser, isLoggedIn, subscribe as subscribeAuth } from "@/lib/session"
 import { computeCartTotals } from "@/lib/pricing"
+import { createOrder } from "@/lib/orders"
+import type { OrderItem } from "@/lib/types"
 import {
   CHECKOUT_STEPS,
   canAdvance,
@@ -22,10 +25,13 @@ import ReviewStep from "./steps/ReviewStep"
 
 export default function OdemeClient() {
   const router = useRouter()
-  const { lines, hydrated } = useCart()
+  const toast = useToast()
+  const { lines, hydrated, clear } = useCart()
 
   const [step, setStep] = useState(0)
   const [triedNext, setTriedNext] = useState(false)
+  const [placing, setPlacing] = useState(false)
+  const placedRef = useRef(false)
   const [state, setState] = useState<CheckoutState>(() => {
     const last = getLastAddress()
     return last ? { ...initialCheckoutState(), address: last } : initialCheckoutState()
@@ -38,7 +44,7 @@ export default function OdemeClient() {
   )
 
   useEffect(() => {
-    if (!hydrated) return
+    if (!hydrated || placedRef.current) return
     if (!authed) {
       router.replace("/giris?next=/odeme")
       return
@@ -76,6 +82,54 @@ export default function OdemeClient() {
     setStep((s) => Math.max(0, s - 1))
   }
 
+  const placeOrder = () => {
+    if (placing) return
+    placedRef.current = true
+    setPlacing(true)
+    try {
+      const items: OrderItem[] = lines.map((l) =>
+        l.kind === "product"
+          ? {
+              kind: "product",
+              name: l.name,
+              image: l.image ?? null,
+              unitKurus: l.unitKurus,
+              qty: l.qty,
+            }
+          : {
+              kind: "recipe",
+              name: l.name,
+              image: l.image ?? null,
+              unitKurus: l.unitKurus,
+              qty: l.qty,
+              recipe: l.recipe,
+              score: l.score,
+              fromArena: l.fromArena,
+            },
+      )
+
+      const order = createOrder({
+        items,
+        address: state.address,
+        delivery: state.delivery,
+        payment: state.payment,
+        subtotalKurus: totals.subtotalKurus,
+        discountKurus: totals.discountKurus,
+        shippingKurus: totals.shippingKurus,
+        totalKurus: totals.totalKurus,
+        userEmail: getUser()?.email,
+      })
+
+      clear()
+      toast.success("Siparişin alındı.")
+      router.replace(`/siparis?o=${order.id}`)
+    } catch {
+      placedRef.current = false
+      setPlacing(false)
+      toast.error("Siparişin oluşturulamadı, lütfen tekrar dene.")
+    }
+  }
+
   return (
     <div className="odeme container">
       <h1>Ödeme</h1>
@@ -99,9 +153,13 @@ export default function OdemeClient() {
                 Geri
               </Button>
             )}
-            {!isLast && (
+            {!isLast ? (
               <Button size="md" onClick={goNext} type="button">
                 Devam et
+              </Button>
+            ) : (
+              <Button size="md" onClick={placeOrder} type="button" loading={placing}>
+                Siparişi onayla
               </Button>
             )}
           </div>

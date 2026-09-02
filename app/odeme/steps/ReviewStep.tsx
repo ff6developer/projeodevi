@@ -20,6 +20,7 @@ type Props = {
 
 export default function ReviewStep({ state, lines, totals }: Props) {
   const { address, delivery, payment } = state
+  const last4 = state.card.number.replace(/\D/g, "").slice(-4)
 
   return (
     <div className="odeme-step">
@@ -43,7 +44,11 @@ export default function ReviewStep({ state, lines, totals }: Props) {
 
       <div className="odeme-review-block">
         <h3>Ödeme</h3>
-        <p>{payment === "kapida" ? "Kapıda ödeme" : "Kart ile ödeme (deneme)"}</p>
+        <p>
+          {payment === "kapida"
+            ? "Kapıda ödeme"
+            : `Kart ile ödeme (deneme)${last4 ? ` · •••• ${last4}` : ""}`}
+        </p>
       </div>
 
       <div className="odeme-review-block">
