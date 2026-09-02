@@ -2,9 +2,11 @@
 import { useState, useEffect } from "react"
 import "@/styles/kahveniolustur.css"
 import { useRouter } from "next/navigation"
-import { Beaker, Zap, Trophy, Lock, Unlock } from "lucide-react"
+import { Zap, Lock } from "lucide-react"
 import CoffeeRight from "@/components/CoffeeRight"
 import { useToast } from "@/components/ToastProvider"
+import { Button, Card, Input, Progress, Price, IntensityDots } from "@/components/ui"
+import { formatPrice } from "@/lib/format"
 import { createOrder } from "@/lib/orders"
 import { isLoggedIn } from "@/lib/session"
 
@@ -142,10 +144,6 @@ export default function KahveniOlusturClient() {
   const total = basePrice + subtotal - discountAmount
   const originalTotal = basePrice + subtotal
 
-  // Geçici para birimi biçimlendirici (TASK-074'te lib/format'a taşınacak)
-  const fmtTRY = (n: number) =>
-    new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY", maximumFractionDigits: 0 }).format(n)
-
   // Fiyat dökümü satırları — sadece ücretli eklentiler gösterilir
   const priceRows = SELECTION_STEPS
     .map((s) => ({ label: s.label, price: (form[s.field]?.price as number) || 0, name: form[s.field]?.name as string }))
@@ -230,99 +228,81 @@ export default function KahveniOlusturClient() {
 
   return (
     <div className="coffee-layout">
-      <div className="coffee-bg"></div>
-      <div className="coffee-left">
-        <div className="lab-badge"><Beaker size={16} /> THE COFFEE LAB</div>
-        <h1 className="hero-title">Şampiyonu Tasarla.</h1>
-        <p className="hero-sub">
-          Arenada yarışacak kahveni tasarlıyorsun. Her seçim yaratıcılık puanını artırır!
-        </p>
+      <aside className="coffee-summary">
+        <Card pad="md" elevated>
+          <p className="eyebrow">Kahve tasarımı</p>
+          <h1 className="coffee-summary-title">Kendi kahveni tasarla</h1>
+          <p className="coffee-summary-lede">
+            Her seçim tarifini ve fiyatını anında güncelliyor.
+          </p>
 
-        <div className="arena-stats-container">
-          <div className="arena-stat-box">
-            <span className="stat-label"><Zap size={14} color="#ffd59e"/> Yaratıcılık Puanı</span>
-            <span className="stat-value">{creativityScore}</span>
-            <span className="stat-hint">Seçimlerinin özgünlüğü — Toplulukta öne çıkmana yardımcı olur.</span>
-          </div>
-        </div>
-
-        <div className="builder-price">
-              <div className="builder-price-row">
-                <span>Temel kahve</span>
-                <span>{fmtTRY(basePrice)}</span>
-              </div>
-              {priceRows.map((r) => (
-                <div className="builder-price-row" key={r.label}>
-                  <span>{r.label}<span className="builder-price-opt"> · {r.name}</span></span>
-                  <span>+ {fmtTRY(r.price)}</span>
-                </div>
-              ))}
-              {isLocked && discountAmount > 0 && (
-                <div className="builder-price-row builder-price-discount">
-                  <span><Unlock size={13} /> Arena indirimi (%15)</span>
-                  <span>− {fmtTRY(discountAmount)}</span>
-                </div>
-              )}
-              <div className="builder-price-row builder-price-total">
-                <span>Toplam</span>
-                <span>
-                  {fmtTRY(total)}
-                  {isLocked && discountAmount > 0 && (
-                    <span className="builder-price-was">{fmtTRY(originalTotal)}</span>
-                  )}
-                </span>
-              </div>
+          <div className="coffee-summary-metrics">
+            <div>
+              <span className="coffee-metric-label">
+                <Zap size={13} aria-hidden="true" /> Yaratıcılık puanı
+              </span>
+              <span className="coffee-metric-value">{creativityScore}</span>
             </div>
+            <IntensityDots value={Math.min(5, Math.max(1, Math.round(creativityScore / 20))) as 1 | 2 | 3 | 4 | 5} />
+          </div>
 
-        {/* KAHVE İSMİ */}
-        {!isLocked && (
-          <div className="coffee-name-input-wrapper">
-            <label className="coffee-name-label">
-              <Beaker size={14} /> Kahvenin Adı
-            </label>
-            <input
-              type="text"
-              className="coffee-name-input"
-              placeholder="Kahvene bir isim ver (opsiyonel)..."
+          <div className="coffee-price">
+            <div className="coffee-price-row">
+              <span>Temel kahve</span>
+              <span>{formatPrice(basePrice * 100)}</span>
+            </div>
+            {priceRows.map((r) => (
+              <div className="coffee-price-row" key={r.label}>
+                <span>
+                  {r.label}
+                  <span className="coffee-price-opt"> · {r.name}</span>
+                </span>
+                <span>+ {formatPrice(r.price * 100)}</span>
+              </div>
+            ))}
+            {isLocked && discountAmount > 0 && (
+              <div className="coffee-price-row coffee-price-discount">
+                <span>Arena indirimi (%15)</span>
+                <span>− {formatPrice(discountAmount * 100)}</span>
+              </div>
+            )}
+            <div className="coffee-price-row coffee-price-total">
+              <span>Toplam</span>
+              <Price value={total * 100} original={isLocked && discountAmount > 0 ? originalTotal * 100 : undefined} />
+            </div>
+          </div>
+
+          {!isLocked && (
+            <Input
+              label="Kahvenin adı (opsiyonel)"
+              placeholder="Kahvene bir isim ver…"
               value={customCoffeeName}
               onChange={(e) => setCustomCoffeeName(e.target.value)}
               maxLength={30}
+              hint={`${customCoffeeName.length}/30`}
             />
-            <span className="coffee-name-hint">
-              {customCoffeeName.length}/30 karakter
-            </span>
-          </div>
-        )}
+          )}
 
-        {isLocked && arenaCoffeeName && (
-          <div className="coffee-name-input-wrapper locked-name">
-            <label className="coffee-name-label">
-              <Beaker size={14} /> Arena Kahvesi
-            </label>
-            <div className="locked-coffee-name">{arenaCoffeeName}</div>
-          </div>
-        )}
+          {isLocked && arenaCoffeeName && (
+            <p className="coffee-locked-name">
+              <Lock size={14} aria-hidden="true" /> {arenaCoffeeName}
+            </p>
+          )}
 
-        {isLocked && (
-          <div className="locked-warning">
-            <Lock size={16} />
-            <span>Bu tarif Arenadan geldiği için içeriği değiştiremezsiniz.</span>
-          </div>
-        )}
+          {isLocked && (
+            <p className="coffee-locked-note">
+              Bu tarif toplumdan geldiği için içeriği değiştirilemez.
+            </p>
+          )}
 
-        <div className="builder-cta">
-            <div className="builder-progress">
-              <span className="builder-progress-count">{selectedCount} / {SELECTION_STEPS.length} seçim tamamlandı</span>
-              <span className="builder-progress-track" aria-hidden="true">
-                <span
-                  className="builder-progress-fill"
-                  style={{ width: `${(selectedCount / SELECTION_STEPS.length) * 100}%` }}
-                />
-              </span>
-            </div>
-
+          <div className="coffee-cta">
+            <Progress
+              value={selectedCount}
+              max={SELECTION_STEPS.length}
+              label={`${selectedCount} / ${SELECTION_STEPS.length} seçim tamamlandı`}
+            />
             {missingSteps.length > 0 && (
-              <p className="builder-missing">
+              <p className="coffee-missing">
                 Kalan:{" "}
                 {missingSteps.map((s, i) => (
                   <span key={s.field}>
@@ -332,20 +312,15 @@ export default function KahveniOlusturClient() {
                 ))}
               </p>
             )}
+            <Button block size="lg" onClick={handleSiparis} disabled={!allSelected}>
+              Siparişi tamamla
+              {isLocked && allSelected ? " (%15 indirim)" : ""}
+            </Button>
+          </div>
+        </Card>
+      </aside>
 
-            <button
-              className="builder-submit-btn"
-              onClick={handleSiparis}
-              disabled={!allSelected}
-            >
-              <Trophy size={18} /> Siparişi Tamamla
-              {isLocked && allSelected && (
-                <span style={{ marginLeft: "8px", fontSize: "0.8em" }}>(%15 İndirim)</span>
-              )}
-            </button>
-        </div>
-      </div>
-        <CoffeeRight
+      <CoffeeRight
   isLocked={isLocked}
   form={form}
   handleOptionSelect={handleOptionSelect}

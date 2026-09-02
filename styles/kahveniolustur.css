@@ -1,472 +1,201 @@
-/* ===== GENEL LAYOUT ===== */
+/* Kahveni Oluştur — TASK-088/089 (2 kolon, sticky özet, component + token). */
+
 .coffee-layout {
-  display: flex;
-  min-height: 100vh;
-  font-family: var(--font-sans);
-  position: relative;
-  width: 100%;
-}
-/* ===== BACKGROUND & OVERLAY ===== */
-.coffee-bg {
-  position: fixed;
-  inset: 0;
-  background-image: url("/coffee-bg.jpg"); 
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  gap: var(--s-7);
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--s-7) var(--s-5) var(--s-9);
+  align-items: start;
 }
 
-.coffee-layout::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  z-index: 1;
+/* --- SOL: yapışkan özet --- */
+.coffee-summary {
+  position: sticky;
+  top: calc(var(--header-h) + var(--s-4));
 }
 
-/* ===== LABORATUVAR ROZETİ ===== */
-/* Not (TASK-003): sol paneldeki tüm elemanlar eski `position:fixed` + `vh`
-   yerleşiminden normal doküman akışına alındı. Çakışma/taşma riski kalktı. */
-.lab-badge {
-  background: rgba(197, 138, 92, 0.2);
-  border: 1px solid var(--accent);
-  padding: var(--s-2) var(--s-4);
-  border-radius: var(--r-lg);
-  color: #ffd59e;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: normal; display: inline-flex;
-  align-items: center;
-  gap: var(--s-2);
-  width: fit-content;
-}
-
-/* ===== SOL PANEL (STATLAR VE TANITIM) ===== */
-.coffee-left {
-  width: 45%;
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: flex-start;
-  gap: var(--s-5);
-  padding: var(--s-7) var(--s-7) var(--s-8);
-  overflow: visible;
-}
-
-.hero-title {
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  font-weight: 600;
-  color: white;
-  margin: 0;
-  line-height: 1.1;
-}
-
-.hero-sub {
-  max-width: 480px;
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* ===== ARENA STAT KUTULARI ===== */
-.arena-stats-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-5);
-}
-
-.arena-stat-box {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: var(--s-4) var(--s-6);
-  border-radius: var(--r-lg);
-  backdrop-filter: blur(10px);
-}
-
-.stat-label {
-  display: flex;
-  align-items: center;
-  gap: var(--s-2);
-  font-size: 11px;
-  color: #888;
-  letter-spacing: normal; }
-
-.stat-value {
+.coffee-summary .eyebrow {
   display: block;
-  font-size: 28px;
-  font-weight: 600;
-  color: #fff;
-  margin-top: 5px;
+  margin-bottom: var(--s-2);
 }
 
-/* ===== KAHVE İSMİ INPUT ===== */
-.coffee-name-input-wrapper {
-  width: 100%;
-  max-width: 400px;
-  padding: var(--s-4);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--r-lg);
-  transition: all 0.3s ease;
-  z-index: 3;
+.coffee-summary-title {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-h3);
 }
 
-.coffee-name-input-wrapper:focus-within {
-  border-color: rgba(255, 213, 158, 0.3);
-  background: rgba(255, 255, 255, 0.06);
+.coffee-summary-lede {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: var(--lh-body);
 }
 
-.coffee-name-label {
+.coffee-summary-metrics {
   display: flex;
   align-items: center;
-  gap: var(--s-2);
-  font-size: 0.8em;
-  color: #ffd59e;
-  margin-bottom: 10px;
-  font-weight: 600;
-  letter-spacing: normal; }
-
-.coffee-name-input {
-  width: 100%;
-  padding: var(--s-3) var(--s-4);
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--r-md);
-  color: #fff;
-  font-size: 1em;
-  outline: none;
-  transition: all 0.2s ease;
-  font-family: inherit;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) 0;
+  border-block: 1px solid var(--line);
+  margin-bottom: var(--s-4);
 }
-
-.coffee-name-input:focus {
-  border-color: #ffd59e;
-  background: rgba(0, 0, 0, 0.5);
+.coffee-metric-label {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
 }
-
-.coffee-name-input::placeholder {
-  color: rgba(255, 255, 255, 0.25);
-}
-
-.coffee-name-hint {
+.coffee-metric-value {
   display: block;
-  text-align: right;
-  font-size: 0.7em;
-  color: rgba(255, 255, 255, 0.35);
-  margin-top: 6px;
-}
-
-/* Kilitli isim gösterimi */
-.locked-name {
-  opacity: 0.8;
-  border-color: rgba(255, 215, 0, 0.15);
-  background: rgba(255, 215, 0, 0.03);
-}
-
-.locked-coffee-name {
-  padding: var(--s-3) var(--s-4);
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: var(--r-md);
-  color: #ffd59e;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
   font-weight: 600;
-  font-size: 1.05em;
+  color: var(--ink);
 }
 
-/* ===== SAĞ PANEL (SEÇENEK ALANI) ===== */
-/* Not: eski tam-ekran scroll-hijack kaldırıldı (TASK-002). Bölümler artık
-   sayfanın normal akışında dikey olarak sıralanır. */
-.coffee-right {
-  width: 55%;
-  position: relative;
-  z-index: 2;
+/* --- Fiyat dökümü --- */
+.coffee-price {
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.config-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 48px 0;
-  width: 100%;
-}
-
-.section-title {
-  color: white;
-  font-size: 32px;
-  font-weight: 600;
-  margin: 0;
-  text-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
   gap: var(--s-2);
+  margin-bottom: var(--s-4);
 }
-
-.option-group {
-  backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--r-lg);
-  padding: var(--s-6);
-  color: white;
-  width: 100%;
-  max-width: 500px;
-  margin-top: 20px;
-}
-
-/* ===== SEÇENEK ÖĞELERİ (ITEMS) ===== */
-.milk-item {
+.coffee-price-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: var(--s-4) var(--s-5);
-  border-radius: var(--r-lg);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid transparent;
+  gap: var(--s-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
 }
-
-.milk-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateX(5px);
+.coffee-price-opt {
+  color: var(--ink-3);
 }
-
-.milk-item.active {
-  background: rgba(197, 138, 92, 0.25);
-  border-color: var(--accent);
+.coffee-price-discount {
+  color: var(--success);
 }
-
-.milk-item span:last-child {
-  font-size: 13px;
-  color: #ffd59e;
+.coffee-price-total {
+  margin-top: var(--s-1);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-lg);
   font-weight: 600;
+  color: var(--ink);
 }
 
-/* ===== BUTONLAR ===== */
-/* Not (TASK-010): "Laboratuvarı Aç" ön adımı kaldırıldı; .hero-btn silindi. */
-.builder-submit-btn {
-  display: inline-flex;
+.coffee-locked-name {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--s-3);
-  padding: var(--s-4) var(--s-6);
-  background: linear-gradient(90deg, #783c12, #714614);
-  border-radius: var(--r-md);
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.builder-submit-btn:hover:not(:disabled) {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-1);
-}
-
-.builder-submit-btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-/* ===== BUILDER CTA + İLERLEME (TASK-004) ===== */
-.builder-cta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s-3);
-  width: 100%;
-  max-width: 400px;
-}
-
-.builder-progress {
-  display: flex;
-  flex-direction: column;
   gap: var(--s-2);
-  width: 100%;
-}
-
-.builder-progress-count {
-  font-size: 13px;
+  margin: 0 0 var(--s-3);
   font-weight: 600;
-  color: #ffd59e;
+  color: var(--ink);
+}
+.coffee-locked-note {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
 }
 
-.builder-progress-track {
-  display: block;
-  height: 4px;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: var(--r-pill);
-  overflow: hidden;
+.coffee-cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
 }
-
-.builder-progress-fill {
-  display: block;
-  height: 100%;
-  background: var(--accent);
-  border-radius: var(--r-pill);
-  transition: width 0.18s ease;
-}
-
-.builder-missing {
+.coffee-missing {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--fs-caption);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--ink-2);
+}
+.coffee-missing a {
+  color: var(--accent);
 }
 
-.builder-missing a {
-  color: #ffd59e;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+/* --- SAĞ: seçim bölümleri --- */
+.coffee-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
 }
 
-/* Sabit header altında kalmasın diye anchor kaydırma payı */
 .config-section {
   scroll-margin-top: calc(var(--header-h) + var(--s-4));
 }
 
-/* ===== YARATICILIK PUANI İPUCU + FİYAT DÖKÜMÜ (TASK-006) ===== */
-.stat-hint {
-  display: block;
-  margin-top: 8px;
-  font-size: 11px;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.5);
-  max-width: 240px;
+.section-title {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-h3);
 }
 
-.builder-price {
-  width: 100%;
-  max-width: 400px;
+.option-group {
   display: flex;
   flex-direction: column;
   gap: var(--s-2);
-  padding: var(--s-4);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--r-lg);
 }
 
-.builder-price-row {
+.option-item {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--s-4);
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.75);
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+  text-align: left;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
-
-.builder-price-opt {
-  color: rgba(255, 255, 255, 0.4);
+.option-item:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--line-strong);
 }
-
-.builder-price-discount {
-  color: #86efac;
+.option-item.is-active {
+  border-color: var(--accent);
+  color: var(--ink);
 }
-
-.builder-price-discount span:first-child {
+.option-item.is-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.option-item.is-locked.is-active {
+  opacity: 1;
+}
+.option-name {
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
 }
-
-.builder-price-total {
-  margin-top: 4px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-}
-
-.builder-price-was {
-  margin-left: 8px;
-  font-size: 0.8em;
-  font-weight: 400;
-  text-decoration: line-through;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .coffee-left {
-    padding: 100px 32px 48px;
-  }
-}
-
-/* Telefon: iki kolon tek kolona iner (elemanlar zaten normal akışta). */
-@media (max-width: 768px) {
-  .coffee-layout {
-    flex-direction: column;
-  }
-
-  .coffee-left {
-    width: 100%;
-    align-self: stretch;
-    padding: 96px 20px 32px;
-  }
-
-  .hero-title {
-    font-size: 28px;
-  }
-
-  .coffee-right {
-    width: 100%;
-  }
-}
-
-/* 🔒 KİLİTLİ TARİF STİLLERİ */
-.milk-item.locked {
-  opacity: 0.5;
-  cursor: not-allowed !important;
-  pointer-events: none;
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-.milk-item.locked.active {
-  opacity: 1;
-  background: rgba(255, 213, 158, 0.12) !important;
-  border: 2px solid #ffd59e !important;
-  pointer-events: none;
-}
-
-.milk-item.locked.active svg {
-  margin-left: 8px;
-  color: #ffd59e;
+.option-price {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+  white-space: nowrap;
 }
 
 .locked-banner {
   display: flex;
   align-items: center;
-  gap: var(--s-3);
-  background: rgba(255, 213, 158, 0.12);
-  border: 1px solid rgba(255, 213, 158, 0.25);
-  border-radius: var(--r-md);
-  padding: var(--s-3) var(--s-4);
-  margin-bottom: 20px;
-  color: #ffd59e;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.locked-warning {
-  display: flex;
-  align-items: center;
   gap: var(--s-2);
-  background: rgba(255, 213, 158, 0.08);
-  border-left: 3px solid #ffd59e;
   padding: var(--s-3) var(--s-4);
-  border-radius: 0 8px 8px 0;
-  margin: 15px 0;
-  color: #ffd59e;
-  font-size: 0.85rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
 }
 
-.arena-stat-box.discount-box {
-  background: rgba(74, 222, 128, 0.08) !important;
-  border: 1px solid rgba(74, 222, 128, 0.25) !important;
+@media (max-width: 900px) {
+  .coffee-layout {
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+  .coffee-summary {
+    position: static;
+  }
 }
