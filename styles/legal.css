@@ -1,0 +1,55 @@
+/* Yasal / kurumsal sayfalar — V2 TASK-240. */
+
+.legal {
+  padding-block: var(--s-7) var(--s-8);
+}
+.legal .eyebrow {
+  display: block;
+  margin-bottom: var(--s-2);
+}
+.legal h1 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-h1);
+}
+.legal-updated {
+  margin: 0 0 var(--s-5);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+
+.legal-note {
+  display: flex;
+  gap: var(--s-2);
+  margin: 0 0 var(--s-6);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.legal-note svg {
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.legal-intro {
+  margin: 0 0 var(--s-5);
+  color: var(--ink-2);
+  line-height: var(--lh-body);
+}
+
+.legal-section {
+  margin-bottom: var(--s-5);
+}
+.legal-section h2 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-h3);
+}
+.legal-section p {
+  margin: 0 0 var(--s-3);
+  color: var(--ink-2);
+  line-height: var(--lh-body);
+}

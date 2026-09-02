@@ -13,5 +13,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/kahveniolustur`, priority: 0.8, changeFrequency: "monthly", lastModified: now },
     { url: `${SITE_URL}/topluluk`, priority: 0.6, changeFrequency: "weekly", lastModified: now },
     { url: `${SITE_URL}/hakkimizda`, priority: 0.5, changeFrequency: "yearly", lastModified: now },
+    { url: `${SITE_URL}/iade-teslimat`, priority: 0.3, changeFrequency: "yearly", lastModified: now },
+    { url: `${SITE_URL}/mesafeli-satis`, priority: 0.3, changeFrequency: "yearly", lastModified: now },
+    { url: `${SITE_URL}/kvkk`, priority: 0.3, changeFrequency: "yearly", lastModified: now },
+    { url: `${SITE_URL}/gizlilik`, priority: 0.3, changeFrequency: "yearly", lastModified: now },
   ];
 }

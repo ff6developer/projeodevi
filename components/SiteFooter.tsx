@@ -2,11 +2,25 @@ import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
 import { BRAND } from "@/app/site-config";
 
-const FOOTER_LINKS = [
-  { href: "/menu", label: "Menü" },
-  { href: "/kahveniolustur", label: "Kahveni Oluştur" },
-  { href: "/topluluk", label: "Topluluk" },
-  { href: "/hakkimizda", label: "Hakkımızda" },
+const COLUMNS: { title: string; links: { href: string; label: string }[] }[] = [
+  {
+    title: "Keşfet",
+    links: [
+      { href: "/menu", label: "Menü" },
+      { href: "/kahveniolustur", label: "Kahveni Oluştur" },
+      { href: "/topluluk", label: "Topluluk" },
+    ],
+  },
+  {
+    title: "Kurumsal",
+    links: [
+      { href: "/hakkimizda", label: "Hakkımızda" },
+      { href: "/iade-teslimat", label: "İade ve Teslimat" },
+      { href: "/mesafeli-satis", label: "Mesafeli Satış Sözleşmesi" },
+      { href: "/kvkk", label: "KVKK Aydınlatma Metni" },
+      { href: "/gizlilik", label: "Gizlilik ve Çerezler" },
+    ],
+  },
 ];
 
 export default function SiteFooter() {
@@ -15,29 +29,36 @@ export default function SiteFooter() {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <p className="footer-brand">{BRAND.name}</p>
-        <p className="footer-tagline">{BRAND.tagline}</p>
-
-        <nav className="footer-nav" aria-label="Alt bilgi bağlantıları">
-          {FOOTER_LINKS.map((l) => (
-            <Link key={l.href} href={l.href}>
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="footer-contact">
-          <span>
-            <Mail size={15} aria-hidden="true" /> {BRAND.email}
-          </span>
-          <span>
-            <MapPin size={15} aria-hidden="true" /> {BRAND.address}
-          </span>
+        <div className="footer-brand-col">
+          <p className="footer-brand">{BRAND.name}</p>
+          <p className="footer-tagline">{BRAND.tagline}</p>
+          <div className="footer-contact">
+            <a href={`mailto:${BRAND.email}`}>
+              <Mail size={15} aria-hidden="true" /> {BRAND.email}
+            </a>
+            <span>
+              <MapPin size={15} aria-hidden="true" /> {BRAND.address}
+            </span>
+          </div>
         </div>
 
-        <hr className="footer-rule" />
+        {COLUMNS.map((col) => (
+          <nav key={col.title} className="footer-col" aria-label={col.title}>
+            <p className="footer-col-title">{col.title}</p>
+            <ul>
+              {col.links.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href}>{l.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
 
-        <p className="footer-copy">© {year} {BRAND.name}. Tüm hakları saklıdır.</p>
+      <div className="footer-bottom">
+        <p>© {year} {BRAND.name}. Tüm hakları saklıdır.</p>
+        {BRAND.isDemo && <p>Bu bir portföy / demo projesidir.</p>}
       </div>
     </footer>
   );
