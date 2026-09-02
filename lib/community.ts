@@ -1,9 +1,13 @@
-// Topluluk seçkisi — takvim ayına bağlı dönem mantığı (client-side prototip).
-// Seçki her ayın 1'inde yenilenir; kalan gün = ay sonuna kadar.
+// Topluluk seçkisi — takvim ayına bağlı dönem mantığı.
+// CommunityService'in LOCAL adapter'ının bir parçası; depolamaya yalnızca
+// `services/adapters/local/storage` üzerinden erişir.
+
+import { readRaw, writeRaw, readJSON, writeJSON } from "./services/adapters/local/storage"
 
 const PERIOD_KEY = "arenaPeriod"
 const POSTS_KEY = "arenaPosts"
 const CHAMPION_KEY = "arenaChampion"
+const VOTES_KEY = "userVotes"
 
 /** Geçerli dönem anahtarı, ör. "2026-09". */
 export function getCurrentPeriodKey(d: Date = new Date()): string {
@@ -28,13 +32,11 @@ type Post = {
  * arşivler ve seçkiyi sıfırlar. Değişmediyse gönderileri aynen döndürür.
  */
 export function rollOverIfNeeded(posts: Post[]): Post[] {
-  if (typeof window === "undefined") return posts
-
   const current = getCurrentPeriodKey()
-  const stored = window.localStorage.getItem(PERIOD_KEY)
+  const stored = readRaw(PERIOD_KEY)
 
   if (!stored) {
-    window.localStorage.setItem(PERIOD_KEY, current)
+    writeRaw(PERIOD_KEY, current)
     return posts
   }
 
@@ -43,7 +45,7 @@ export function rollOverIfNeeded(posts: Post[]): Post[] {
   // Yeni döneme geçildi.
   if (posts.length > 0) {
     const winner = [...posts].sort((a, b) => (b.likes || 0) - (a.likes || 0))[0]
-    window.localStorage.setItem(
+    writeRaw(
       CHAMPION_KEY,
       JSON.stringify({
         name: winner.coffee?.name ?? "İsimsiz Kahve",
@@ -53,7 +55,41 @@ export function rollOverIfNeeded(posts: Post[]): Post[] {
       }),
     )
   }
-  window.localStorage.setItem(POSTS_KEY, JSON.stringify([]))
-  window.localStorage.setItem(PERIOD_KEY, current)
+  writeRaw(POSTS_KEY, JSON.stringify([]))
+  writeRaw(PERIOD_KEY, current)
   return []
+}
+
+/* --------------------------- seçki gönderileri --------------------------- */
+// Not: Post şekli bileşenlerde tanımlı; burada minimum `{ id: number }` yeter.
+// Backend: GET/POST/DELETE /api/community/posts, POST /api/community/posts/:id/vote.
+
+export function listCommunityPosts<T = unknown>(): T[] {
+  return readJSON<T[]>(POSTS_KEY, [])
+}
+
+export function saveCommunityPosts<T>(posts: T[]): void {
+  writeJSON(POSTS_KEY, posts)
+}
+
+export function prependCommunityPost<T>(post: T): void {
+  writeJSON(POSTS_KEY, [post, ...listCommunityPosts<T>()])
+}
+
+export function removeCommunityPost(id: number): void {
+  const next = listCommunityPosts<{ id: number }>().filter((p) => p.id !== id)
+  writeJSON(POSTS_KEY, next)
+}
+
+export function getVotedPostIds(): number[] {
+  return readJSON<number[]>(VOTES_KEY, [])
+}
+
+export function saveVotedPostIds(ids: number[]): void {
+  writeJSON(VOTES_KEY, ids)
+}
+
+/** Önceki dönemin öne çıkan tasarımı (varsa). */
+export function getChampion<T = { name: string; creator: string; image?: string | null }>(): T | null {
+  return readJSON<T | null>(CHAMPION_KEY, null)
 }

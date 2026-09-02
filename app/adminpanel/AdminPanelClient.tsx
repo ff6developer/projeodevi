@@ -16,6 +16,8 @@ import {
 } from "@/lib/orders"
 import { DELIVERY_LABEL } from "@/lib/pricing"
 import { formatPrice, formatDateTime, liraToKurus } from "@/lib/format"
+import { listCatalogProducts, saveCatalogProducts, type CatalogProduct } from "@/lib/catalog"
+import { listSavedCoffees, removeSavedCoffee } from "@/lib/gallery"
 import type { Order, OrderStatus } from "@/lib/types"
 import {
   Button,
@@ -27,7 +29,7 @@ import {
   useConfirm,
 } from "@/components/ui"
 
-type Product = { id: number; name: string; priceKurus: number }
+type Product = CatalogProduct
 type Coffee = { id: number; name: string; score?: number; total?: number; isFromArena?: boolean }
 
 const STATUS_TONE: Record<OrderStatus, "neutral" | "accent" | "success" | "warning" | "danger"> = {
@@ -52,46 +54,26 @@ export default function AdminPanelClient() {
   const [newName, setNewName] = useState("")
   const [newPrice, setNewPrice] = useState("")
 
+  const loadAdminData = () => {
+    setOrders(getOrders())
+    setProducts(listCatalogProducts())
+    setCoffees(listSavedCoffees() as Coffee[])
+  }
+
   // Mount: yetki kontrolü + tarayıcıdan veri hidrasyonu (SSR sonrası, tek sefer).
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setReady(true)
     if (!isAdmin()) return
     setAuthorized(true)
-    setOrders(getOrders())
-    try {
-      const p = JSON.parse(localStorage.getItem("products") || "[]")
-      setProducts(
-        p.map((x: { id: number; name: string; price?: number; priceKurus?: number }) => ({
-          id: x.id,
-          name: x.name,
-          priceKurus: x.priceKurus ?? (x.price ?? 0) * 100,
-        })),
-      )
-      setCoffees(JSON.parse(localStorage.getItem("coffees") || "[]"))
-    } catch {
-      /* yoksay */
-    }
+    loadAdminData()
   }, [])
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const enterDemoAdmin = () => {
     setAdmin(true)
     setAuthorized(true)
-    setOrders(getOrders())
-    try {
-      const p = JSON.parse(localStorage.getItem("products") || "[]")
-      setProducts(
-        p.map((x: { id: number; name: string; price?: number; priceKurus?: number }) => ({
-          id: x.id,
-          name: x.name,
-          priceKurus: x.priceKurus ?? (x.price ?? 0) * 100,
-        })),
-      )
-      setCoffees(JSON.parse(localStorage.getItem("coffees") || "[]"))
-    } catch {
-      /* yoksay */
-    }
+    loadAdminData()
   }
 
   const stats = useMemo(() => {
@@ -138,7 +120,7 @@ export default function AdminPanelClient() {
     if (!newName.trim() || !newPrice) return
     const next = [...products, { id: Date.now(), name: newName.trim(), priceKurus: liraToKurus(newPrice) }]
     setProducts(next)
-    localStorage.setItem("products", JSON.stringify(next))
+    saveCatalogProducts(next)
     setNewName("")
     setNewPrice("")
   }
@@ -146,14 +128,13 @@ export default function AdminPanelClient() {
   const delProduct = (id: number) => {
     const next = products.filter((p) => p.id !== id)
     setProducts(next)
-    localStorage.setItem("products", JSON.stringify(next))
+    saveCatalogProducts(next)
   }
 
   const delCoffee = async (id: number) => {
     if (!(await confirm({ title: "Kahveyi sil", confirmText: "Sil", tone: "danger" }))) return
-    const next = coffees.filter((c) => c.id !== id)
-    setCoffees(next)
-    localStorage.setItem("coffees", JSON.stringify(next))
+    removeSavedCoffee(id)
+    setCoffees(coffees.filter((c) => c.id !== id))
   }
 
   if (!authorized) {

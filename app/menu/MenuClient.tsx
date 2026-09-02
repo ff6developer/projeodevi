@@ -24,9 +24,8 @@ import type { Product, ProductCategory } from "@/lib/types"
 import { addProduct } from "@/lib/cart"
 import { FREE_SHIPPING_THRESHOLD_KURUS } from "@/lib/pricing"
 import { formatPrice } from "@/lib/format"
-
-type Yorum = { puan: number; metin: string; gorsel?: string }
-const YORUM_KEY = "menuYorumlar"
+import { getReviews, addReview, type Review as Yorum } from "@/lib/reviews"
+import { getChampion } from "@/lib/community"
 
 function StarRating({
   value,
@@ -64,16 +63,6 @@ const CATEGORIES: ProductCategory[] = ["sicak", "soguk", "tatli"]
 
 type Sampiyon = { name: string; creator: string; image?: string }
 
-function readJSON<T>(key: string, fallback: T): T {
-  if (typeof window === "undefined") return fallback
-  try {
-    const raw = window.localStorage.getItem(key)
-    return raw ? (JSON.parse(raw) as T) : fallback
-  } catch {
-    return fallback
-  }
-}
-
 type SortKey = "onerilen" | "fiyat-artan" | "fiyat-azalan" | "isim"
 const SORT_KEYS: SortKey[] = ["onerilen", "fiyat-artan", "fiyat-azalan", "isim"]
 const SORT_LABEL: Record<SortKey, string> = {
@@ -96,9 +85,7 @@ export default function MenuClient() {
     return SORT_KEYS.includes(s as SortKey) ? (s as SortKey) : "onerilen"
   })
   const [detay, setDetay] = useState<Product | null>(null)
-  const [yorumlar, setYorumlar] = useState<Record<number, Yorum[]>>(() =>
-    readJSON<Record<number, Yorum[]>>(YORUM_KEY, {}),
-  )
+  const [yorumlar, setYorumlar] = useState<Record<number, Yorum[]>>(() => getReviews())
   const [yeniMetin, setYeniMetin] = useState("")
   const [yeniPuan, setYeniPuan] = useState(5)
   const [yeniGorsel, setYeniGorsel] = useState<string>("")
@@ -107,7 +94,7 @@ export default function MenuClient() {
   // Yalnızca istemcide, hidrasyondan sonra oku (SSR uyuşmazlığını önlemek için).
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSampiyon(readJSON<Sampiyon | null>("arenaChampion", null))
+    setSampiyon(getChampion<Sampiyon>())
   }, [])
 
   // Kategori/sıralama değişince URL'i güncelle (paylaşılabilir bağlantı).
@@ -153,16 +140,12 @@ export default function MenuClient() {
 
   const yorumGonder = () => {
     if (!detay || (!yeniMetin.trim() && !yeniGorsel)) return
-    const next = {
-      ...yorumlar,
-      [detay.id]: [...(yorumlar[detay.id] ?? []), { puan: yeniPuan, metin: yeniMetin.trim(), gorsel: yeniGorsel || undefined }],
-    }
+    const next = addReview(detay.id, {
+      puan: yeniPuan,
+      metin: yeniMetin.trim(),
+      gorsel: yeniGorsel || undefined,
+    })
     setYorumlar(next)
-    try {
-      localStorage.setItem(YORUM_KEY, JSON.stringify(next))
-    } catch {
-      /* yoksay */
-    }
     resetForm()
     toast.success("Yorumun eklendi.")
   }

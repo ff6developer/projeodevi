@@ -2,6 +2,7 @@
 // burada tipler, adım tanımları, doğrulama ve "son adres" kalıcılığı var.
 
 import type { Address, DeliveryMethod } from "./types"
+import { readRaw, writeRaw } from "./services/adapters/local/storage"
 
 export type PaymentMethod = "demo" | "kapida"
 
@@ -137,20 +138,15 @@ export function canAdvance(step: number, state: CheckoutState): boolean {
 const LAST_ADDRESS_KEY = "elmenes.lastAddress"
 
 export function getLastAddress(): Address | null {
-  if (typeof window === "undefined") return null
+  const raw = readRaw(LAST_ADDRESS_KEY)
+  if (!raw) return null
   try {
-    const raw = window.localStorage.getItem(LAST_ADDRESS_KEY)
-    return raw ? (JSON.parse(raw) as Address) : null
+    return JSON.parse(raw) as Address
   } catch {
     return null
   }
 }
 
 export function saveLastAddress(a: Address): void {
-  if (typeof window === "undefined") return
-  try {
-    window.localStorage.setItem(LAST_ADDRESS_KEY, JSON.stringify(a))
-  } catch {
-    /* yoksay */
-  }
+  writeRaw(LAST_ADDRESS_KEY, JSON.stringify(a))
 }

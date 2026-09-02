@@ -1,5 +1,9 @@
-// Oturum (client-side prototip). localStorage["user"] erişimi tek yerden.
-// Not: gerçek auth sertleştirme backlog (BL-02/BL-03).
+// Oturum durumu — AuthService'in LOCAL adapter'ının oturum kısmı.
+// Tarayıcı depolamasına yalnızca `services/adapters/local/storage` üzerinden erişir.
+// Gerçek backend: httpOnly cookie / token; bu API (getUser/isLoggedIn/subscribe)
+// aynı kalır. Sözleşme: docs/BACKEND_CONTRACT.md → AuthService.
+
+import { readRaw, writeRaw, removeRaw, emit, subscribe as sub } from "./services/adapters/local/storage"
 
 export type SessionUser = { name: string; email: string }
 
@@ -9,10 +13,10 @@ const ADMIN_KEY = "isAdmin"
 const EVENT = "authChanged"
 
 export function getUser(): SessionUser | null {
-  if (typeof window === "undefined") return null
+  const raw = readRaw(USER_KEY)
+  if (!raw) return null
   try {
-    const raw = window.localStorage.getItem(USER_KEY)
-    return raw ? (JSON.parse(raw) as SessionUser) : null
+    return JSON.parse(raw) as SessionUser
   } catch {
     return null
   }
@@ -23,40 +27,29 @@ export function isLoggedIn(): boolean {
 }
 
 export function isAdmin(): boolean {
-  if (typeof window === "undefined") return false
-  return window.localStorage.getItem(ADMIN_KEY) === "true"
+  return readRaw(ADMIN_KEY) === "true"
 }
 
 export function setUser(user: SessionUser): void {
-  if (typeof window === "undefined") return
-  window.localStorage.setItem(USER_KEY, JSON.stringify(user))
-  window.localStorage.setItem(LOGGED_KEY, "true")
-  window.dispatchEvent(new Event(EVENT))
+  writeRaw(USER_KEY, JSON.stringify(user))
+  writeRaw(LOGGED_KEY, "true")
+  emit(EVENT)
 }
 
 export function setAdmin(value: boolean): void {
-  if (typeof window === "undefined") return
-  if (value) window.localStorage.setItem(ADMIN_KEY, "true")
-  else window.localStorage.removeItem(ADMIN_KEY)
-  window.dispatchEvent(new Event(EVENT))
+  if (value) writeRaw(ADMIN_KEY, "true")
+  else removeRaw(ADMIN_KEY)
+  emit(EVENT)
 }
 
 export function clearSession(): void {
-  if (typeof window === "undefined") return
-  window.localStorage.removeItem(USER_KEY)
-  window.localStorage.removeItem(LOGGED_KEY)
-  window.localStorage.removeItem(ADMIN_KEY)
-  window.dispatchEvent(new Event(EVENT))
+  removeRaw(USER_KEY)
+  removeRaw(LOGGED_KEY)
+  removeRaw(ADMIN_KEY)
+  emit(EVENT)
 }
 
 /** Oturum değişimlerine abone ol (giriş/çıkış). Cleanup fonksiyonu döner. */
 export function subscribe(cb: () => void): () => void {
-  if (typeof window === "undefined") return () => {}
-  const handler = () => cb()
-  window.addEventListener(EVENT, handler)
-  window.addEventListener("storage", handler)
-  return () => {
-    window.removeEventListener(EVENT, handler)
-    window.removeEventListener("storage", handler)
-  }
+  return sub(EVENT, cb)
 }

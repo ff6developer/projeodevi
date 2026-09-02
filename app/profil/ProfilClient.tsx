@@ -10,6 +10,16 @@ import { getUser, setUser as setSessionUser, clearSession } from "@/lib/session"
 import { getOrders, STATUS_LABEL } from "@/lib/orders"
 import { formatDateTime } from "@/lib/format"
 import {
+  getProfilePosts,
+  saveProfilePosts,
+  getAvatar,
+  saveAvatar,
+  getBio,
+  saveBio,
+} from "@/lib/profile"
+import { listSavedCoffees, removeSavedCoffee } from "@/lib/gallery"
+import { prependCommunityPost, removeCommunityPost } from "@/lib/community"
+import {
   Button,
   IconButton,
   Card,
@@ -73,20 +83,12 @@ export default function ProfilClient() {
     setEditName(parsed.name)
     setEditEmail(parsed.email)
 
-    try {
-      const p = localStorage.getItem("userPosts")
-      if (p) setPosts(JSON.parse(p))
-      const a = localStorage.getItem("userAvatar")
-      if (a) setAvatar(a)
-      const b = localStorage.getItem("userBio")
-      if (b) {
-        setBio(b)
-        setEditBio(b)
-      }
-      setCoffees(JSON.parse(localStorage.getItem("coffees") || "[]"))
-    } catch {
-      /* yoksay */
-    }
+    setPosts(getProfilePosts<Post>())
+    setAvatar(getAvatar())
+    const b = getBio()
+    setBio(b)
+    setEditBio(b)
+    setCoffees(listSavedCoffees() as Coffee[])
   }, [router])
   /* eslint-enable react-hooks/set-state-in-effect */
 
@@ -99,7 +101,7 @@ export default function ProfilClient() {
     reader.onloadend = () => {
       const base64 = reader.result as string
       setAvatar(base64)
-      localStorage.setItem("userAvatar", base64)
+      saveAvatar(base64)
     }
     reader.readAsDataURL(file)
   }
@@ -110,14 +112,14 @@ export default function ProfilClient() {
     setSessionUser(updated)
     setUser(updated)
     setBio(editBio)
-    localStorage.setItem("userBio", editBio)
+    saveBio(editBio)
     setShowEdit(false)
     toast.success("Profil güncellendi.")
   }
 
   const persistPosts = (next: Post[]) => {
     setPosts(next)
-    localStorage.setItem("userPosts", JSON.stringify(next))
+    saveProfilePosts(next)
   }
 
   const sharePost = () => {
@@ -137,11 +139,7 @@ export default function ProfilClient() {
       },
     }
     persistPosts([newPost, ...posts])
-    const arenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
-    localStorage.setItem(
-      "arenaPosts",
-      JSON.stringify([{ ...newPost, userName: user?.name, userAvatar: avatar }, ...arenaPosts]),
-    )
+    prependCommunityPost({ ...newPost, userName: user?.name, userAvatar: avatar })
     setPostText("")
     setSelectedCoffee(null)
     toast.success("Tasarımın toplulukta paylaşıldı.")
@@ -151,19 +149,14 @@ export default function ProfilClient() {
     const ok = await confirm({ title: "Gönderiyi sil", confirmText: "Sil", tone: "danger" })
     if (!ok) return
     persistPosts(posts.filter((p) => p.id !== id))
-    const arenaPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
-    localStorage.setItem(
-      "arenaPosts",
-      JSON.stringify(arenaPosts.filter((p: { id: number }) => p.id !== id)),
-    )
+    removeCommunityPost(id)
   }
 
   const deleteCoffee = async (id: number) => {
     const ok = await confirm({ title: "Kahveyi sil", confirmText: "Sil", tone: "danger" })
     if (!ok) return
-    const next = coffees.filter((c) => c.id !== id)
-    setCoffees(next)
-    localStorage.setItem("coffees", JSON.stringify(next))
+    removeSavedCoffee(id)
+    setCoffees(coffees.filter((c) => c.id !== id))
     if (selectedCoffee?.id === id) setSelectedCoffee(null)
   }
 

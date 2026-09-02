@@ -21,7 +21,7 @@ başkasını bozarsa önce regresyonu çöz. Her task sonrası `WORKLOG_V2.md`.
 | Faz | Konu | Task aralığı | Durum |
 |---|---|---|---|
 | A | Production blockers | TASK-201 … TASK-212 | ✅ COMPLETE |
-| B | Backend-ready data layer | TASK-213 … TASK-222 | ⬜ |
+| B | Backend-ready data layer | TASK-213 … TASK-222 | ✅ COMPLETE |
 | C | Conversion / UX friction | TASK-223 … TASK-236 | ⬜ |
 | D | Visual professionalism | TASK-237 … TASK-248 | ⬜ |
 | E | Copy / microcopy | TASK-249 … TASK-254 | ⬜ |

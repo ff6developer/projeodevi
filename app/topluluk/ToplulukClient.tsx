@@ -6,7 +6,15 @@ import Image from "next/image"
 import { Flame, MessageCircle, ClipboardCopy, Coffee } from "lucide-react"
 import "@/styles/topluluk.css"
 import { useToast } from "@/components/ToastProvider"
-import { getRemainingDays, rollOverIfNeeded } from "@/lib/community"
+import {
+  getRemainingDays,
+  rollOverIfNeeded,
+  listCommunityPosts,
+  saveCommunityPosts,
+  getVotedPostIds,
+  saveVotedPostIds,
+} from "@/lib/community"
+import { saveBuilderDraft } from "@/lib/builder-draft"
 import {
   Button,
   IconButton,
@@ -57,9 +65,8 @@ export default function ToplulukClient() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const raw = JSON.parse(localStorage.getItem("arenaPosts") || "[]") as Post[]
-      setPosts(rollOverIfNeeded(raw) as Post[])
-      setVotedPosts(JSON.parse(localStorage.getItem("userVotes") || "[]"))
+      setPosts(rollOverIfNeeded(listCommunityPosts<Post>()) as Post[])
+      setVotedPosts(getVotedPostIds())
       setIsLoading(false)
     }, 300)
     return () => clearTimeout(timer)
@@ -74,7 +81,7 @@ export default function ToplulukClient() {
 
   const persist = (next: Post[]) => {
     setPosts(next)
-    localStorage.setItem("arenaPosts", JSON.stringify(next))
+    saveCommunityPosts(next)
   }
 
   const handleVote = (id: number) => {
@@ -85,7 +92,7 @@ export default function ToplulukClient() {
     )
     setVotedPosts(nextVotes)
     persist(nextPosts)
-    localStorage.setItem("userVotes", JSON.stringify(nextVotes))
+    saveVotedPostIds(nextVotes)
   }
 
   const handleDelete = async (id: number) => {
@@ -113,17 +120,14 @@ export default function ToplulukClient() {
 
   const copyRecipe = (post: Post) => {
     const d = post.coffee?.details || post.details || {}
-    localStorage.setItem(
-      "copiedRecipe",
-      JSON.stringify({
-        ...d,
-        fromArena: true,
-        locked: true,
-        name: post.coffee?.name || "Topluluk Kahvesi",
-        image: post.coffee?.image || null,
-        arenaScore: post.arenaScore || 0,
-      }),
-    )
+    saveBuilderDraft({
+      ...d,
+      fromArena: true,
+      locked: true,
+      name: post.coffee?.name || "Topluluk Kahvesi",
+      image: post.coffee?.image || null,
+      arenaScore: post.arenaScore || 0,
+    })
     toast.success("Tarif tasarım ekranına aktarıldı — %15 topluluk indirimi uygulanacak.")
     router.push("/kahveniolustur")
   }

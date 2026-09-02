@@ -1,7 +1,12 @@
-// Sepet veri katmanı (client-side prototip). Tek anahtar: localStorage["elmenes.cart"].
-// (TASK-085 için erken oluşturuldu; TASK-109 context/provider ekler.)
+// Sepet veri katmanı.
+//
+// Bu modül CartService'in LOCAL adapter'ıdır: tarayıcı depolamasına yalnızca
+// `lib/services/adapters/local/storage` üzerinden erişir. Gerçek backend
+// geldiğinde bu dosyanın yerini bir HTTP adapter alır; UI (CartProvider) hiç
+// değişmez. Sözleşme: docs/BACKEND_CONTRACT.md → CartService.
 
 import type { CartLine, CoffeeRecipe } from "./types"
+import { readRaw, writeRaw, emit, subscribe } from "./services/adapters/local/storage"
 
 const KEY = "elmenes.cart"
 const EVENT = "cartChanged"
@@ -9,31 +14,29 @@ const EVENT = "cartChanged"
 /** Boş sepet için sabit referans — useSyncExternalStore döngüye girmesin. */
 export const EMPTY_CART: readonly CartLine[] = Object.freeze([])
 
-// Snapshot önbelleği: localStorage string'i değişmedikçe aynı dizi referansı döner.
+// Snapshot önbelleği: depolama string'i değişmedikçe aynı dizi referansı döner.
 let cacheRaw: string | null = null
 let cache: CartLine[] = EMPTY_CART as CartLine[]
 
 function read(): CartLine[] {
-  if (typeof window === "undefined") return EMPTY_CART as CartLine[]
+  const raw = readRaw(KEY)
+  if (raw === cacheRaw) return cache
+  cacheRaw = raw
   try {
-    const raw = window.localStorage.getItem(KEY)
-    if (raw === cacheRaw) return cache
-    cacheRaw = raw
     cache = raw ? (JSON.parse(raw) as CartLine[]) : (EMPTY_CART as CartLine[])
-    return cache
   } catch {
-    return EMPTY_CART as CartLine[]
+    cache = EMPTY_CART as CartLine[]
   }
+  return cache
 }
 
 function write(lines: CartLine[]) {
-  if (typeof window === "undefined") return
   const raw = JSON.stringify(lines)
-  window.localStorage.setItem(KEY, raw)
+  writeRaw(KEY, raw)
   // Snapshot önbelleğini hemen güncelle: useSyncExternalStore aynı referansı görsün.
   cacheRaw = raw
   cache = lines
-  window.dispatchEvent(new Event(EVENT))
+  emit(EVENT)
 }
 
 const uid = () => `l_${Date.now().toString(36)}_${Math.random().toString(16).slice(2, 8)}`
@@ -116,8 +119,9 @@ export function addRecipe(input: AddRecipeInput): void {
 }
 
 export function setQty(lineId: string, qty: number): void {
-  const lines = read()
-    .map((l) => (l.lineId === lineId ? { ...l, qty: Math.max(1, qty) } : l))
+  const lines = read().map((l) =>
+    l.lineId === lineId ? { ...l, qty: Math.max(1, qty) } : l,
+  )
   write(lines)
 }
 
@@ -130,12 +134,5 @@ export function clearCart(): void {
 }
 
 export function subscribeCart(cb: () => void): () => void {
-  if (typeof window === "undefined") return () => {}
-  const h = () => cb()
-  window.addEventListener(EVENT, h)
-  window.addEventListener("storage", h)
-  return () => {
-    window.removeEventListener(EVENT, h)
-    window.removeEventListener("storage", h)
-  }
+  return subscribe(EVENT, cb)
 }

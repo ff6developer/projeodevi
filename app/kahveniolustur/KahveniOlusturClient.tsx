@@ -10,6 +10,8 @@ import { formatPrice } from "@/lib/format"
 import { useCart } from "@/components/CartProvider"
 import { BASE_COFFEE_KURUS, priceRecipe } from "@/lib/pricing"
 import { isLoggedIn } from "@/lib/session"
+import { takeBuilderDraft } from "@/lib/builder-draft"
+import { addSavedCoffee } from "@/lib/gallery"
 
 type RecipeOption = { name: string; price: number; power: number }
 
@@ -74,15 +76,7 @@ const DEFAULT_FORM = {
 
 /** Arena "tarifi kopyala" ile bırakılan taslağı bir kez okur (ve temizler). */
 function readCopiedRecipe(): Record<string, RecipeOption | string | boolean> | null {
-  if (typeof window === "undefined") return null
-  try {
-    const raw = window.localStorage.getItem("copiedRecipe")
-    if (!raw) return null
-    window.localStorage.removeItem("copiedRecipe")
-    return JSON.parse(raw)
-  } catch {
-    return null
-  }
+  return takeBuilderDraft() as Record<string, RecipeOption | string | boolean> | null
 }
 
 export default function KahveniOlusturClient() {
@@ -181,7 +175,7 @@ export default function KahveniOlusturClient() {
     })
 
     // "Kahvelerim" galerisi (profil sekmesi) — tasarım kaydı
-    const coffeeData = {
+    addSavedCoffee({
       id: Date.now(),
       name: finalCoffeeName,
       image: arenaCoffeeImage,
@@ -191,9 +185,7 @@ export default function KahveniOlusturClient() {
       originalTotal: Math.round(subtotalKurus / 100),
       isFromArena: isLocked,
       date: new Date().toISOString(),
-    }
-    const existingCoffees = JSON.parse(localStorage.getItem("coffees") || "[]")
-    localStorage.setItem("coffees", JSON.stringify([coffeeData, ...existingCoffees]))
+    })
 
     toast.success(
       isLocked

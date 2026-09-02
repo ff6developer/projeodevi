@@ -1,8 +1,10 @@
-// Sipariş veri katmanı (client-side prototip).
-// Tek yetkili kaynak: localStorage["elmenes.orders"]. Bileşenler doğrudan
-// localStorage'a dokunmaz, bu modülü kullanır.
+// Sipariş veri katmanı — OrderService'in LOCAL adapter'ı.
+// Tarayıcı depolamasına yalnızca `services/adapters/local/storage` üzerinden
+// erişir. Bileşenler doğrudan depolamaya dokunmaz, bu modülü kullanır.
+// Sözleşme: docs/BACKEND_CONTRACT.md → OrderService.
 
 import type { CoffeeRecipe, Order, OrderInput, OrderStatus } from "./types"
+import { readRaw, writeRaw } from "./services/adapters/local/storage"
 
 const KEY = "elmenes.orders"
 const LEGACY_KEY = "orders"
@@ -61,9 +63,8 @@ export function parseOrderDate(dateStr: string): Date | null {
 /* ------------------------------ depolama ------------------------------ */
 
 function read(): Order[] {
-  if (typeof window === "undefined") return []
   try {
-    const raw = window.localStorage.getItem(KEY)
+    const raw = readRaw(KEY)
     if (raw) return JSON.parse(raw) as Order[]
   } catch {
     /* yoksay */
@@ -75,19 +76,13 @@ function read(): Order[] {
 }
 
 function write(orders: Order[]) {
-  if (typeof window === "undefined") return
-  try {
-    window.localStorage.setItem(KEY, JSON.stringify(orders))
-  } catch {
-    /* yoksay */
-  }
+  writeRaw(KEY, JSON.stringify(orders))
 }
 
 /** Eski "orders" anahtarındaki kayıtları kanonik şekle çevirir (kopya bırakır). */
 function migrateLegacy(): Order[] {
-  if (typeof window === "undefined") return []
   try {
-    const raw = window.localStorage.getItem(LEGACY_KEY)
+    const raw = readRaw(LEGACY_KEY)
     if (!raw) return []
     const legacy = JSON.parse(raw) as Array<Record<string, unknown>>
     if (!Array.isArray(legacy)) return []
