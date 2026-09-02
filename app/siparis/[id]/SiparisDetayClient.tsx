@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useSyncExternalStore } from "react"
 import { useParams } from "next/navigation"
 import "@/styles/siparislerim.css"
 import { getOrder, STATUS_FLOW, STATUS_LABEL } from "@/lib/orders"
@@ -14,13 +14,30 @@ import {
   Price,
   Stepper,
   EmptyState,
+  LoadingState,
 } from "@/components/ui"
 
 export default function SiparisDetayClient() {
   const params = useParams<{ id: string }>()
   const id = params?.id ?? ""
 
+  // Sipariş verisi tarayıcı depolamasından gelir; SSR'da yok. Hidrasyon
+  // uyuşmazlığını (#418) önlemek için istemci bağlanana kadar iskelet göster.
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+
   const order = useMemo<Order | null>(() => (id ? getOrder(id) ?? null : null), [id])
+
+  if (!hydrated) {
+    return (
+      <div className="siparis-detay container container-narrow">
+        <LoadingState label="Sipariş yükleniyor" />
+      </div>
+    )
+  }
 
   if (!order) {
     return (

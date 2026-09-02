@@ -1,13 +1,13 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useSyncExternalStore } from "react"
 import { useSearchParams } from "next/navigation"
 import { CheckCircle2, MapPin, Truck } from "lucide-react"
 import "@/styles/siparis.css"
 import { getOrder, getOrders, STATUS_LABEL } from "@/lib/orders"
 import { estimateDelivery } from "@/lib/format"
 import type { Order } from "@/lib/types"
-import { Button, Card, Badge, Price, EmptyState } from "@/components/ui"
+import { Button, Card, Badge, Price, EmptyState, LoadingState } from "@/components/ui"
 
 const STATUS_TONE: Record<string, "neutral" | "accent" | "success" | "warning" | "danger"> = {
   alindi: "warning",
@@ -21,10 +21,26 @@ export default function SiparisClient() {
   const params = useSearchParams()
   const orderId = params.get("o")
 
+  // Sipariş verisi tarayıcı depolamasından gelir; SSR'da yok. Hidrasyon
+  // uyuşmazlığını (#418) önlemek için istemci bağlanana kadar iskelet göster.
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+
   const order = useMemo<Order | null>(
     () => (orderId ? getOrder(orderId) : getOrders()[0]) ?? null,
     [orderId],
   )
+
+  if (!hydrated) {
+    return (
+      <div className="siparis-page container container-narrow">
+        <LoadingState label="Sipariş yükleniyor" />
+      </div>
+    )
+  }
 
   if (!order) {
     return (
