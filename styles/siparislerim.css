@@ -2,12 +2,15 @@
 
 .siparislerim,
 .siparis-detay {
-  padding-block: var(--s-7) var(--s-9);
+  padding-block: var(--s-7) var(--s-7);
 }
 .siparislerim h1,
 .siparis-detay h1 {
   margin: 0 0 var(--s-6);
   font-size: var(--fs-h1);
+}
+.siparis-detay h1 {
+  margin-bottom: var(--s-5);
 }
 
 .siparislerim-list {
@@ -113,6 +116,13 @@
   font-weight: 600;
   color: var(--ink);
   margin-bottom: 0;
+}
+
+.siparis-detay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
 }
 
 @media (max-width: 860px) {

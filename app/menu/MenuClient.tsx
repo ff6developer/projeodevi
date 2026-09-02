@@ -222,24 +222,26 @@ export default function MenuClient() {
           <div className="menu-grid">
             {urunler.map((p) => (
               <Card key={p.id} className="menu-card" pad="sm">
-                <span className="menu-card-img">
-                  <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 50vw, 280px" />
-                </span>
-                <h2 className="menu-card-name">{p.name}</h2>
+                <button
+                  type="button"
+                  className="menu-card-open"
+                  onClick={() => setDetay(p)}
+                  aria-label={`${p.name} — detayları incele`}
+                >
+                  <span className="menu-card-img">
+                    <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 50vw, 280px" />
+                  </span>
+                  <h2 className="menu-card-name">{p.name}</h2>
+                </button>
                 <div className="menu-card-spec">
                   {p.roast && <RoastMeter level={p.roast} />}
                   {p.origin && <OriginTag origin={p.origin} />}
                 </div>
                 <div className="menu-card-foot">
                   <Price value={p.priceKurus} className="menu-card-price" />
-                  <div className="menu-card-actions">
-                    <Button variant="ghost" size="md" onClick={() => setDetay(p)}>
-                      İncele
-                    </Button>
-                    <Button size="md" onClick={() => sepeteEkle(p)}>
-                      Sepete ekle
-                    </Button>
-                  </div>
+                  <Button size="md" block onClick={() => sepeteEkle(p)}>
+                    Sepete ekle
+                  </Button>
                 </div>
               </Card>
             ))}

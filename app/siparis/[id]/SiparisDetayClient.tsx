@@ -135,6 +135,11 @@ export default function SiparisDetayClient() {
           </Card>
         </aside>
       </div>
+
+      <div className="siparis-detay-actions">
+        <Button href="/siparislerim" variant="secondary">Siparişlerim</Button>
+        <Button href="/menu" variant="ghost">Alışverişe devam</Button>
+      </div>
     </div>
   )
 }

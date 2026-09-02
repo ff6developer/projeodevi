@@ -22,8 +22,8 @@ export default function Home() {
           <p className="eyebrow">İstanbul&apos;da kavrulur · 2–3 günde kapında</p>
           <h1 className="home-title">Günün kahvesi, senin seçtiğin gibi.</h1>
           <p className="home-lede">
-            Menüden hazır bir kahve seç ya da süt, çekirdek ve şurubu kendin ayarla.
-            Siparişe göre taze kavrulur, kapına gelir.
+            Menüden hazır seç ya da kendi kahveni tasarla. Siparişe göre taze
+            kavrulur, kapına gelir.
           </p>
           <div className="cluster home-cta-row">
             <Button href="/menu" size="lg">
