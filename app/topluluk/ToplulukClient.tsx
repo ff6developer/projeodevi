@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Flame, MessageCircle, ClipboardCopy, Coffee } from "lucide-react"
-import "@/styles/kahvearenasi.css"
+import "@/styles/topluluk.css"
 import { useToast } from "@/components/ToastProvider"
 import { getRemainingDays, rollOverIfNeeded } from "@/lib/community"
 import {

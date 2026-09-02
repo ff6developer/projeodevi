@@ -10,8 +10,10 @@
 | `components/ui/` | Paylaşılan tasarım-sistemi component'leri. `Name/Name.tsx` + `Name.module.css` + `index.ts`. |
 | `components/` | Uygulamaya özel bileşik component'ler (HeaderNav, SiteFooter, CartProvider…). |
 | `lib/` | Veri katmanı ve saf yardımcılar. Tarayıcı `localStorage` erişimi SADECE burada. Tipler `lib/types.ts`. |
-| `styles/` | `tokens.css` (tek token kaynağı), `base.css` (reset + element defaultları), `typography.css`, `utilities.css`, sayfa/parça CSS'leri (giderek `*.module.css`'e taşınır). |
+| `styles/` | `tokens.css` (tek token kaynağı), `base.css` (reset + element defaultları), `typography.css`, `utilities.css`, sayfa sheet'leri (`home.css`, `menu.css`, `kahveniolustur.css`, `sepet.css`, `odeme.css`, `siparis.css`, `siparislerim.css` [+`/siparis/[id]`], `topluluk.css`, `profil.css`, `login.css` [giriş+kayıt], `hakkimizda.css`, `adminpanel.css`, `layout.css` [header/drawer/footer/toast/route-state]). Yeni component'ler `*.module.css`. |
 | `docs/` | Bu dosya, kararlar. |
+
+**CSS ölçüsü:** `styles/*.css` ≈ 2.870 satır + `components/ui/**/*.module.css` ≈ 610 → toplam ≈ 3.480 (baseline ≈ 7.082 → ~%51 azalma). Eski tasarım selector'ları (podium/glass-card/arena-item/gold-trophy/milk-item/mobile-nav…) = 0.
 
 ## Import
 
