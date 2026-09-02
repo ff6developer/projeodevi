@@ -28,7 +28,11 @@ function read(): CartLine[] {
 
 function write(lines: CartLine[]) {
   if (typeof window === "undefined") return
-  window.localStorage.setItem(KEY, JSON.stringify(lines))
+  const raw = JSON.stringify(lines)
+  window.localStorage.setItem(KEY, raw)
+  // Snapshot önbelleğini hemen güncelle: useSyncExternalStore aynı referansı görsün.
+  cacheRaw = raw
+  cache = lines
   window.dispatchEvent(new Event(EVENT))
 }
 
@@ -56,22 +60,30 @@ type AddProductInput = {
 }
 
 export function addProduct(input: AddProductInput): void {
-  const lines = read()
-  const existing = lines.find((l) => l.kind === "product" && l.productId === input.productId)
-  if (existing) {
-    existing.qty += input.qty ?? 1
-  } else {
-    lines.push({
-      kind: "product",
-      lineId: uid(),
-      productId: input.productId,
-      slug: input.slug,
-      name: input.name,
-      image: input.image,
-      unitKurus: input.unitKurus,
-      qty: input.qty ?? 1,
-    })
-  }
+  const current = read()
+  const add = input.qty ?? 1
+  const hasLine = current.some(
+    (l) => l.kind === "product" && l.productId === input.productId,
+  )
+  const lines: CartLine[] = hasLine
+    ? current.map((l) =>
+        l.kind === "product" && l.productId === input.productId
+          ? { ...l, qty: l.qty + add }
+          : l,
+      )
+    : [
+        ...current,
+        {
+          kind: "product",
+          lineId: uid(),
+          productId: input.productId,
+          slug: input.slug,
+          name: input.name,
+          image: input.image,
+          unitKurus: input.unitKurus,
+          qty: add,
+        },
+      ]
   write(lines)
 }
 
@@ -86,18 +98,20 @@ type AddRecipeInput = {
 }
 
 export function addRecipe(input: AddRecipeInput): void {
-  const lines = read()
-  lines.push({
-    kind: "recipe",
-    lineId: uid(),
-    name: input.name,
-    image: input.image,
-    unitKurus: input.unitKurus,
-    qty: input.qty ?? 1,
-    recipe: input.recipe,
-    score: input.score,
-    fromArena: input.fromArena,
-  })
+  const lines: CartLine[] = [
+    ...read(),
+    {
+      kind: "recipe",
+      lineId: uid(),
+      name: input.name,
+      image: input.image,
+      unitKurus: input.unitKurus,
+      qty: input.qty ?? 1,
+      recipe: input.recipe,
+      score: input.score,
+      fromArena: input.fromArena,
+    },
+  ]
   write(lines)
 }
 
