@@ -1,12 +1,11 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Trash2 } from "lucide-react"
+import { Trash2, ShieldCheck } from "lucide-react"
 import "@/styles/adminpanel.css"
 import AdminSidebar from "@/components/AdminSidebar"
 import type { Tab } from "@/components/adminTypes"
-import { isAdmin } from "@/lib/session"
+import { isAdmin, setAdmin } from "@/lib/session"
 import {
   getOrders,
   updateOrderStatus,
@@ -40,10 +39,10 @@ const STATUS_TONE: Record<OrderStatus, "neutral" | "accent" | "success" | "warni
 }
 
 export default function AdminPanelClient() {
-  const router = useRouter()
   const confirm = useConfirm()
 
   const [authorized, setAuthorized] = useState(false)
+  const [ready, setReady] = useState(false)
   const [tab, setTab] = useState<Tab>("dashboard")
   const [orders, setOrders] = useState<Order[]>([])
   const [products, setProducts] = useState<Product[]>([])
@@ -56,10 +55,8 @@ export default function AdminPanelClient() {
   // Mount: yetki kontrolü + tarayıcıdan veri hidrasyonu (SSR sonrası, tek sefer).
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    if (!isAdmin()) {
-      router.push("/giris")
-      return
-    }
+    setReady(true)
+    if (!isAdmin()) return
     setAuthorized(true)
     setOrders(getOrders())
     try {
@@ -75,8 +72,27 @@ export default function AdminPanelClient() {
     } catch {
       /* yoksay */
     }
-  }, [router])
+  }, [])
   /* eslint-enable react-hooks/set-state-in-effect */
+
+  const enterDemoAdmin = () => {
+    setAdmin(true)
+    setAuthorized(true)
+    setOrders(getOrders())
+    try {
+      const p = JSON.parse(localStorage.getItem("products") || "[]")
+      setProducts(
+        p.map((x: { id: number; name: string; price?: number; priceKurus?: number }) => ({
+          id: x.id,
+          name: x.name,
+          priceKurus: x.priceKurus ?? (x.price ?? 0) * 100,
+        })),
+      )
+      setCoffees(JSON.parse(localStorage.getItem("coffees") || "[]"))
+    } catch {
+      /* yoksay */
+    }
+  }
 
   const stats = useMemo(() => {
     const todayStr = new Date().toDateString()
@@ -141,7 +157,22 @@ export default function AdminPanelClient() {
   }
 
   if (!authorized) {
-    return <div className="admin container"><EmptyState title="Yükleniyor…" /></div>
+    return (
+      <div className="admin container">
+        <div className="admin-gate">
+          <EmptyState
+            icon={<ShieldCheck size={28} />}
+            title="Yönetici paneli — demo"
+            description="Bu panel bir portföy demosudur. Gerçek yönetici yetkilendirmesi backend ile gelir; burada demo veriler üzerinde sipariş durumu, ürün ve tasarım yönetimini görebilirsin."
+            action={
+              ready ? (
+                <Button onClick={enterDemoAdmin}>Demo yönetici görünümüne gir</Button>
+              ) : null
+            }
+          />
+        </div>
+      </div>
+    )
   }
 
   return (

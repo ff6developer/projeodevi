@@ -4,6 +4,13 @@
   padding-block: var(--s-7) var(--s-9);
 }
 
+.admin-gate {
+  min-height: 55vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .admin-head {
   margin-bottom: var(--s-5);
 }

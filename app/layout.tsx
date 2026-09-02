@@ -60,14 +60,12 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    // Yer tutucu: yayına almadan önce 1200×630 marka görseli ekleyin.
-    images: [{ url: "/logo.png" }],
+    // Görsel: app/opengraph-image.tsx (build sırasında üretilir)
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: ["/logo.png"],
   },
   robots: {
     index: true,
@@ -78,8 +76,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  // TASK-028+ ile design token'a (--paper koyu değeri) hizalanacak.
-  themeColor: "#080808",
+  // --paper (koyu tema zemini) ile hizalı.
+  themeColor: "#17140f",
 };
 
 export default function RootLayout({

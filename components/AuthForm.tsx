@@ -1,11 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useToast } from "./ToastProvider"
 import { Button, Card, Input, PasswordInput } from "./ui"
-import { setUser, setAdmin } from "@/lib/session"
 
 interface Field {
   id: string
@@ -17,36 +15,40 @@ interface Field {
   hint?: string
 }
 
+export type AuthSubmitResult = {
+  ok: boolean
+  /** Genel hata — toast ile gösterilir. */
+  error?: string
+  /** Alan bazlı hata — ilgili input altında gösterilir (`error.code`). */
+  field?: string
+}
+
 interface AuthFormProps {
   title: string
   subtitle: string
   fields: Field[]
-  submitUrl: string
-  submitMethod: "POST" | "GET"
   submitButtonText: string
-  onSuccess: (data: unknown, formData: Record<string, string>) => void
-  onError?: (data: { message?: string }) => string
-  links: { text?: string; href: string; label: string; onClick?: () => void }[]
-  adminCheck?: { email: string; password: string; redirect: string; message: string }
+  /** Formu işleyen fonksiyon. Başarıda yönlendirmeyi kendisi yapar. */
+  onSubmit: (formData: Record<string, string>) => Promise<AuthSubmitResult>
+  links: { text?: string; href: string; label: string }[]
+  /** Portföy kolaylığı: tek tıkla demo hesabıyla gir. */
+  onDemo?: () => Promise<void>
 }
 
 export default function AuthForm({
   title,
   subtitle,
   fields,
-  submitUrl,
-  submitMethod,
   submitButtonText,
-  onSuccess,
-  onError,
+  onSubmit,
   links,
-  adminCheck,
+  onDemo,
 }: AuthFormProps) {
-  const router = useRouter()
   const toast = useToast()
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
+  const [demoLoading, setDemoLoading] = useState(false)
 
   const setField = (id: string, value: string) => {
     setFormData((p) => ({ ...p, [id]: value }))
@@ -65,29 +67,13 @@ export default function AuthForm({
     setErrors(next)
     if (Object.keys(next).length > 0) return
 
-    if (adminCheck && formData.email === adminCheck.email && formData.password === adminCheck.password) {
-      setAdmin(true)
-      toast.success(adminCheck.message)
-      router.push(adminCheck.redirect)
-      return
-    }
-
     setSubmitting(true)
     try {
-      const res = await fetch(submitUrl, {
-        method: submitMethod,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      })
-      const data = await res.json()
+      const res = await onSubmit(formData)
       if (!res.ok) {
-        toast.error(onError ? onError(data) : data.message || "Bir şeyler ters gitti, tekrar dener misin?")
-        return
+        if (res.field) setErrors({ [res.field]: res.error ?? "Geçersiz." })
+        else toast.error(res.error ?? "Bir şeyler ters gitti, tekrar dener misin?")
       }
-      onSuccess(data, formData)
-    } catch (err) {
-      console.error("Bağlantı hatası:", err)
-      toast.error("Şu an işlem tamamlanamadı. Lütfen birazdan tekrar dene.")
     } finally {
       setSubmitting(false)
     }
@@ -132,19 +118,39 @@ export default function AuthForm({
           </Button>
         </form>
 
+        {onDemo && (
+          <>
+            <p className="login-divider"><span>ya da</span></p>
+            <Button
+              type="button"
+              variant="secondary"
+              block
+              size="lg"
+              loading={demoLoading}
+              onClick={async () => {
+                setDemoLoading(true)
+                try {
+                  await onDemo()
+                } finally {
+                  setDemoLoading(false)
+                }
+              }}
+            >
+              Demo hesabıyla dene
+            </Button>
+            <p className="login-demo-note">
+              Bu bir portföy projesidir; hesaplar yalnızca bu tarayıcıda tutulur.
+            </p>
+          </>
+        )}
+
         <div className="login-links">
           {links.map((link, i) => (
             <p key={i} className="login-link-row">
               {link.text && <span>{link.text} </span>}
-              {link.onClick ? (
-                <button type="button" className="login-link" onClick={link.onClick}>
-                  {link.label}
-                </button>
-              ) : (
-                <Link href={link.href} className="login-link">
-                  {link.label}
-                </Link>
-              )}
+              <Link href={link.href} className="login-link">
+                {link.label}
+              </Link>
             </p>
           ))}
         </div>
@@ -152,5 +158,3 @@ export default function AuthForm({
     </div>
   )
 }
-
-export { setUser }

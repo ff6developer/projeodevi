@@ -9,11 +9,15 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         "/adminpanel",
         "/profil",
-        "/siparis",
         "/giris",
         "/kayit",
+        "/sepet",
+        "/odeme",
+        "/siparis",
+        "/siparislerim",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }
