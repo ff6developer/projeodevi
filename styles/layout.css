@@ -453,3 +453,41 @@
 @media (prefers-reduced-motion: reduce) {
   .route-state-spinner { animation-duration: 2s; }
 }
+
+/* Header sağ blok + sepet (TASK-110) */
+.site-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.site-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+  border-radius: var(--r-sm);
+  text-decoration: none;
+}
+.site-cart:hover {
+  background: var(--tint);
+}
+.site-cart-badge {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 10px;
+  font-weight: 600;
+}

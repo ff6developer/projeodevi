@@ -7,6 +7,7 @@ import "@/styles/utilities.css";
 import "@/styles/layout.css";
 import { ToastProvider } from "@/components/ToastProvider";
 import { ConfirmProvider } from "@/components/ui/ConfirmDialog/ConfirmDialog";
+import { CartProvider } from "@/components/CartProvider";
 import HeaderNav from "@/components/HeaderNav";
 import SiteFooter from "@/components/SiteFooter";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./site-config";
@@ -94,6 +95,7 @@ export default function RootLayout({
       <body>
         <ToastProvider>
           <ConfirmProvider>
+          <CartProvider>
           <a href="#main" className="skip-link">İçeriğe geç</a>
           <div className="layout">
 
@@ -106,6 +108,7 @@ export default function RootLayout({
             <SiteFooter />
 
           </div>
+          </CartProvider>
           </ConfirmProvider>
         </ToastProvider>
       </body>

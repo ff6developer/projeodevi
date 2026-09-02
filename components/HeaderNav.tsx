@@ -4,9 +4,10 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu as MenuIcon } from "lucide-react"
+import { Menu as MenuIcon, ShoppingBag } from "lucide-react"
 import { visibleNavItems } from "@/lib/nav"
 import { isLoggedIn as sessionLoggedIn, subscribe } from "@/lib/session"
+import { useCart } from "./CartProvider"
 import NavDrawer from "./NavDrawer"
 
 export default function HeaderNav() {
@@ -26,6 +27,7 @@ export default function HeaderNav() {
   }, [pathname])
 
   const items = visibleNavItems(isLoggedIn)
+  const { count } = useCart()
 
   return (
     <header className="site-header">
@@ -51,16 +53,27 @@ export default function HeaderNav() {
           })}
         </nav>
 
-        <button
-          type="button"
-          className="site-nav-toggle"
-          aria-label="Menüyü aç"
-          aria-expanded={drawerOpen}
-          aria-controls="nav-drawer"
-          onClick={() => setDrawerOpen(true)}
-        >
-          <MenuIcon size={24} />
-        </button>
+        <div className="site-header-right">
+          <Link
+            href="/sepet"
+            className="site-cart"
+            aria-label={count > 0 ? `Sepet, ${count} ürün` : "Sepet"}
+          >
+            <ShoppingBag size={20} aria-hidden="true" />
+            {count > 0 && <span className="site-cart-badge">{count}</span>}
+          </Link>
+
+          <button
+            type="button"
+            className="site-nav-toggle"
+            aria-label="Menüyü aç"
+            aria-expanded={drawerOpen}
+            aria-controls="nav-drawer"
+            onClick={() => setDrawerOpen(true)}
+          >
+            <MenuIcon size={24} />
+          </button>
+        </div>
       </div>
 
       <NavDrawer

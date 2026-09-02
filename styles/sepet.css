@@ -1,0 +1,131 @@
+/* Sepet — TASK-112. */
+
+.sepet {
+  padding-block: var(--s-7) var(--s-9);
+}
+.sepet h1 {
+  margin: 0 0 var(--s-6);
+  font-size: var(--fs-h1);
+}
+
+.sepet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--s-6);
+  align-items: start;
+}
+
+.sepet-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.sepet-line {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: var(--s-4);
+  align-items: center;
+}
+.sepet-line-img {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--tint);
+}
+.sepet-line-img :where(img) {
+  object-fit: cover;
+}
+.sepet-line-img-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  color: var(--ink-3);
+}
+.sepet-line-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sepet-line-body strong {
+  color: var(--ink);
+}
+.sepet-line-tag {
+  font-size: var(--fs-caption);
+  color: var(--accent);
+}
+.sepet-line-unit {
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+.sepet-line-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.sepet-line-total {
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 72px;
+  text-align: right;
+}
+
+.sepet-summary h2 {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-h3);
+}
+.sepet-summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  margin-bottom: var(--s-3);
+}
+.sepet-summary-muted {
+  color: var(--ink-3);
+  font-size: var(--fs-caption);
+}
+.sepet-shipping-hint {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+.sepet-summary-total {
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: var(--s-4);
+}
+.sepet-summary .button {
+  margin-bottom: var(--s-2);
+}
+
+@media (max-width: 900px) {
+  .sepet-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .sepet-line {
+    grid-template-columns: 64px 1fr;
+  }
+  .sepet-line-img {
+    width: 64px;
+    height: 64px;
+  }
+  .sepet-line-controls {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
