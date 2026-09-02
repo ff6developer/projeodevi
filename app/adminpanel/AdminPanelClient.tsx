@@ -15,6 +15,7 @@ import {
   STATUS_FLOW,
   STATUS_LABEL,
 } from "@/lib/orders"
+import { DELIVERY_LABEL } from "@/lib/pricing"
 import { formatPrice, formatDateTime, liraToKurus } from "@/lib/format"
 import type { Order, OrderStatus } from "@/lib/types"
 import {
@@ -249,7 +250,8 @@ export default function AdminPanelClient() {
                     </p>
                     {o.address && (
                       <p className="admin-order-address">
-                        {o.address.fullName} · {o.address.phone} · {o.address.district}/{o.address.city}
+                        {o.address.fullName} · {o.address.phone} · {o.address.line}, {o.address.district}/{o.address.city}
+                        {o.delivery ? ` · ${DELIVERY_LABEL[o.delivery]}` : ""}
                       </p>
                     )}
                     <div className="admin-order-actions">
