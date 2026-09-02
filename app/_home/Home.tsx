@@ -47,7 +47,10 @@ export default function Home() {
 
       <section className="home-section container">
         <div className="home-section-head">
-          <h2>Öne çıkanlar</h2>
+          <div>
+            <h2>Öne çıkanlar</h2>
+            <p className="home-section-sub">Menünün en çok tercih edilen dördü.</p>
+          </div>
           <Link href="/menu" className="home-section-link">
             Tüm menü
           </Link>
@@ -69,8 +72,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="home-section container home-split">
-        <Card pad="lg">
+      <section className="home-section container">
+        <Card pad="lg" className="home-feature">
           <h2>Kendi kahveni tasarla</h2>
           <p className="home-split-text">
             Süt tipi, çekirdek, köpük, şurup, baharat… Her seçim tarifini ve fiyatını
@@ -78,16 +81,10 @@ export default function Home() {
           </p>
           <Button href="/kahveniolustur">Tasarlamaya başla</Button>
         </Card>
-        <Card pad="lg">
-          <h2>Topluluk seçkisi</h2>
-          <p className="home-split-text">
-            Tasarımını toplulukla paylaş, başkalarının tariflerini incele ve oy ver.
-            Her ay öne çıkan tasarım ödül kazanır.
-          </p>
-          <Button href="/topluluk" variant="secondary">
-            Seçkiye göz at
-          </Button>
-        </Card>
+        <p className="home-community-strip">
+          Tasarımını toplulukla paylaş, başkalarının tariflerine oy ver.{" "}
+          <Link href="/topluluk">Topluluğa göz at</Link>
+        </p>
       </section>
 
       <section className="home-trust container">

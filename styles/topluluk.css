@@ -67,8 +67,15 @@
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: var(--s-4);
 }
-.community-reward-img {
-  display: block;
+.community-reward-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  background: var(--tint);
+  color: var(--accent);
   margin-bottom: var(--s-3);
 }
 .community-rewards h3 {

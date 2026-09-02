@@ -239,7 +239,7 @@ export default function MenuClient() {
                 </div>
                 <div className="menu-card-foot">
                   <Price value={p.priceKurus} className="menu-card-price" />
-                  <Button size="md" block onClick={() => sepeteEkle(p)}>
+                  <Button size="md" variant="secondary" block onClick={() => sepeteEkle(p)}>
                     Sepete ekle
                   </Button>
                 </div>

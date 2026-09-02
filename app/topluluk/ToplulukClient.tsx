@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { Flame, MessageCircle, ClipboardCopy, Coffee } from "lucide-react"
+import { Flame, MessageCircle, ClipboardCopy, Coffee, Gift, Ticket } from "lucide-react"
 import "@/styles/topluluk.css"
 import { useToast } from "@/components/ToastProvider"
 import {
@@ -46,9 +46,9 @@ const HOW_IT_WORKS = [
 ]
 
 const REWARDS = [
-  { image: "/arena-gift.png", title: "Özel hediye kutusu", desc: "Ayın öne çıkan tasarımına özel hazırlanmış hediye kutusu." },
-  { image: "/kupon.png", title: "%15 indirim kuponu", desc: "Tüm kahve çeşitlerinde geçerli özel indirim." },
-  { image: "/bardak.png", title: "İsimli seramik kupa", desc: "Ayın öne çıkanına özel, isim yazılı kupa." },
+  { Icon: Gift, title: "Özel hediye kutusu", desc: "Ayın öne çıkan tasarımına özel hazırlanmış hediye kutusu." },
+  { Icon: Ticket, title: "%15 indirim kuponu", desc: "Tüm kahve çeşitlerinde geçerli özel indirim." },
+  { Icon: Coffee, title: "İsimli seramik kupa", desc: "Ayın öne çıkanına özel, isim yazılı kupa." },
 ]
 
 export default function ToplulukClient() {
@@ -170,8 +170,8 @@ export default function ToplulukClient() {
         <div className="community-rewards">
           {REWARDS.map((r) => (
             <Card key={r.title} pad="md">
-              <span className="community-reward-img">
-                <Image src={r.image} alt="" width={64} height={64} />
+              <span className="community-reward-icon" aria-hidden="true">
+                <r.Icon size={22} />
               </span>
               <h3>{r.title}</h3>
               <p>{r.desc}</p>
