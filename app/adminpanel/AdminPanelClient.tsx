@@ -1,449 +1,353 @@
 "use client"
 
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { Trash2 } from "lucide-react"
 import "@/styles/adminpanel.css"
 import AdminSidebar from "@/components/AdminSidebar"
-import Dashboard from "@/components/Dashboard"
-import OrdersPanel from "@/components/OrdersPanel"
-import ProductsPanel from "@/components/ProductsPanel"
 import type { Tab } from "@/components/adminTypes"
 import { isAdmin } from "@/lib/session"
+import {
+  getOrders,
+  updateOrderStatus,
+  deleteOrder as removeOrder,
+  nextStatus,
+  STATUS_FLOW,
+  STATUS_LABEL,
+} from "@/lib/orders"
+import { formatPrice, formatDateTime, liraToKurus } from "@/lib/format"
+import type { Order, OrderStatus } from "@/lib/types"
+import {
+  Button,
+  IconButton,
+  Card,
+  Badge,
+  Input,
+  EmptyState,
+  useConfirm,
+} from "@/components/ui"
 
+type Product = { id: number; name: string; priceKurus: number }
+type Coffee = { id: number; name: string; score?: number; total?: number; isFromArena?: boolean }
 
-type OrderDetails = {
-  milkType?: { name: string; price: number; power: number } | null
-  beanType?: { name: string; price: number; power: number } | null
-  foam?: { name: string; price: number; power: number } | null
-  cupType?: { name: string; price: number; power: number } | null
-  syrup?: { name: string; price: number; power: number } | null
-  spice?: { name: string; price: number; power: number } | null
-  sweetener?: { name: string; price: number; power: number } | null
-  technique?: { name: string; price: number; power: number } | null
-}
-
-type Order = {
-  id: number
-  coffeeName?: string
-  details: OrderDetails
-  totalPrice: number
-  originalPrice?: number
-  discountApplied?: number
-  isFromArena?: boolean
-  score: number
-  status: string
-  date: string
-}
-
-type Coffee = {
-  id: number
-  name: string
-  image?: string | null
-  details: OrderDetails
-  score: number
-  total: number
-  originalTotal?: number
-  isFromArena?: boolean
-  date: string
-}
-
-type Product = {
-  id: number
-  name: string
-  price: number
-}
-
-// Sipariş/kahve tarihleri hem ISO (yeni) hem de Türkçe "GG.AA.YYYY SS:dd:ss"
-// (eski) formatta gelebiliyor. Tüm parse işlemleri burada tek noktadan yapılır.
-function parseOrderDate(dateStr: string): Date | null {
-  if (!dateStr) return null
-
-  let date: Date
-
-  if (dateStr.includes("T")) {
-    date = new Date(dateStr)
-  } else {
-    const [datePart, timePart] = dateStr.split(" ")
-    const [day, month, year] = datePart.split(".")
-    if (!day || !month || !year) return null
-    const isoStr = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T${timePart || "00:00:00"}`
-    date = new Date(isoStr)
-  }
-
-  return isNaN(date.getTime()) ? null : date
+const STATUS_TONE: Record<OrderStatus, "neutral" | "accent" | "success" | "warning" | "danger"> = {
+  alindi: "warning",
+  hazirlaniyor: "accent",
+  hazir: "success",
+  teslim: "success",
+  iptal: "danger",
 }
 
 export default function AdminPanelClient() {
   const router = useRouter()
-  const [isAuthorized, setIsAuthorized] = useState(false)
+  const confirm = useConfirm()
+
+  const [authorized, setAuthorized] = useState(false)
+  const [tab, setTab] = useState<Tab>("dashboard")
   const [orders, setOrders] = useState<Order[]>([])
   const [products, setProducts] = useState<Product[]>([])
   const [coffees, setCoffees] = useState<Coffee[]>([])
-  const [newProduct, setNewProduct] = useState("")
+  const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all")
+  const [search, setSearch] = useState("")
+  const [newName, setNewName] = useState("")
   const [newPrice, setNewPrice] = useState("")
-  const [activeTab, setActiveTab] = useState<Tab>("dashboard")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isMobile, setIsMobile] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
-  const [orderDetailOpen, setOrderDetailOpen] = useState(false)
-  const [currentTime, setCurrentTime] = useState<Date | null>(null)
 
-  // Yetki kontrolü: admin girişi yapılmamışsa panele erişimi engelle
   useEffect(() => {
     if (!isAdmin()) {
       router.push("/giris")
       return
     }
-    setIsAuthorized(true)
+    setAuthorized(true)
+    setOrders(getOrders())
+    try {
+      const p = JSON.parse(localStorage.getItem("products") || "[]")
+      setProducts(
+        p.map((x: { id: number; name: string; price?: number; priceKurus?: number }) => ({
+          id: x.id,
+          name: x.name,
+          priceKurus: x.priceKurus ?? (x.price ?? 0) * 100,
+        })),
+      )
+      setCoffees(JSON.parse(localStorage.getItem("coffees") || "[]"))
+    } catch {
+      /* yoksay */
+    }
   }, [router])
 
-  // Ekran boyutu kontrolü
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-      if (window.innerWidth >= 768) {
-        setSidebarOpen(false)
-      }
-    }
-
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
-
-  useEffect(() => {
-    const stored = localStorage.getItem("orders")
-    if (stored) {
-      const parsed = JSON.parse(stored)
-      const sorted = parsed.sort((a: Order, b: Order) =>
-        (parseOrderDate(b.date)?.getTime() ?? 0) - (parseOrderDate(a.date)?.getTime() ?? 0)
-      )
-      setOrders(sorted)
-    }
-
-    const storedProducts = localStorage.getItem("products")
-    if (storedProducts) {
-      setProducts(JSON.parse(storedProducts))
-    }
-
-    const storedCoffees = localStorage.getItem("coffees")
-    if (storedCoffees) {
-      const parsedCoffees = JSON.parse(storedCoffees)
-      const sortedCoffees = parsedCoffees.sort((a: Coffee, b: Coffee) =>
-        (parseOrderDate(b.date)?.getTime() ?? 0) - (parseOrderDate(a.date)?.getTime() ?? 0)
-      )
-      setCoffees(sortedCoffees)
-    }
-  }, [])
-
   const stats = useMemo(() => {
-    const today = new Date()
-    const todayDay = today.getDate().toString().padStart(2, "0")
-    const todayMonth = (today.getMonth() + 1).toString().padStart(2, "0")
-    const todayYear = today.getFullYear()
-    const todayStr = `${todayDay}.${todayMonth}.${todayYear}`
-
-    const todayOrders = orders.filter(o => {
-      const orderDate = parseOrderDate(o.date)
-      if (!orderDate) return false
-
-      const orderDatePart =
-        `${orderDate.getDate().toString().padStart(2, "0")}.` +
-        `${(orderDate.getMonth() + 1).toString().padStart(2, "0")}.` +
-        `${orderDate.getFullYear()}`
-
-      return orderDatePart === todayStr
-    })
-
-    const dailyRevenue = todayOrders.reduce((acc, o) => acc + o.totalPrice, 0)
-    const totalRevenue = orders.reduce((acc, o) => acc + o.totalPrice, 0)
-    const avgScore = orders.length > 0 
-      ? (orders.reduce((acc, o) => acc + o.score, 0) / orders.length).toFixed(1)
-      : "0"
-
-    const pending = orders.filter(o => o.status === "Bekliyor").length
-    const preparing = orders.filter(o => o.status === "Hazırlanıyor").length
-    const ready = orders.filter(o => o.status === "Hazır").length
-    const arenaOrders = orders.filter(o => o.isFromArena).length
-    const totalDiscount = orders.reduce((acc, o) => acc + (o.discountApplied || 0), 0)
-
-    return { 
-      dailyRevenue, 
-      totalRevenue, 
-      avgScore, 
-      pending, 
-      preparing, 
-      ready, 
-      todayOrders: todayOrders.length,
-      arenaOrders,
-      totalDiscount,
-      totalCoffees: coffees.length
+    const todayStr = new Date().toDateString()
+    const todayRevenue = orders
+      .filter((o) => new Date(o.createdAt).toDateString() === todayStr)
+      .reduce((n, o) => n + o.totalKurus, 0)
+    const totalRevenue = orders.reduce((n, o) => n + o.totalKurus, 0)
+    const byStatus = (s: OrderStatus) => orders.filter((o) => o.status === s).length
+    return {
+      todayRevenue,
+      totalRevenue,
+      todayOrders: orders.filter((o) => new Date(o.createdAt).toDateString() === todayStr).length,
+      alindi: byStatus("alindi"),
+      hazirlaniyor: byStatus("hazirlaniyor"),
+      hazir: byStatus("hazir"),
+      designs: coffees.length,
     }
   }, [orders, coffees])
 
-  const filteredOrders = useMemo(() => {
-    return orders.filter(order => {
-      const matchesStatus = statusFilter === "all" || order.status === statusFilter
-      const matchesSearch = order.id.toString().includes(searchTerm)
-      return matchesStatus && matchesSearch
-    })
-  }, [orders, statusFilter, searchTerm])
+  const filteredOrders = useMemo(
+    () =>
+      orders.filter(
+        (o) =>
+          (statusFilter === "all" || o.status === statusFilter) &&
+          (search === "" || o.id.toLowerCase().includes(search.toLowerCase())),
+      ),
+    [orders, statusFilter, search],
+  )
 
-  const updateStatus = (id: number, newStatus: string) => {
-    const updated = orders.map(order =>
-      order.id === id ? { ...order, status: newStatus } : order
-    )
-    setOrders(updated)
-    localStorage.setItem("orders", JSON.stringify(updated))
+  const advance = (id: string, current: OrderStatus) => {
+    const ns = nextStatus(current)
+    updateOrderStatus(id, ns)
+    setOrders(getOrders())
   }
 
-  const deleteOrder = (id: number) => {
-    const updated = orders.filter(o => o.id !== id)
-    setOrders(updated)
-    localStorage.setItem("orders", JSON.stringify(updated))
+  const delOrder = async (id: string) => {
+    if (!(await confirm({ title: "Siparişi sil", confirmText: "Sil", tone: "danger" }))) return
+    removeOrder(id)
+    setOrders(getOrders())
   }
 
   const addProduct = () => {
-    if (!newProduct.trim() || !newPrice) return
-
-    const newItem: Product = {
-      id: Date.now(),
-      name: newProduct.trim(),
-      price: Number(newPrice)
-    }
-
-    const updated = [...products, newItem]
-    setProducts(updated)
-    localStorage.setItem("products", JSON.stringify(updated))
-    setNewProduct("")
+    if (!newName.trim() || !newPrice) return
+    const next = [...products, { id: Date.now(), name: newName.trim(), priceKurus: liraToKurus(newPrice) }]
+    setProducts(next)
+    localStorage.setItem("products", JSON.stringify(next))
+    setNewName("")
     setNewPrice("")
   }
 
-  const deleteProduct = (id: number) => {
-    const updated = products.filter(p => p.id !== id)
-    setProducts(updated)
-    localStorage.setItem("products", JSON.stringify(updated))
+  const delProduct = (id: number) => {
+    const next = products.filter((p) => p.id !== id)
+    setProducts(next)
+    localStorage.setItem("products", JSON.stringify(next))
   }
 
-  const deleteCoffee = (id: number) => {
-    const updated = coffees.filter(c => c.id !== id)
-    setCoffees(updated)
-    localStorage.setItem("coffees", JSON.stringify(updated))
+  const delCoffee = async (id: number) => {
+    if (!(await confirm({ title: "Kahveyi sil", confirmText: "Sil", tone: "danger" }))) return
+    const next = coffees.filter((c) => c.id !== id)
+    setCoffees(next)
+    localStorage.setItem("coffees", JSON.stringify(next))
   }
 
-  const getStatusConfig = (status: string) => {
-    switch (status) {
-      case "Hazır":
-        return { bg: "linear-gradient(135deg, #10b981, #059669)", icon: "✓", color: "#ecfdf5" }
-      case "Hazırlanıyor":
-        return { bg: "linear-gradient(135deg, #f59e0b, #d97706)", icon: "◐", color: "#fffbeb" }
-      default:
-        return { bg: "linear-gradient(135deg, #6366f1, #4f46e5)", icon: "◷", color: "#eef2ff" }
-    }
-  }
-
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return "Tarih yok"
-
-    const date = parseOrderDate(dateStr)
-    if (!date) return dateStr
-
-    return new Intl.DateTimeFormat("tr-TR", {
-      day: "numeric",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit"
-    }).format(date)
-  }
-
-  // Real-time clock
-useEffect(() => {
-  setCurrentTime(new Date())
-
-  const timer = setInterval(() => {
-    setCurrentTime(new Date())
-  }, 1000)
-
-  return () => clearInterval(timer)
-}, [])
-
-  const openOrderDetail = (order: Order) => {
-    setSelectedOrder(order)
-    setOrderDetailOpen(true)
-  }
-
-  const closeOrderDetail = () => {
-    setOrderDetailOpen(false)
-    setSelectedOrder(null)
-  }
-
-  const renderOrderDetails = (details: OrderDetails) => {
-    const items = [
-      { label: "Süt", value: details.milkType?.name, icon: "🥛" },
-      { label: "Çekirdek", value: details.beanType?.name, icon: "☕" },
-      { label: "Köpük", value: details.foam?.name, icon: "🫧" },
-      { label: "Bardak", value: details.cupType?.name, icon: "🥤" },
-      { label: "Şurup", value: details.syrup?.name, icon: "🍯" },
-      { label: "Baharat", value: details.spice?.name, icon: "🌶️" },
-      { label: "Tatlandırıcı", value: details.sweetener?.name, icon: "🍬" },
-      { label: "Teknik", value: details.technique?.name, icon: "⚙️" }
-    ].filter(item => item.value)
-
-    return (
-      <div className="detail-grid">
-        {items.map((item, i) => (
-          <div key={i} className="detail-item">
-            <span className="detail-icon">{item.icon}</span>
-            <span className="detail-label">{item.label}</span>
-            <span className="detail-value">{item.value}</span>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  if (!isAuthorized) {
-    return (
-      <div style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#080808",
-        color: "#c58a5c"
-      }}>
-        <h2>Yükleniyor...</h2>
-      </div>
-    )
+  if (!authorized) {
+    return <div className="admin container"><EmptyState title="Yükleniyor…" /></div>
   }
 
   return (
-    <div className="admin-container">
-      <div className="admin-inner">
-        <AdminSidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        stats={stats}
-        isMobile={isMobile}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+    <div className="admin container">
+      <header className="admin-head">
+        <p className="eyebrow">Yönetim</p>
+        <h1>{tab === "dashboard" ? "Genel bakış" : tab === "orders" ? "Siparişler" : tab === "products" ? "Ürünler" : "Tasarlanan kahveler"}</h1>
+      </header>
 
+      <AdminSidebar activeTab={tab} setActiveTab={setTab} pending={stats.alindi} />
 
-        {/* Main Content */}
-        <main className="main-content">
+      <div className="admin-body">
+        {tab === "dashboard" && (
+          <>
+            <div className="admin-stats">
+              {[
+                { label: "Bugünkü gelir", value: formatPrice(stats.todayRevenue) },
+                { label: "Toplam gelir", value: formatPrice(stats.totalRevenue) },
+                { label: "Bugünkü sipariş", value: String(stats.todayOrders) },
+                { label: "Tasarlanan kahve", value: String(stats.designs) },
+              ].map((s) => (
+                <Card key={s.label} pad="md">
+                  <p className="admin-stat-label">{s.label}</p>
+                  <p className="admin-stat-value">{s.value}</p>
+                </Card>
+              ))}
+            </div>
 
-          {activeTab === "dashboard" && (
-            <Dashboard
-              stats={stats}
-              orders={orders}
-              isMobile={isMobile}
-              currentTime={currentTime}
-              setActiveTab={setActiveTab}
-              getStatusConfig={getStatusConfig}
-              formatDate={formatDate}
-            />
-          )}
+            <Card pad="md" className="admin-status-summary">
+              <h2>Sipariş durumu</h2>
+              <div className="admin-status-row">
+                <span><Badge tone="warning">Alındı</Badge> {stats.alindi}</span>
+                <span><Badge tone="accent">Hazırlanıyor</Badge> {stats.hazirlaniyor}</span>
+                <span><Badge tone="success">Hazır</Badge> {stats.hazir}</span>
+              </div>
+            </Card>
 
-          {activeTab === "orders" && (
-            <OrdersPanel
-              filteredOrders={filteredOrders}
-              isMobile={isMobile}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-              updateStatus={updateStatus}
-              deleteOrder={deleteOrder}
-              getStatusConfig={getStatusConfig}
-              formatDate={formatDate}
-              renderOrderDetails={renderOrderDetails}
-            />
-          )}
-
-          {activeTab === "products" && (
-            <ProductsPanel
-              products={products}
-              isMobile={isMobile}
-              newProduct={newProduct}
-              setNewProduct={setNewProduct}
-              newPrice={newPrice}
-              setNewPrice={setNewPrice}
-              addProduct={addProduct}
-              deleteProduct={deleteProduct}
-            />
-          )}
-
-          {/* Coffees Tab */}
-          {activeTab === "coffees" && (
-            <div>
-              {isMobile && (
-                <h2 className="page-title-mobile">Kahveler</h2>
+            <Card pad="md">
+              <div className="admin-section-head">
+                <h2>Son siparişler</h2>
+                <Button variant="ghost" size="md" onClick={() => setTab("orders")}>
+                  Tümü
+                </Button>
+              </div>
+              {orders.length === 0 ? (
+                <EmptyState title="Henüz sipariş yok" />
+              ) : (
+                <ul className="admin-recent">
+                  {orders.slice(0, 5).map((o) => (
+                    <li key={o.id}>
+                      <span className="text-mono">#{o.id}</span>
+                      <span className="admin-recent-name">
+                        {o.items.map((i) => i.name).join(", ")}
+                      </span>
+                      <span className="admin-recent-meta">{formatDateTime(o.createdAt)}</span>
+                      <Badge tone={STATUS_TONE[o.status]}>{STATUS_LABEL[o.status]}</Badge>
+                      <span className="admin-recent-price">{formatPrice(o.totalKurus)}</span>
+                    </li>
+                  ))}
+                </ul>
               )}
+            </Card>
+          </>
+        )}
 
-              <div className="coffees-list">
-                {coffees.map(coffee => (
-                  <div key={coffee.id} className="coffee-card">
-                    <div className="coffee-card-header">
-                      <div className="coffee-card-info">
-                        <div className="coffee-card-icon">
-                          {coffee.image ? (
-                            <img src={coffee.image} alt={coffee.name} className="coffee-image" />
-                          ) : (
-                            "☕"
-                          )}
-                        </div>
-                        <div>
-                          <h3 className="coffee-card-name">
-                            {coffee.name}
-                            {coffee.isFromArena && <span className="arena-tag">🏆 Arena</span>}
-                          </h3>
-                          <p className="coffee-card-date">{formatDate(coffee.date)}</p>
-                        </div>
-                      </div>
-
-                      <div className="coffee-card-meta">
-                        <div className="coffee-price">
-                          <p className="coffee-price-value">₺{coffee.total}</p>
-                          {coffee.originalTotal && coffee.originalTotal !== coffee.total && (
-                            <p className="coffee-price-original">₺{coffee.originalTotal}</p>
-                          )}
-                        </div>
-                        <div className="coffee-score-badge">
-                          <span>⭐</span>
-                          <span>{coffee.score}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="coffee-card-details">
-                      {renderOrderDetails(coffee.details)}
-                    </div>
-
-                    <div className="coffee-card-actions">
-                      <button
-                        onClick={() => deleteCoffee(coffee.id)}
-                        className="action-btn delete"
-                      >
-                        <span>🗑️</span> Sil
-                      </button>
-                    </div>
-                  </div>
+        {tab === "orders" && (
+          <>
+            <div className="admin-filters">
+              <Input
+                label="Sipariş no ara"
+                placeholder="#A1042"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <div className="admin-filter-tabs" role="tablist" aria-label="Durum filtresi">
+                {(["all", ...STATUS_FLOW] as const).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    role="tab"
+                    aria-selected={statusFilter === s}
+                    className={`admin-filter-tab${statusFilter === s ? " is-active" : ""}`}
+                    onClick={() => setStatusFilter(s)}
+                  >
+                    {s === "all" ? "Tümü" : STATUS_LABEL[s]}
+                  </button>
                 ))}
-
-                {coffees.length === 0 && (
-                  <div className="empty-state large">
-                    <p className="empty-icon">☕</p>
-                    <p>Henüz kahve oluşturulmamış</p>
-                    <p className="empty-hint">Kahveni Oluştur sayfasından kahve tasarlayın</p>
-                  </div>
-                )}
               </div>
             </div>
-          )}
-        </main>
+
+            {filteredOrders.length === 0 ? (
+              <EmptyState title="Sonuç yok" />
+            ) : (
+              <div className="admin-orders">
+                {filteredOrders.map((o) => (
+                  <Card key={o.id} pad="md">
+                    <div className="admin-order-head">
+                      <div>
+                        <strong className="text-mono">#{o.id}</strong>
+                        <span className="admin-recent-meta">{formatDateTime(o.createdAt)}</span>
+                      </div>
+                      <div className="admin-order-head-right">
+                        <Badge tone={STATUS_TONE[o.status]}>{STATUS_LABEL[o.status]}</Badge>
+                        <span className="admin-order-price">{formatPrice(o.totalKurus)}</span>
+                      </div>
+                    </div>
+                    <p className="admin-order-items">
+                      {o.items.map((i) => `${i.name}${i.qty > 1 ? ` ×${i.qty}` : ""}`).join(", ")}
+                    </p>
+                    {o.address && (
+                      <p className="admin-order-address">
+                        {o.address.fullName} · {o.address.phone} · {o.address.district}/{o.address.city}
+                      </p>
+                    )}
+                    <div className="admin-order-actions">
+                      {o.status !== "teslim" && o.status !== "iptal" && (
+                        <Button size="md" onClick={() => advance(o.id, o.status)}>
+                          {STATUS_LABEL[nextStatus(o.status)]} yap
+                        </Button>
+                      )}
+                      <IconButton
+                        label="Siparişi sil"
+                        tone="danger"
+                        size="sm"
+                        icon={<Trash2 size={16} />}
+                        onClick={() => delOrder(o.id)}
+                      />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {tab === "products" && (
+          <>
+            <Card pad="md" className="admin-add-product">
+              <h2>Yeni ürün</h2>
+              <div className="admin-add-row">
+                <Input
+                  label="Ad"
+                  placeholder="Ürün adı"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                />
+                <Input
+                  label="Fiyat (₺)"
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="0"
+                  value={newPrice}
+                  onChange={(e) => setNewPrice(e.target.value)}
+                />
+                <Button onClick={addProduct} disabled={!newName.trim() || !newPrice}>
+                  Ekle
+                </Button>
+              </div>
+            </Card>
+
+            {products.length === 0 ? (
+              <EmptyState title="Henüz ürün eklenmemiş" />
+            ) : (
+              <div className="admin-products">
+                {products.map((p) => (
+                  <Card key={p.id} pad="md" className="admin-product">
+                    <div>
+                      <strong>{p.name}</strong>
+                      <span>{formatPrice(p.priceKurus)}</span>
+                    </div>
+                    <IconButton
+                      label={`${p.name} ürününü sil`}
+                      tone="danger"
+                      size="sm"
+                      icon={<Trash2 size={16} />}
+                      onClick={() => delProduct(p.id)}
+                    />
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {tab === "coffees" && (
+          <>
+            {coffees.length === 0 ? (
+              <EmptyState title="Henüz kahve tasarlanmamış" />
+            ) : (
+              <div className="admin-products">
+                {coffees.map((c) => (
+                  <Card key={c.id} pad="md" className="admin-product">
+                    <div>
+                      <strong>{c.name}</strong>
+                      {c.isFromArena && <Badge tone="accent">Topluluk</Badge>}
+                      {typeof c.total === "number" && <span>{formatPrice(c.total * 100)}</span>}
+                    </div>
+                    <IconButton
+                      label={`${c.name} kahvesini sil`}
+                      tone="danger"
+                      size="sm"
+                      icon={<Trash2 size={16} />}
+                      onClick={() => delCoffee(c.id)}
+                    />
+                  </Card>
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   )
