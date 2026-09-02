@@ -124,7 +124,7 @@ export default function ToplulukClient() {
         arenaScore: post.arenaScore || 0,
       }),
     )
-    toast.success("Tarif kahve tasarımına aktarıldı — %15 indirim uygulandı.")
+    toast.success("Tarif tasarım ekranına aktarıldı — %15 topluluk indirimi uygulanacak.")
     router.push("/kahveniolustur")
   }
 

@@ -20,7 +20,7 @@ export default function CoffeeRight({
       {isLocked && (
         <div className="locked-banner">
           <Lock size={20} />
-          <span>Arena tarifi — değiştirilemez</span>
+          <span>Topluluk tarifi — değiştirilemez</span>
         </div>
       )}
 

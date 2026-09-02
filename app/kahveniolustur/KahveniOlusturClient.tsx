@@ -197,7 +197,7 @@ export default function KahveniOlusturClient() {
 
     toast.success(
       isLocked
-        ? "Kahven sepete eklendi — %15 Arena indirimi uygulandı."
+        ? "Kahven sepete eklendi — %15 topluluk indirimi uygulandı."
         : "Kahven sepete eklendi.",
     )
 
@@ -243,7 +243,7 @@ export default function KahveniOlusturClient() {
             ))}
             {isLocked && discountKurus > 0 && (
               <div className="coffee-price-row coffee-price-discount">
-                <span>Arena indirimi (%15)</span>
+                <span>Topluluk indirimi (%15)</span>
                 <span>− {formatPrice(discountKurus)}</span>
               </div>
             )}

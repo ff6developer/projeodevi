@@ -3,7 +3,7 @@ import ProfilClient from './ProfilClient';
 
 export const metadata: Metadata = {
   title: "Profil",
-  description: "Profilini yönet, kahvelerini gör ve Kahve Arenası'nda paylaş.",
+  description: "Profilini yönet, tasarladığın kahveleri ve siparişlerini gör.",
   robots: {
     index: false,
     follow: false,

@@ -67,7 +67,7 @@ export default function DevUiClient() {
           <Card interactive as="a" href="#">
             <p>Interactive card</p>
             <div className="cluster" style={{ marginTop: "var(--s-2)" }}>
-              <Badge tone="accent">Arena</Badge>
+              <Badge tone="accent">Seçki</Badge>
               <Badge tone="success">Hazır</Badge>
               <Badge tone="warning">Bekliyor</Badge>
               <Badge tone="danger">İptal</Badge>
