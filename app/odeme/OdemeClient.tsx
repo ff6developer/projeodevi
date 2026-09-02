@@ -88,7 +88,9 @@ export default function OdemeClient() {
             <AddressStep state={state} setState={setState} showErrors={triedNext} />
           )}
           {step === 1 && <DeliveryStep state={state} setState={setState} totals={totals} />}
-          {step === 2 && <PaymentStep state={state} setState={setState} />}
+          {step === 2 && (
+            <PaymentStep state={state} setState={setState} showErrors={triedNext} />
+          )}
           {step === 3 && <ReviewStep state={state} lines={lines} totals={totals} />}
 
           <div className="odeme-actions">

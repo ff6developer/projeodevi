@@ -84,6 +84,23 @@
   white-space: nowrap;
 }
 
+.odeme-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  margin-top: var(--s-4);
+}
+.odeme-demo-note {
+  margin: 0;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  background: var(--tint);
+}
+
 .odeme-actions {
   display: flex;
   justify-content: space-between;
