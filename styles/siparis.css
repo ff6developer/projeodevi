@@ -1,8 +1,43 @@
 /* Sipariş onayı — TASK-090 (component + token). */
 
 .siparis-page {
-  padding-block: var(--s-8) var(--s-9);
+  padding-block: var(--s-7) var(--s-8);
   text-align: center;
+}
+
+.siparis-lede {
+  margin: 0 0 var(--s-5);
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+}
+
+.siparis-facts {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin: 0 auto var(--s-6);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  text-align: left;
+}
+.siparis-facts p {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+.siparis-facts svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.siparis-demo-note {
+  margin: var(--s-5) 0 0;
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
 }
 
 .siparis-confirm-icon {

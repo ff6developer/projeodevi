@@ -3,9 +3,9 @@
 import type { LucideIcon } from "lucide-react"
 import {
   Coffee,
-  FlaskConical,
+  SlidersHorizontal,
   Info,
-  Trophy,
+  Users,
   LogIn,
   UserPlus,
   UserCircle,
@@ -23,8 +23,8 @@ export type NavItem = {
 
 export const NAV_ITEMS: NavItem[] = [
   { href: "/menu", label: "Menü", icon: Coffee },
-  { href: "/kahveniolustur", label: "Kahveni Oluştur", icon: FlaskConical, requiresAuth: true },
-  { href: "/topluluk", label: "Topluluk", icon: Trophy },
+  { href: "/kahveniolustur", label: "Kahveni Oluştur", icon: SlidersHorizontal },
+  { href: "/topluluk", label: "Topluluk", icon: Users },
   { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
   { href: "/giris", label: "Giriş Yap", icon: LogIn, hideWhenAuth: true },
   { href: "/kayit", label: "Kayıt Ol", icon: UserPlus, hideWhenAuth: true },

@@ -28,3 +28,27 @@ export function formatDateTime(iso: string): string {
   const d = new Date(iso)
   return isNaN(d.getTime()) ? "" : dateFormatter.format(d)
 }
+
+const dayFormatter = new Intl.DateTimeFormat("tr-TR", {
+  day: "numeric",
+  month: "long",
+})
+
+/**
+ * Tahmini teslim aralığı — sipariş tarihinden itibaren teslimat yöntemine göre.
+ * Standart: 2–3 gün · Hızlı: 1 gün.
+ */
+export function estimateDelivery(
+  iso: string,
+  delivery: "standart" | "hizli" | undefined,
+): string {
+  const base = new Date(iso)
+  if (isNaN(base.getTime())) return ""
+  const [minDays, maxDays] = delivery === "hizli" ? [1, 1] : [2, 3]
+  const from = new Date(base)
+  from.setDate(from.getDate() + minDays)
+  const to = new Date(base)
+  to.setDate(to.getDate() + maxDays)
+  if (minDays === maxDays) return dayFormatter.format(from)
+  return `${from.getDate()}–${dayFormatter.format(to)}`
+}

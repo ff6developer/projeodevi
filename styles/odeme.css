@@ -148,6 +148,63 @@
   margin: 0 0 var(--s-4);
   font-size: var(--fs-h3);
 }
+
+.odeme-summary-items {
+  margin: 0 0 var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+.odeme-summary-items > summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ink);
+  padding: var(--s-1) 0;
+}
+.odeme-summary-items > summary::-webkit-details-marker {
+  display: none;
+}
+.odeme-summary-items > summary::after {
+  content: "▾";
+  float: right;
+  color: var(--ink-3);
+  transition: transform var(--t-fast) var(--ease);
+}
+.odeme-summary-items[open] > summary::after {
+  transform: rotate(180deg);
+}
+.odeme-summary-items ul {
+  list-style: none;
+  margin: var(--s-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.odeme-summary-items li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  font-size: var(--fs-caption);
+  color: var(--ink-2);
+}
+.odeme-summary-item-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.odeme-summary-trust {
+  margin: var(--s-4) 0 0;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
 .odeme-summary-row {
   display: flex;
   justify-content: space-between;

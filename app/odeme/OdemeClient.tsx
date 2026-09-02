@@ -168,6 +168,24 @@ export default function OdemeClient() {
         <aside className="odeme-summary">
           <Card pad="md" elevated>
             <h2>Özet</h2>
+
+            <details className="odeme-summary-items" open>
+              <summary>
+                {lines.reduce((n, l) => n + l.qty, 0)} ürün
+              </summary>
+              <ul>
+                {lines.map((l) => (
+                  <li key={l.lineId}>
+                    <span className="odeme-summary-item-name">
+                      {l.name}
+                      {l.qty > 1 ? ` × ${l.qty}` : ""}
+                    </span>
+                    <Price value={l.unitKurus * l.qty} />
+                  </li>
+                ))}
+              </ul>
+            </details>
+
             <div className="odeme-summary-row">
               <span>Ara toplam</span>
               <Price value={totals.subtotalKurus} />
@@ -184,6 +202,11 @@ export default function OdemeClient() {
               <span>Toplam</span>
               <Price value={totals.totalKurus} />
             </div>
+
+            <p className="odeme-summary-trust">
+              Bilgilerin yalnızca bu sipariş için kullanılır. Demo ortamı — gerçek
+              ödeme alınmaz.
+            </p>
           </Card>
         </aside>
       </div>

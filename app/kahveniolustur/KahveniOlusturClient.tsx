@@ -10,7 +10,7 @@ import { formatPrice } from "@/lib/format"
 import { useCart } from "@/components/CartProvider"
 import { BASE_COFFEE_KURUS, priceRecipe } from "@/lib/pricing"
 import { isLoggedIn } from "@/lib/session"
-import { takeBuilderDraft } from "@/lib/builder-draft"
+import { takeBuilderDraft, saveBuilderDraft } from "@/lib/builder-draft"
 import { addSavedCoffee } from "@/lib/gallery"
 
 type RecipeOption = { name: string; price: number; power: number }
@@ -84,12 +84,14 @@ export default function KahveniOlusturClient() {
   const toast = useToast()
   const { addRecipe } = useCart()
 
-  const [customCoffeeName, setCustomCoffeeName] = useState("")
-
-  // Arena taslağı (varsa) — render sırasında bir kez, effect'siz.
+  // Taslak (Arena kilidi veya girişe giderken kaydedilen tasarım) — render'da bir kez.
   const [copied] = useState(readCopiedRecipe)
   const fromArena =
     !!copied && copied.fromArena === true && copied.locked === true
+
+  const [customCoffeeName, setCustomCoffeeName] = useState(() =>
+    !fromArena && typeof copied?.name === "string" ? copied.name : "",
+  )
 
   const [isLocked] = useState(fromArena)
   const [arenaCoffeeName] = useState(() =>
@@ -156,7 +158,9 @@ export default function KahveniOlusturClient() {
   const handleAddToCart = () => {
     if (!allSelected) return
     if (!isLoggedIn()) {
-      toast.warning("Sepete eklemek için önce giriş yap.")
+      // Tasarımı taslağa yaz — girişten dönünce kaybolmasın.
+      saveBuilderDraft({ ...form, name: customCoffeeName.trim() })
+      toast.info("Tasarımın kaydedildi. Giriş yaptıktan sonra sepete ekleyebilirsin.")
       router.push("/giris?next=/kahveniolustur")
       return
     }

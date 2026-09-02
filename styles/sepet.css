@@ -1,10 +1,10 @@
-/* Sepet — TASK-112. */
+/* Sepet — TASK-112 / V2 TASK-226/227. */
 
 .sepet {
-  padding-block: var(--s-7) var(--s-9);
+  padding-block: var(--s-7) var(--s-8);
 }
 .sepet h1 {
-  margin: 0 0 var(--s-6);
+  margin: 0 0 var(--s-5);
   font-size: var(--fs-h1);
 }
 
@@ -18,19 +18,19 @@
 .sepet-lines {
   display: flex;
   flex-direction: column;
-  gap: var(--s-4);
+  gap: var(--s-3);
 }
 
 .sepet-line {
   display: grid;
-  grid-template-columns: 80px 1fr auto;
+  grid-template-columns: 64px 1fr auto;
   gap: var(--s-4);
   align-items: center;
 }
 .sepet-line-img {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   border-radius: var(--r-md);
   overflow: hidden;
   background: var(--tint);
@@ -44,8 +44,6 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  font-family: var(--font-display);
-  font-size: var(--fs-h3);
   color: var(--ink-3);
 }
 .sepet-line-body {
@@ -56,6 +54,9 @@
 }
 .sepet-line-body strong {
   color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .sepet-line-tag {
   font-size: var(--fs-caption);
@@ -89,14 +90,20 @@
   color: var(--ink-2);
   margin-bottom: var(--s-3);
 }
-.sepet-summary-muted {
-  color: var(--ink-3);
-  font-size: var(--fs-caption);
+.sepet-free {
+  color: var(--success);
+  font-weight: 600;
 }
 .sepet-shipping-hint {
   margin: 0 0 var(--s-3);
   font-size: var(--fs-caption);
   color: var(--ink-3);
+}
+.sepet-shipping-ok {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  color: var(--success);
 }
 .sepet-summary-total {
   padding-top: var(--s-3);
@@ -104,7 +111,12 @@
   font-size: var(--fs-lg);
   font-weight: 600;
   color: var(--ink);
-  margin-bottom: var(--s-4);
+  margin-bottom: var(--s-2);
+}
+.sepet-summary-note {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
 }
 .sepet-summary .button {
   margin-bottom: var(--s-2);
@@ -117,11 +129,11 @@
 }
 @media (max-width: 560px) {
   .sepet-line {
-    grid-template-columns: 64px 1fr;
+    grid-template-columns: 56px 1fr;
   }
   .sepet-line-img {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
   }
   .sepet-line-controls {
     grid-column: 1 / -1;

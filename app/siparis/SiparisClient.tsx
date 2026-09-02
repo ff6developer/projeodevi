@@ -2,19 +2,12 @@
 
 import { useMemo } from "react"
 import { useSearchParams } from "next/navigation"
-import { CheckCircle2, Clock } from "lucide-react"
+import { CheckCircle2, MapPin, Truck } from "lucide-react"
 import "@/styles/siparis.css"
 import { getOrder, getOrders, STATUS_LABEL } from "@/lib/orders"
+import { estimateDelivery } from "@/lib/format"
 import type { Order } from "@/lib/types"
 import { Button, Card, Badge, Price, EmptyState } from "@/components/ui"
-
-const ETA: Record<string, string> = {
-  alindi: "Siparişin hazırlanmaya başlanacak. Hazırlık genelde 15–25 dakika sürer.",
-  hazirlaniyor: "Kahven şu anda hazırlanıyor.",
-  hazir: "Siparişin hazır.",
-  teslim: "Siparişin teslim edildi. Afiyet olsun.",
-  iptal: "Bu sipariş iptal edildi.",
-}
 
 const STATUS_TONE: Record<string, "neutral" | "accent" | "success" | "warning" | "danger"> = {
   alindi: "warning",
@@ -52,11 +45,26 @@ export default function SiparisClient() {
       </div>
       <h1 className="siparis-hero">Siparişin alındı</h1>
       <p className="siparis-order-id text-mono">#{order.id}</p>
-
-      <p className="siparis-eta">
-        <Clock size={15} aria-hidden="true" />
-        <span>{ETA[order.status] ?? ETA.alindi}</span>
+      <p className="siparis-lede">
+        Hazırlığa başlıyoruz. Durumu istediğin zaman takip edebilirsin.
       </p>
+
+      {order.address && (
+        <div className="siparis-facts">
+          <p>
+            <MapPin size={15} aria-hidden="true" />
+            <span>
+              {order.address.district} / {order.address.city} adresine
+            </span>
+          </p>
+          <p>
+            <Truck size={15} aria-hidden="true" />
+            <span>
+              Tahmini teslim: {estimateDelivery(order.createdAt, order.delivery)}
+            </span>
+          </p>
+        </div>
+      )}
 
       <Card pad="md" className="siparis-summary">
         {order.items.map((it, i) => (
@@ -96,13 +104,14 @@ export default function SiparisClient() {
 
       <div className="siparis-actions">
         <Button href={`/siparis/${order.id}`}>Siparişini takip et</Button>
-        <Button variant="secondary" href="/siparislerim">
-          Siparişlerim
-        </Button>
-        <Button variant="ghost" href="/menu">
+        <Button variant="secondary" href="/menu">
           Alışverişe devam
         </Button>
       </div>
+
+      <p className="siparis-demo-note">
+        Bu bir demo siparişidir — gerçek ödeme alınmaz, kargo çıkışı yapılmaz.
+      </p>
     </div>
   )
 }

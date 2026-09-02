@@ -1,10 +1,14 @@
 "use client"
 
 import Image from "next/image"
-import { Trash2 } from "lucide-react"
+import { Trash2, ShoppingBag, Coffee, Check } from "lucide-react"
 import "@/styles/sepet.css"
 import { useCart } from "@/components/CartProvider"
-import { computeCartTotals, FREE_SHIPPING_THRESHOLD_KURUS } from "@/lib/pricing"
+import {
+  computeCartTotals,
+  FREE_SHIPPING_THRESHOLD_KURUS,
+  SHIPPING_STANDARD_KURUS,
+} from "@/lib/pricing"
 import { formatPrice } from "@/lib/format"
 import {
   Button,
@@ -24,15 +28,25 @@ export default function SepetClient() {
       <div className="sepet container container-narrow">
         <h1>Sepet</h1>
         <EmptyState
+          icon={<ShoppingBag size={30} />}
           title="Sepetin boş"
           description="Menüden bir kahve ekle ya da kendi tarifini tasarla."
-          action={<Button href="/menu">Menüye git</Button>}
+          action={
+            <div className="cluster">
+              <Button href="/menu">Menüye git</Button>
+              <Button href="/kahveniolustur" variant="secondary">
+                Kahveni tasarla
+              </Button>
+            </div>
+          }
         />
       </div>
     )
   }
 
   const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD_KURUS - totals.subtotalKurus)
+  const freeShipping = remaining === 0
+  const estShipping = freeShipping ? 0 : SHIPPING_STANDARD_KURUS
 
   return (
     <div className="sepet container">
@@ -44,9 +58,11 @@ export default function SepetClient() {
             <Card key={l.lineId} pad="md" className="sepet-line">
               <span className="sepet-line-img">
                 {l.image ? (
-                  <Image src={l.image} alt={l.name} fill sizes="80px" />
+                  <Image src={l.image} alt={l.name} fill sizes="72px" />
                 ) : (
-                  <span className="sepet-line-img-ph">{l.name.slice(0, 1)}</span>
+                  <span className="sepet-line-img-ph" aria-hidden="true">
+                    <Coffee size={22} />
+                  </span>
                 )}
               </span>
               <div className="sepet-line-body">
@@ -75,19 +91,33 @@ export default function SepetClient() {
               <span>Ara toplam</span>
               <Price value={totals.subtotalKurus} />
             </div>
-            <div className="sepet-summary-row sepet-summary-muted">
-              <span>Teslimat</span>
-              <span>Ödeme adımında hesaplanır</span>
+            <div className="sepet-summary-row">
+              <span>Standart teslimat</span>
+              {freeShipping ? (
+                <span className="sepet-free">Ücretsiz</span>
+              ) : (
+                <Price value={estShipping} />
+              )}
             </div>
-            {remaining > 0 && (
+
+            {freeShipping ? (
+              <p className="sepet-shipping-hint sepet-shipping-ok">
+                <Check size={14} aria-hidden="true" /> Ücretsiz kargoyu kazandın.
+              </p>
+            ) : (
               <p className="sepet-shipping-hint">
                 {formatPrice(remaining)} daha ekle, standart teslimat ücretsiz olsun.
               </p>
             )}
+
             <div className="sepet-summary-row sepet-summary-total">
               <span>Toplam</span>
-              <Price value={totals.subtotalKurus} />
+              <Price value={totals.subtotalKurus + estShipping} />
             </div>
+            <p className="sepet-summary-note">
+              Hızlı teslimat seçersen tutar ödeme adımında güncellenir.
+            </p>
+
             <Button href="/odeme" block size="lg">
               Ödemeye geç
             </Button>
