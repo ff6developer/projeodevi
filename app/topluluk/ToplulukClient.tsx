@@ -1,446 +1,309 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { 
-  Trophy, MessageCircle, Zap, Award, 
-  Flame, X, User, ClipboardCopy, Send, Star, Trash2,
-  Sparkles, Coffee, Heart, TrendingUp, Gift, Users
-} from "lucide-react"
+import { Flame, MessageCircle, ClipboardCopy, Coffee } from "lucide-react"
 import "@/styles/kahvearenasi.css"
 import { useToast } from "@/components/ToastProvider"
 import { getRemainingDays, rollOverIfNeeded } from "@/lib/community"
+import {
+  Button,
+  IconButton,
+  Card,
+  Badge,
+  Input,
+  LoadingState,
+  EmptyState,
+  useConfirm,
+} from "@/components/ui"
+
+type Post = {
+  id: number
+  userName?: string
+  userAvatar?: string
+  likes?: number
+  arenaScore?: number
+  comments?: { id: number; text: string; user: string }[]
+  coffee?: { name?: string; image?: string | null; details?: Record<string, unknown> }
+  details?: Record<string, unknown>
+}
+
+const HOW_IT_WORKS = [
+  "Kahveni oluştur ve toplulukta paylaş",
+  "Diğer kullanıcılar oy versin",
+  "Oy aldıkça sıralamada yüksel",
+  "Ay sonunda en çok oyu topla",
+  "Ayın öne çıkan tasarımına ödül",
+]
+
+const REWARDS = [
+  { image: "/arena-gift.png", title: "Özel hediye kutusu", desc: "Ayın öne çıkan tasarımına özel hazırlanmış hediye kutusu." },
+  { image: "/kupon.png", title: "%15 indirim kuponu", desc: "Tüm kahve çeşitlerinde geçerli özel indirim." },
+  { image: "/bardak.png", title: "İsimli seramik kupa", desc: "Ayın öne çıkanına özel, isim yazılı kupa." },
+]
 
 export default function ToplulukClient() {
   const router = useRouter()
   const toast = useToast()
+  const confirm = useConfirm()
 
-  const [posts, setPosts] = useState<any[]>([])
-  const [votedPosts, setVotedPosts] = useState<number[]>([]) 
+  const [posts, setPosts] = useState<Post[]>([])
+  const [votedPosts, setVotedPosts] = useState<number[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedUser, setSelectedUser] = useState<any>(null) 
   const [activeComments, setActiveComments] = useState<number | null>(null)
   const [commentText, setCommentText] = useState("")
   const [remainingDays, setRemainingDays] = useState(0)
 
-  // VERİ YÜKLEME — dönem (takvim ayı) değiştiyse seçki yenilenir
   useEffect(() => {
     const timer = setTimeout(() => {
-      const rawPosts = JSON.parse(localStorage.getItem("arenaPosts") || "[]")
-      const checkedPosts = rollOverIfNeeded(rawPosts)
-      const savedVotes = JSON.parse(localStorage.getItem("userVotes") || "[]")
-
-      setPosts(checkedPosts)
-      setVotedPosts(savedVotes)
+      const raw = JSON.parse(localStorage.getItem("arenaPosts") || "[]") as Post[]
+      setPosts(rollOverIfNeeded(raw) as Post[])
+      setVotedPosts(JSON.parse(localStorage.getItem("userVotes") || "[]"))
       setIsLoading(false)
-    }, 400)
+    }, 300)
     return () => clearTimeout(timer)
   }, [])
 
-  // KALAN GÜN — ay sonuna kadar
   useEffect(() => {
     const update = () => setRemainingDays(getRemainingDays())
     update()
-    const interval = setInterval(update, 60000)
-    return () => clearInterval(interval)
+    const t = setInterval(update, 60000)
+    return () => clearInterval(t)
   }, [])
 
-  // 4. OY VERME (Geri Çekme Özellikli)
-  const handleVote = (postId: number) => {
-    const isAlreadyVoted = votedPosts.includes(postId);
-    let updatedVotes;
-    let updatedPosts;
-
-    if (isAlreadyVoted) {
-      updatedVotes = votedPosts.filter(id => id !== postId);
-      updatedPosts = posts.map(p => 
-        p.id === postId ? { ...p, likes: Math.max(0, (p.likes || 0) - 1) } : p
-      );
-    } else {
-      updatedVotes = [...votedPosts, postId];
-      updatedPosts = posts.map(p => 
-        p.id === postId ? { ...p, likes: (p.likes || 0) + 1 } : p
-      );
-    }
-
-    setPosts(updatedPosts);
-    setVotedPosts(updatedVotes);
-    localStorage.setItem("arenaPosts", JSON.stringify(updatedPosts));
-    localStorage.setItem("userVotes", JSON.stringify(updatedVotes));
+  const persist = (next: Post[]) => {
+    setPosts(next)
+    localStorage.setItem("arenaPosts", JSON.stringify(next))
   }
 
-  const handleDeletePost = (postId: number) => {
-    if (window.confirm("Bu kahve tasarımını arenadan hem listeden hem de podyumdan kaldırmak istediğine emin misin?")) {
-      const currentPosts = [...posts];
-      const updatedPosts = currentPosts.filter(p => p.id !== postId);
+  const handleVote = (id: number) => {
+    const voted = votedPosts.includes(id)
+    const nextVotes = voted ? votedPosts.filter((v) => v !== id) : [...votedPosts, id]
+    const nextPosts = posts.map((p) =>
+      p.id === id ? { ...p, likes: Math.max(0, (p.likes || 0) + (voted ? -1 : 1)) } : p,
+    )
+    setVotedPosts(nextVotes)
+    persist(nextPosts)
+    localStorage.setItem("userVotes", JSON.stringify(nextVotes))
+  }
 
-      setPosts(updatedPosts);
-      localStorage.setItem("arenaPosts", JSON.stringify(updatedPosts));
-
-      if (selectedUser?.id === postId) {
-        setSelectedUser(null);
-      }
-    }
-  };
-
-  // 6. YORUM EKLEME
-  const handleAddComment = (postId: number) => {
-    if (!commentText.trim()) return
-    const updatedPosts = posts.map(p => {
-      if (p.id === postId) {
-        const newComments = [...(p.comments || []), { id: Date.now(), text: commentText, user: "Sen" }]
-        return { ...p, comments: newComments }
-      }
-      return p
+  const handleDelete = async (id: number) => {
+    const ok = await confirm({
+      title: "Tasarımı kaldır",
+      description: "Bu kahve tasarımı seçkiden ve sıralamadan kaldırılacak.",
+      confirmText: "Kaldır",
+      tone: "danger",
     })
-    setPosts(updatedPosts)
-    localStorage.setItem("arenaPosts", JSON.stringify(updatedPosts))
+    if (!ok) return
+    persist(posts.filter((p) => p.id !== id))
+  }
+
+  const handleAddComment = (id: number) => {
+    if (!commentText.trim()) return
+    persist(
+      posts.map((p) =>
+        p.id === id
+          ? { ...p, comments: [...(p.comments || []), { id: Date.now(), text: commentText.trim(), user: "Sen" }] }
+          : p,
+      ),
+    )
     setCommentText("")
   }
 
-  const copyRecipe = (post: any) => {
-    const coffeeDetails = post.coffee?.details || post.details || {}
-
-    localStorage.setItem("copiedRecipe", JSON.stringify({
-      milkType: coffeeDetails.milkType || null,
-      beanType: coffeeDetails.beanType || null,
-      foam: coffeeDetails.foam || null,
-      cupType: coffeeDetails.cupType || null,
-      syrup: coffeeDetails.syrup || null,
-      spice: coffeeDetails.spice || null,
-      sweetener: coffeeDetails.sweetener || null,
-      technique: coffeeDetails.technique || null,
-      fromArena: true,
-      locked: true,
-      name: post.coffee?.name || "Arena Kahvesi",
-      image: post.coffee?.image || null,
-      arenaPostId: post.id,
-      arenaCreator: post.userName,
-      arenaScore: post.arenaScore || 0
-    }))
-
+  const copyRecipe = (post: Post) => {
+    const d = post.coffee?.details || post.details || {}
+    localStorage.setItem(
+      "copiedRecipe",
+      JSON.stringify({
+        ...d,
+        fromArena: true,
+        locked: true,
+        name: post.coffee?.name || "Topluluk Kahvesi",
+        image: post.coffee?.image || null,
+        arenaScore: post.arenaScore || 0,
+      }),
+    )
     toast.success("Tarif kahve tasarımına aktarıldı — %15 indirim uygulandı.")
     router.push("/kahveniolustur")
   }
 
-  // PODYUM HESAPLAMA
-  const topThree = [...posts]
-    .sort((a, b) => (b.likes || 0) - (a.likes || 0))
-    .slice(0, 3)
-
-  // ÖDÜLLER VERİSİ
-  const rewards = [
-    {
-      id: 1,
-      icon: "/arena-gift.png", // Hediye kutusu görseli
-      title: "Özel Hediye Kutusu",
-      desc: "Ayın öne çıkan tasarımına özel hazırlanmış hediye kutusu"
-    },
-    {
-      id: 2,
-      icon: "/kupon.png", // İndirim kartı görseli
-      title: "%15 İndirim Kuponu",
-      desc: "Tüm kahve çeşitlerinde geçerli özel indirim fırsatı"
-    },
-    {
-      id: 3,
-      icon: "/bardak.png", // Özel kupa görseli
-      title: "Elmenes Coffee Özel Kupa",
-      desc: "Ayın öne çıkanına özel, isim yazılı seramik kupa"
-    }
-  ]
-
-  // TURNUVA SÜRECİ VERİSİ
-  const processSteps = [
-    {
-      id: 1,
-      icon: <Coffee size={28} />,
-      number: "1. ADIM",
-      title: "Katıl",
-      desc: "Kahveni oluştur ve toplulukta paylaş"
-    },
-    {
-      id: 2,
-      icon: <Heart size={28} />,
-      number: "2. ADIM",
-      title: "Oy topla",
-      desc: "Diğer kullanıcılar oy versin"
-    },
-    {
-      id: 3,
-      icon: <TrendingUp size={28} />,
-      number: "3. ADIM",
-      title: "Sıralamada yüksel",
-      desc: "Oy aldıkça sıralamada yukarı çık"
-    },
-    {
-      id: 4,
-      icon: <Trophy size={28} />,
-      number: "4. ADIM",
-      title: "Öne çık",
-      desc: "Ay sonunda en çok oyu topla"
-    },
-    {
-      id: 5,
-      icon: <Gift size={28} />,
-      number: "5. ADIM",
-      title: "Ödül kazan",
-      desc: "Ayın öne çıkan tasarımına ödül"
-    }
-  ]
-
-  // Gerçek katılımcı sayısı (benzersiz kullanıcı)
-  const participantCount = new Set(posts.map((p) => p.userName).filter(Boolean)).size
+  const topThree = useMemo(
+    () => [...posts].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 3),
+    [posts],
+  )
+  const participantCount = useMemo(
+    () => new Set(posts.map((p) => p.userName).filter(Boolean)).size,
+    [posts],
+  )
 
   return (
-    <div className="arena-page">
-      <div className="arena-overlay"></div>
-
-      <header className="arena-header">
-        <div className="arena-title-area">
-          <Trophy className="gold-trophy" size={40} />
-          <h1>Topluluk</h1>
-          <p>Kendi kahveni tasarla, toplulukla paylaş, oy ver.</p>
-          <span className="days-badge">Bu ayın seçkisi — {remainingDays} gün kaldı</span>
-        </div>
+    <div className="community container">
+      <header className="community-head">
+        <p className="eyebrow">Topluluk</p>
+        <h1>Bu ayın seçkisi</h1>
+        <p className="community-sub">
+          Kendi kahveni tasarla, toplulukla paylaş, oy ver. Ay sonunda en çok oyu alan
+          tasarım öne çıkar.
+        </p>
+        <Badge tone="accent">{remainingDays} gün kaldı</Badge>
       </header>
 
-      {/* ÖDÜLLER BÖLÜMÜ */}
-      <section className="rewards-section">
-        <div className="rewards-header">
-          <h2>
-            <Sparkles className="sparkle-icon" size={28} />
-            ÖDÜLLER
-            <Sparkles className="sparkle-icon" size={28} />
-          </h2>
-        </div>
-
-        <div className="rewards-grid">
-          {rewards.map((reward) => (
-            <div key={reward.id} className="reward-card">
-              <div className="reward-icon-wrapper">
-                <Image 
-                  src={reward.icon} 
-                  alt={reward.title}
-                  width={120}
-                  height={120}
-                />
-              </div>
-              <h3>{reward.title}</h3>
-              <p>{reward.desc}</p>
-            </div>
+      <section className="community-section">
+        <h2>Nasıl çalışır</h2>
+        <ol className="community-steps">
+          {HOW_IT_WORKS.map((s, i) => (
+            <li key={i}>
+              <span className="community-step-n">{i + 1}</span>
+              {s}
+            </li>
           ))}
-        </div>
-
-        <p className="rewards-footer">ve daha fazlası...</p>
+        </ol>
       </section>
 
-      {/* NASIL ÇALIŞIR */}
-      <section className="process-section">
-        <div className="process-header">
-          <h2>Nasıl çalışır</h2>
-        </div>
-
-        <div className="process-timeline">
-          {processSteps.map((step) => (
-            <div key={step.id} className="process-step">
-              <div className="step-icon-wrapper">
-                {step.icon}
-              </div>
-              <span className="step-number">{step.number}</span>
-              <span className="step-title">{step.title}</span>
-              <p className="step-desc">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* KATILIM ÇAĞRISI BÖLÜMÜ */}
-      <section className="join-section">
-        <div className="join-card">
-          <div className="join-left">
-            <div className="join-icon-wrapper">
-              <Users size={32} />
-            </div>
-            <div className="join-text">
-              <h3>Sen de yerini al</h3>
-              <p>Oyla, yorum yap, destekle ve seçkiye katıl.</p>
-            </div>
-          </div>
-
-          {participantCount > 0 && (
-            <div className="join-right">
-              <span className="join-count">
-                {participantCount} kişi bu ay tasarım paylaştı
+      <section className="community-section">
+        <h2>Ödüller</h2>
+        <div className="community-rewards">
+          {REWARDS.map((r) => (
+            <Card key={r.title} pad="md">
+              <span className="community-reward-img">
+                <Image src={r.image} alt="" width={64} height={64} />
               </span>
-            </div>
-          )}
+              <h3>{r.title}</h3>
+              <p>{r.desc}</p>
+            </Card>
+          ))}
         </div>
       </section>
 
-      {/* PODYUM (ANLIK SIRALAMA) */}
       {!isLoading && topThree.length > 0 && (
-        <section className="podium-section">
-          <div className="podium-header">
-            <strong>Bu ayın sıralaması</strong>
-            <p>Oy sayısına göre anlık olarak değişir</p>
-          </div>
-
-          <div className="podium-container">
-            {[topThree[1], topThree[0], topThree[2]].map((item, idx) => {
-              if (!item) return null
-              const isGold = item.id === topThree[0].id
-
-              return (
-                <div 
-                  key={item.id} 
-                  className={`podium-card ${isGold ? 'gold' : idx === 0 ? 'silver' : 'bronze'}`} 
-                  onClick={() => setSelectedUser(item)}
-                >
-                  {isGold && <div className="winner-crown"><Award size={40} /></div>}
-
-                  <div className="rank-label">
-                    #{isGold ? '1' : idx === 0 ? '2' : '3'}
-                  </div>
-
-                  <Image
-                    src={item.coffee?.image || "/profilikon.png"}
-                    alt="Winner"
-                    width={isGold ? 160 : 120}
-                    height={isGold ? 160 : 120}
-                    className="podium-img"
-                  />
-
-                  <div className="podium-info">
-                    <strong>{item.coffee?.name || "İsimsiz Kahve"}</strong>
-                    <span>@{item.userName}</span>
-
-                    {isGold && (
-                      <div style={{ fontSize: "0.8rem", color: "#ffcc00", marginTop: "4px" }}>
-                        Şu an önde
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+        <section className="community-section">
+          <h2>Sıralama</h2>
+          <ol className="community-rank">
+            {topThree.map((p, i) => (
+              <li key={p.id}>
+                <span className="community-rank-n">{i + 1}</span>
+                <span className="community-rank-img">
+                  <Image src={p.coffee?.image || "/profilikon.png"} alt="" width={44} height={44} />
+                </span>
+                <span className="community-rank-body">
+                  <strong>{p.coffee?.name || "İsimsiz kahve"}</strong>
+                  <span className="community-rank-user">@{p.userName}</span>
+                </span>
+                <span className="community-rank-votes">
+                  <Flame size={14} aria-hidden="true" /> {p.likes || 0}
+                </span>
+              </li>
+            ))}
+          </ol>
         </section>
       )}
 
-      {/* ANA LİSTE */}
-      <main className="arena-feed">
-        {!isLoading && posts.length === 0 ? (
-          <div className="arena-empty">
-            <Coffee size={32} />
-            <h3>Henüz tasarım paylaşılmamış</h3>
-            <p>Bu ayın seçkisinde ilk sıra senin olabilir. Kendi kahveni tasarla ve toplulukla paylaş.</p>
-            <button className="arena-empty-btn" onClick={() => router.push("/kahveniolustur")}>
-              Kahveni tasarla
-            </button>
-          </div>
-        ) : (
-        <div className="arena-grid">
-          {isLoading ? (
-            [1, 2, 3, 4].map((n) => (
-              <div key={n} className="arena-item-card skeleton-card">
-                <div className="skeleton" style={{ width: '100%', height: '250px', borderRadius: '25px' }}></div>
-              </div>
-            ))
-          ) : (
-            posts.map((post) => (
-
-              <div key={post.id} className="arena-item-card">
-                <div className="card-image-wrapper">
-                  <Image src={post.coffee?.image || "/profilikon.png"} alt={post.coffee?.name || "Kahve"} width={400} height={300} className="card-main-img" />
-
-                  <button className="delete-arena-post" onClick={(e) => { e.stopPropagation(); handleDeletePost(post.id); }} aria-label="Gönderiyi Sil">
-                    <Trash2 size={18} />
-                  </button>
-
-                  <div className="score-badge"><Zap size={14} /> {post.arenaScore} Puan</div>
-                  <button className="copy-recipe-btn" onClick={(e) => { e.stopPropagation(); copyRecipe(post) }} aria-label="Tarifi kahve tasarımına kopyala">
-                    <ClipboardCopy size={18} />
-                  </button>
-                </div>
-
-                <div className="card-body">
-                  <div className="user-line" onClick={() => setSelectedUser(post)}>
-                    <Image src={post.userAvatar || "/profilikon.png"} alt="User" width={24} height={24} className="avatar-round" />
-                    <span>@{post.userName}</span>
-                  </div>
-                  <h3>{post.coffee?.name || "İsimsiz Kahve"}</h3>
-                </div>
-
-                <div className="card-actions">
-                  <button 
-                    className={`vote-btn ${votedPosts.includes(post.id) ? 'voted' : ''}`} 
-                    onClick={() => handleVote(post.id)}
-                  >
-                    <Flame size={20} fill={votedPosts.includes(post.id) ? "#ff4d4d" : "none"} /> 
-                    <span>{post.likes || 0}</span>
-                  </button>
-
-                  <button className={`comment-btn ${activeComments === post.id ? 'active' : ''}`} onClick={() => setActiveComments(activeComments === post.id ? null : post.id)}>
-                    <MessageCircle size={20} /> 
-                    <span>{post.comments?.length || 0}</span>
-                  </button>
-                </div>
-
-                {activeComments === post.id && (
-                  <div className="comment-section-mini">
-                    <div className="comment-list">
-                      {post.comments?.map((c: any) => (
-                        <div key={c.id} className="mini-comment">
-                          <span className="comment-author">@{c.user}</span>
-                          <span className="comment-text">{c.text}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="comment-input-row">
-                      <input type="text" placeholder="Yaz..." value={commentText} onChange={(e) => setCommentText(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleAddComment(post.id)} />
-                      <button onClick={() => handleAddComment(post.id)}><Send size={16}/></button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))
+      <section className="community-section">
+        <div className="community-feed-head">
+          <h2>Seçki</h2>
+          {participantCount > 0 && (
+            <span className="community-count">{participantCount} kişi paylaştı</span>
           )}
         </div>
-        )}
-      </main>
 
-      {/* USER DRAWER */}
-      {selectedUser && (
-        <div className="user-drawer-overlay open" onClick={() => setSelectedUser(null)}>
-          <div className="user-drawer" onClick={e => e.stopPropagation()}>
-            <button className="close-drawer" onClick={() => setSelectedUser(null)} aria-label="Kapat"><X size={24} /></button>
-            <div className="drawer-content">
-              <div className="drawer-header">
-                <div className="drawer-avatar-bg">
-                  <Image 
-                    src={selectedUser.userAvatar || "/profilikon.png"} 
-                    alt="User" 
+        {isLoading ? (
+          <LoadingState />
+        ) : posts.length === 0 ? (
+          <EmptyState
+            icon={<Coffee size={32} />}
+            title="Henüz tasarım paylaşılmamış"
+            description="Bu ayın seçkisinde ilk sıra senin olabilir."
+            action={<Button href="/kahveniolustur">Kahveni tasarla</Button>}
+          />
+        ) : (
+          <div className="community-grid">
+            {posts.map((post) => (
+              <Card key={post.id} pad="none" className="community-card">
+                <span className="community-card-img">
+                  <Image
+                    src={post.coffee?.image || "/profilikon.png"}
+                    alt={post.coffee?.name || "Kahve"}
                     fill
-                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 640px) 100vw, 340px"
                   />
+                </span>
+                <div className="community-card-body">
+                  <span className="community-card-user">
+                    <Image
+                      src={post.userAvatar || "/profilikon.png"}
+                      alt=""
+                      width={22}
+                      height={22}
+                      className="community-card-avatar"
+                    />
+                    @{post.userName}
+                  </span>
+                  <h3 className="community-card-name">{post.coffee?.name || "İsimsiz kahve"}</h3>
+
+                  <div className="community-card-actions">
+                    <Button
+                      variant={votedPosts.includes(post.id) ? "primary" : "secondary"}
+                      size="md"
+                      onClick={() => handleVote(post.id)}
+                    >
+                      <Flame
+                        size={16}
+                        fill={votedPosts.includes(post.id) ? "currentColor" : "none"}
+                        aria-hidden="true"
+                      />
+                      {post.likes || 0}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      onClick={() =>
+                        setActiveComments(activeComments === post.id ? null : post.id)
+                      }
+                    >
+                      <MessageCircle size={16} aria-hidden="true" />
+                      {post.comments?.length || 0}
+                    </Button>
+                    <IconButton
+                      label="Tarifi kahve tasarımına kopyala"
+                      icon={<ClipboardCopy size={18} />}
+                      onClick={() => copyRecipe(post)}
+                    />
+                    <IconButton
+                      label="Tasarımı kaldır"
+                      tone="danger"
+                      icon={<Coffee size={18} />}
+                      onClick={() => handleDelete(post.id)}
+                    />
+                  </div>
+
+                  {activeComments === post.id && (
+                    <div className="community-comments">
+                      {(post.comments || []).map((c) => (
+                        <p key={c.id} className="community-comment">
+                          <strong>@{c.user}</strong> {c.text}
+                        </p>
+                      ))}
+                      <div className="community-comment-form">
+                        <Input
+                          label="Yorumun"
+                          placeholder="Yaz…"
+                          value={commentText}
+                          onChange={(e) => setCommentText(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && handleAddComment(post.id)}
+                        />
+                        <Button size="md" onClick={() => handleAddComment(post.id)}>
+                          Gönder
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <h2>@{selectedUser.userName}</h2>
-                <div className="barista-rank">
-                  <Star size={14} fill="#ffcc00" color="#ffcc00" />
-                  {(selectedUser.arenaScore || 0) >= 50 ? "Usta Barista" : "Barista"}
-                </div>
-              </div>
-              <div className="drawer-stats-row">
-                <div className="drawer-stat-item"><strong>{selectedUser.likes || 0}</strong><span>OY</span></div>
-                <div className="drawer-stat-item"><strong>{selectedUser.arenaScore || 0}</strong><span>PUAN</span></div>
-              </div>
-              <button className="full-profile-btn" onClick={() => router.push(`/profil`)}>TAM PROFİLİ GÖR <User size={18} /></button>
-            </div>
+              </Card>
+            ))}
           </div>
-        </div>
-      )}
+        )}
+      </section>
     </div>
   )
 }
