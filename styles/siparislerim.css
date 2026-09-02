@@ -1,0 +1,122 @@
+/* Siparişlerim listesi + sipariş detay — TASK-120. */
+
+.siparislerim,
+.siparis-detay {
+  padding-block: var(--s-7) var(--s-9);
+}
+.siparislerim h1,
+.siparis-detay h1 {
+  margin: 0 0 var(--s-6);
+  font-size: var(--fs-h1);
+}
+
+.siparislerim-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+.siparislerim-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  text-decoration: none;
+  color: inherit;
+}
+.siparislerim-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.siparislerim-item-body {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+}
+.siparislerim-item-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  font-size: var(--fs-caption);
+  color: var(--ink-3);
+}
+
+/* ---- detay ---- */
+.siparis-detay-id {
+  margin: 0 0 var(--s-2);
+  color: var(--ink-3);
+}
+.siparis-detay-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: var(--s-5);
+  align-items: start;
+}
+.siparis-detay-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+.siparis-detay-block h2 {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-h3);
+}
+.siparis-detay-block h3 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-body);
+  color: var(--ink-2);
+}
+.siparis-detay-block p {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+.siparis-detay-block p.siparis-detay-note {
+  margin-top: var(--s-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-3);
+}
+.siparis-detay-subhead {
+  margin-top: var(--s-3);
+}
+.siparis-detay-summary h2 {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-h3);
+}
+.siparis-detay-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.siparis-detay-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  font-size: var(--fs-sm);
+}
+.siparis-detay-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  margin-bottom: var(--s-3);
+}
+.siparis-detay-row-total {
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0;
+}
+
+@media (max-width: 860px) {
+  .siparis-detay-grid {
+    grid-template-columns: 1fr;
+  }
+}

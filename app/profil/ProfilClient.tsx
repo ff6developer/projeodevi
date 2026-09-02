@@ -312,7 +312,7 @@ export default function ProfilClient() {
           <Card
             key={o.id}
             as="a"
-            href={`/siparis?o=${o.id}`}
+            href={`/siparis/${o.id}`}
             interactive
             pad="md"
             className="profil-order"
@@ -332,6 +332,9 @@ export default function ProfilClient() {
             </div>
           </Card>
         ))}
+        <Button href="/siparislerim" variant="ghost">
+          Tüm siparişleri gör
+        </Button>
       </div>
     )
 

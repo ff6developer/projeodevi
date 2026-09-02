@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { CheckCircle2, Clock } from "lucide-react"
 import "@/styles/siparis.css"
 import { getOrder, getOrders, STATUS_LABEL } from "@/lib/orders"
@@ -25,7 +25,6 @@ const STATUS_TONE: Record<string, "neutral" | "accent" | "success" | "warning" |
 }
 
 export default function SiparisClient() {
-  const router = useRouter()
   const params = useSearchParams()
   const orderId = params.get("o")
 
@@ -96,8 +95,11 @@ export default function SiparisClient() {
       </Card>
 
       <div className="siparis-actions">
-        <Button onClick={() => router.push("/profil")}>Siparişlerim</Button>
-        <Button variant="secondary" onClick={() => router.push("/menu")}>
+        <Button href={`/siparis/${order.id}`}>Siparişini takip et</Button>
+        <Button variant="secondary" href="/siparislerim">
+          Siparişlerim
+        </Button>
+        <Button variant="ghost" href="/menu">
           Alışverişe devam
         </Button>
       </div>
