@@ -13,53 +13,29 @@ export default function LoginClient() {
 
   return (
     <AuthForm
-      title="Giriş Yap"
-      subtitle="ELMENES COFFEE hesabınıza giriş yapın"
+      title="Giriş yap"
+      subtitle="Elmenes Coffee hesabına giriş yap"
       fields={[
-        {
-          id: "email",
-          label: "Email",
-          type: "email",
-          autoComplete: "email",
-          placeholder: "email@example.com",
-          required: true
-        },
-        {
-          id: "password",
-          label: "Şifre",
-          type: "password",
-          autoComplete: "current-password",
-          placeholder: "Şifrenizi girin",
-          required: true
-        }
+        { id: "email", label: "E-posta", type: "email", autoComplete: "email", placeholder: "ornek@eposta.com", required: true },
+        { id: "password", label: "Şifre", type: "password", autoComplete: "current-password", placeholder: "Şifreni gir", required: true },
       ]}
       submitUrl={`${API_BASE_URL}/api/backend/auth/login`}
       submitMethod="POST"
-      submitButtonText="Giriş Yap"
-      noValidate={true}
+      submitButtonText="Giriş yap"
       adminCheck={{
         email: "admin@gmail.com",
         password: "admin123",
         redirect: "/adminpanel",
-        alertMessage: "Admin olarak giriş yaptın",
-        storageKey: "isAdmin",
-        storageValue: "true"
+        message: "Admin olarak giriş yapıldı.",
       }}
       onSuccess={(data) => {
-        setUser(data.user)
-        toast.success(`Hoş geldin, ${data.user.name}!`)
+        const u = (data as { user: { name: string; email: string } }).user
+        setUser(u)
+        toast.success(`Hoş geldin, ${u.name}.`)
         router.push("/profil")
       }}
-      onError={(data) => data.message || "Giriş başarısız"}
-      links={[
-        {
-          href: "#",
-          label: "Şifremi Unuttum",
-          isExternal: true,
-          onClick: () => toast.info("Bu özellik yakında kullanıma sunulacak.")
-        },
-        { href: "/kayit", label: "Hesap Oluştur" }
-      ]}
+      onError={(data) => data.message || "Giriş yapılamadı."}
+      links={[{ text: "Hesabın yok mu?", href: "/kayit", label: "Kayıt ol" }]}
     />
   )
 }
