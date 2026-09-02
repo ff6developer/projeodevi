@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Trash2, Coffee } from "lucide-react"
+import { useToast } from "@/components/ToastProvider"
 import {
   Button,
   IconButton,
@@ -30,6 +31,7 @@ export default function DevUiClient() {
   const [modalOpen, setModalOpen] = useState(false)
   const [qty, setQty] = useState(1)
   const confirm = useConfirm()
+  const toast = useToast()
 
   return (
     <div className="container" style={{ paddingBlock: "var(--s-8)", display: "flex", flexDirection: "column", gap: "var(--s-7)" }}>
@@ -103,7 +105,8 @@ export default function DevUiClient() {
                 confirmText: "Sil",
                 tone: "danger",
               })
-              alert(ok ? "silindi" : "vazgeçildi")
+              if (ok) toast.success("Silindi.")
+              else toast.info("Vazgeçildi.")
             }}
           >
             Confirm test
