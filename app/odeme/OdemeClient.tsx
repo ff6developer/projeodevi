@@ -9,7 +9,9 @@ import { computeCartTotals } from "@/lib/pricing"
 import {
   CHECKOUT_STEPS,
   canAdvance,
+  getLastAddress,
   initialCheckoutState,
+  saveLastAddress,
   type CheckoutState,
 } from "@/lib/checkout"
 import { Button, Card, Stepper, LoadingState, Price } from "@/components/ui"
@@ -23,7 +25,11 @@ export default function OdemeClient() {
   const { lines, hydrated } = useCart()
 
   const [step, setStep] = useState(0)
-  const [state, setState] = useState<CheckoutState>(initialCheckoutState)
+  const [triedNext, setTriedNext] = useState(false)
+  const [state, setState] = useState<CheckoutState>(() => {
+    const last = getLastAddress()
+    return last ? { ...initialCheckoutState(), address: last } : initialCheckoutState()
+  })
 
   const authed = useSyncExternalStore(
     subscribeAuth,
@@ -57,10 +63,18 @@ export default function OdemeClient() {
   const isLast = step === CHECKOUT_STEPS.length - 1
 
   const goNext = () => {
-    if (!canNext) return
+    if (!canNext) {
+      setTriedNext(true)
+      return
+    }
+    if (step === 0) saveLastAddress(state.address)
+    setTriedNext(false)
     setStep((s) => Math.min(CHECKOUT_STEPS.length - 1, s + 1))
   }
-  const goBack = () => setStep((s) => Math.max(0, s - 1))
+  const goBack = () => {
+    setTriedNext(false)
+    setStep((s) => Math.max(0, s - 1))
+  }
 
   return (
     <div className="odeme container">
@@ -70,7 +84,9 @@ export default function OdemeClient() {
 
       <div className="odeme-layout">
         <Card pad="lg" className="odeme-panel">
-          {step === 0 && <AddressStep state={state} setState={setState} />}
+          {step === 0 && (
+            <AddressStep state={state} setState={setState} showErrors={triedNext} />
+          )}
           {step === 1 && <DeliveryStep state={state} setState={setState} totals={totals} />}
           {step === 2 && <PaymentStep state={state} setState={setState} />}
           {step === 3 && <ReviewStep state={state} lines={lines} totals={totals} />}
@@ -82,7 +98,7 @@ export default function OdemeClient() {
               </Button>
             )}
             {!isLast && (
-              <Button size="md" onClick={goNext} type="button" disabled={!canNext}>
+              <Button size="md" onClick={goNext} type="button">
                 Devam et
               </Button>
             )}

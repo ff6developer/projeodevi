@@ -1,19 +1,28 @@
 "use client"
 
-import type { Dispatch, SetStateAction } from "react"
+import { useState, type Dispatch, type SetStateAction } from "react"
 import { Input, Textarea } from "@/components/ui"
 import type { Address } from "@/lib/types"
-import type { CheckoutState } from "@/lib/checkout"
+import { validateAddress, type CheckoutState } from "@/lib/checkout"
 
 type Props = {
   state: CheckoutState
   setState: Dispatch<SetStateAction<CheckoutState>>
+  /** "Devam et" denendi ve adres eksik — tüm hataları göster. */
+  showErrors: boolean
 }
 
-export default function AddressStep({ state, setState }: Props) {
+type FieldKey = "fullName" | "phone" | "city" | "district" | "line"
+
+export default function AddressStep({ state, setState, showErrors }: Props) {
   const a = state.address
+  const [touched, setTouched] = useState<Partial<Record<FieldKey, boolean>>>({})
+  const errors = validateAddress(a)
+
   const set = (patch: Partial<Address>) =>
     setState((s) => ({ ...s, address: { ...s.address, ...patch } }))
+  const markTouched = (k: FieldKey) => setTouched((t) => ({ ...t, [k]: true }))
+  const errFor = (k: FieldKey) => ((showErrors || touched[k]) && errors[k]) || undefined
 
   return (
     <div className="odeme-step">
@@ -25,7 +34,9 @@ export default function AddressStep({ state, setState }: Props) {
           label="Ad soyad"
           value={a.fullName}
           autoComplete="name"
+          error={errFor("fullName")}
           onChange={(e) => set({ fullName: e.target.value })}
+          onBlur={() => markTouched("fullName")}
         />
         <Input
           label="Telefon"
@@ -33,19 +44,25 @@ export default function AddressStep({ state, setState }: Props) {
           inputMode="tel"
           autoComplete="tel"
           placeholder="05XX XXX XX XX"
+          error={errFor("phone")}
           onChange={(e) => set({ phone: e.target.value })}
+          onBlur={() => markTouched("phone")}
         />
         <Input
           label="İl"
           value={a.city}
           autoComplete="address-level1"
+          error={errFor("city")}
           onChange={(e) => set({ city: e.target.value })}
+          onBlur={() => markTouched("city")}
         />
         <Input
           label="İlçe"
           value={a.district}
           autoComplete="address-level2"
+          error={errFor("district")}
           onChange={(e) => set({ district: e.target.value })}
+          onBlur={() => markTouched("district")}
         />
       </div>
 
@@ -54,7 +71,9 @@ export default function AddressStep({ state, setState }: Props) {
         value={a.line}
         rows={3}
         autoComplete="street-address"
+        error={errFor("line")}
         onChange={(e) => set({ line: e.target.value })}
+        onBlur={() => markTouched("line")}
       />
       <Textarea
         label="Sipariş notu (isteğe bağlı)"
