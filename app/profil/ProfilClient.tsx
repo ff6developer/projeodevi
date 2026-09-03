@@ -109,7 +109,15 @@ export default function ProfilClient() {
 
   const saveProfile = () => {
     if (!user) return
-    const updated = { ...user, name: editName, email: editEmail }
+    if (!editName.trim()) {
+      toast.warning("Ad boş bırakılamaz.")
+      return
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editEmail.trim())) {
+      toast.warning("Geçerli bir e-posta adresi gir.")
+      return
+    }
+    const updated = { ...user, name: editName.trim(), email: editEmail.trim() }
     setSessionUser(updated)
     setUser(updated)
     setBio(editBio)

@@ -32,6 +32,7 @@ export default function OdemeClient() {
   const [triedNext, setTriedNext] = useState(false)
   const [placing, setPlacing] = useState(false)
   const placedRef = useRef(false)
+  const panelRef = useRef<HTMLDivElement>(null)
   const [state, setState] = useState<CheckoutState>(() => {
     const last = getLastAddress()
     return last ? { ...initialCheckoutState(), address: last } : initialCheckoutState()
@@ -42,6 +43,15 @@ export default function OdemeClient() {
     () => isLoggedIn(),
     () => false,
   )
+
+  // Geçersiz "Devam" denemesinde ilk hatalı alana odaklan/kaydır.
+  useEffect(() => {
+    if (!triedNext) return
+    const first = panelRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')
+    if (!first) return
+    first.focus()
+    first.scrollIntoView({ block: "center", behavior: "smooth" })
+  }, [triedNext, step])
 
   useEffect(() => {
     if (!hydrated || placedRef.current) return
@@ -137,7 +147,7 @@ export default function OdemeClient() {
       <Stepper steps={[...CHECKOUT_STEPS]} current={step} />
 
       <div className="odeme-layout">
-        <Card pad="lg" className="odeme-panel">
+        <Card pad="lg" className="odeme-panel" ref={panelRef}>
           {step === 0 && (
             <AddressStep state={state} setState={setState} showErrors={triedNext} />
           )}

@@ -13,7 +13,11 @@ interface Field {
   placeholder: string
   required: boolean
   hint?: string
+  /** Minimum karakter sayısı (ör. şifre). */
+  minLength?: number
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export type AuthSubmitResult = {
   ok: boolean
@@ -55,24 +59,43 @@ export default function AuthForm({
     if (errors[id]) setErrors((p) => ({ ...p, [id]: "" }))
   }
 
+  const focusField = (id?: string) => {
+    if (!id || typeof document === "undefined") return
+    const el = document.getElementById(id) as HTMLElement | null
+    el?.focus()
+    el?.scrollIntoView({ block: "center", behavior: "smooth" })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const next: Record<string, string> = {}
     for (const f of fields) {
-      if (f.required && !String(formData[f.id] ?? "").trim()) {
+      const value = String(formData[f.id] ?? "").trim()
+      if (f.required && !value) {
         next[f.id] = `${f.label} zorunludur.`
+      } else if (value && f.type === "email" && !EMAIL_RE.test(value)) {
+        next[f.id] = "Geçerli bir e-posta adresi gir."
+      } else if (value && f.minLength && value.length < f.minLength) {
+        next[f.id] = `${f.label} en az ${f.minLength} karakter olmalı.`
       }
     }
     setErrors(next)
-    if (Object.keys(next).length > 0) return
+    if (Object.keys(next).length > 0) {
+      focusField(fields.find((f) => next[f.id])?.id)
+      return
+    }
 
     setSubmitting(true)
     try {
       const res = await onSubmit(formData)
       if (!res.ok) {
-        if (res.field) setErrors({ [res.field]: res.error ?? "Geçersiz." })
-        else toast.error(res.error ?? "Bir şeyler ters gitti, tekrar dener misin?")
+        if (res.field) {
+          setErrors({ [res.field]: res.error ?? "Geçersiz." })
+          focusField(res.field)
+        } else {
+          toast.error(res.error ?? "Bir şeyler ters gitti, tekrar dener misin?")
+        }
       }
     } finally {
       setSubmitting(false)
@@ -90,6 +113,7 @@ export default function AuthForm({
             f.type === "password" ? (
               <PasswordInput
                 key={f.id}
+                id={f.id}
                 label={f.label}
                 autoComplete={f.autoComplete}
                 placeholder={f.placeholder}
@@ -101,6 +125,7 @@ export default function AuthForm({
             ) : (
               <Input
                 key={f.id}
+                id={f.id}
                 label={f.label}
                 type={f.type}
                 autoComplete={f.autoComplete}

@@ -30,6 +30,7 @@ export default function RegisterClient() {
           autoComplete: "new-password",
           placeholder: "En az 8 karakter",
           required: true,
+          minLength: 8,
           hint: "En az 8 karakter.",
         },
       ]}
