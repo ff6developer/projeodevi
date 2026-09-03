@@ -20,6 +20,8 @@
   overflow: hidden;
   cursor: pointer;
   flex: none;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
 }
 .profil-avatar-img {
   width: 100%;

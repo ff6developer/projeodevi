@@ -129,3 +129,23 @@ Temiz `.next` sil → `next build` → `next start`. İki kez: (a) env'siz, (b) 
 | 9 | Recruiter 60 sn: aç, kaydol, 1 ürün al, mobil, konsol, repo | ✅ kayıt (parola SAKLANMAZ, network isteği 0) → auto-login → `/menu/cappuccino` → sepete ekle → checkout (özet doğru) → konsol temiz. Repo: `backend/` yok, `node_modules` commit'siz, WORKLOG/PLAN/AUDIT belgeleri var |
 
 **Bulgu:** 9 senaryonun tamamında friction/bozukluk **YOK**. TASK-268+ boş.
+
+### TASK-269 — Final görsel inceleme
+
+Her ana yüzey (bu FAZ boyunca alınan temiz ekran görüntüleri + DOM doğrulaması):
+
+| Yüzey | Görsel değerlendirme |
+|---|---|
+| İlk ekran / hero | Asimetrik 2 kolon, gerçek ürün fotoğrafı (`--shadow-2` + `--r-lg`), somut eyebrow + Fraunces h1 + 2 satır lede + 2 CTA (primary + secondary). "Gerçek mağaza" hissi. ✅ |
+| Header | Logo + marka (Fraunces) + nav + sepet ikonu; sticky; sade. ✅ |
+| Ürün kartları | 4/3 görsel, roast meter + origin, tek outline "Sepete ekle" — accent sakin. ✅ |
+| Butonlar | Hiyerarşi net (sayfa başına 1 dolu-accent); `loading` spinner; `:focus-visible` outline. ✅ |
+| Formlar | `Field` bileşeni: label + hint + inline error + `aria-invalid`; ilk hataya focus. ✅ |
+| Checkout | 4-adım stepper, özet kalem listesi + demo güven satırı, kart maskeli + "deneme ekranı" notu. ✅ |
+| Footer | 3 kolon ticari (marka + Keşfet + Kurumsal) + "portföy/demo" alt notu. ✅ |
+| Mobil (375) | Yatay taşma yok; drawer marka + Çıkış; hero CTA katlamada. ✅ |
+| Empty / error / loading | İkon + tek cümle + tek CTA; `LoadingState` spinner; 404 CTA'lı. ✅ |
+
+**Düzeltme:** `.profil-avatar` — varsayılan koyu ikon koyu kartta kayboluyordu → `background: var(--surface-2)` + `border: 1px solid var(--line-strong)` (tanımlı dairesel çerçeve).
+
+**Sonuç:** Amatör duran öğe kalmadı; tek küçük kontrast düzeltmesi yapıldı.
