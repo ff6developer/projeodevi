@@ -23,6 +23,17 @@
   color: var(--ink-2);
 }
 
+.about-demo-note {
+  margin: var(--s-5) 0 var(--s-7);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
 .about-media {
   display: grid;
   grid-template-columns: 1fr 1fr;

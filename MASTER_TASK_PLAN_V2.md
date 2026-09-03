@@ -24,7 +24,7 @@ başkasını bozarsa önce regresyonu çöz. Her task sonrası `WORKLOG_V2.md`.
 | B | Backend-ready data layer | TASK-213 … TASK-222 | ✅ COMPLETE |
 | C | Conversion / UX friction | TASK-223 … TASK-236 | ✅ COMPLETE |
 | D | Visual professionalism | TASK-237 … TASK-248 | ✅ COMPLETE |
-| E | Copy / microcopy | TASK-249 … TASK-254 | ⬜ |
+| E | Copy / microcopy | TASK-249 … TASK-254 | ✅ COMPLETE |
 | F | Edge cases / states | TASK-255 … TASK-263 | ⬜ |
 | G | Final simülasyon + re-audit | TASK-264 … TASK-270 | ⬜ |
 

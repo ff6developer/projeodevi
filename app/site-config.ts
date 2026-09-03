@@ -30,7 +30,7 @@ export const SITE_URL = resolveSiteUrl()
 export const SITE_NAME = "Elmenes Coffee"
 
 export const SITE_DESCRIPTION =
-  "Nitelikli çekirdek, ustalıkla kavurma. Menüden sipariş ver ya da kendi kahveni tasarla."
+  "Taze kavrulmuş kahve, kapına gelir. Menüden hazır bir kahve seç ya da kendi kahveni tasarla."
 
 /**
  * Marka bilgisi — tek kaynak. Footer, iletişim, metadata buradan beslenir.

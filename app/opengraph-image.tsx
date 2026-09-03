@@ -49,7 +49,7 @@ export default function OpengraphImage() {
             {BRAND.tagline}
           </div>
           <div style={{ fontSize: 32, color: "#b3aa9b", maxWidth: 820 }}>
-            Menüden sipariş ver ya da kendi kahveni tasarla.
+            Menüden hazır seç ya da kendi kahveni tasarla.
           </div>
         </div>
       </div>

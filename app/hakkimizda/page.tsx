@@ -6,7 +6,7 @@ import { BRAND } from "@/app/site-config";
 export const metadata: Metadata = {
   title: "Hakkımızda",
   description:
-    "Elmenes Coffee; nitelikli çekirdeği, ustalıkla kavurma ve sade bir kahve deneyimini bir araya getiren küçük bir kavurucu.",
+    "Elmenes Coffee; tek origin ve harman çekirdekleri küçük partiler hâlinde kavuran, siparişe göre taze hazırlayıp kapıya gönderen bir kahve dükkânı.",
   alternates: { canonical: "/hakkimizda" },
 };
 
@@ -36,11 +36,16 @@ export default function About() {
         <p className="eyebrow">Hikâyemiz</p>
         <h1>Hakkımızda</h1>
         <p className="about-lede">
-          {BRAND.name}, kahvenin topraktan fincana uzanan yolculuğuna saygı duyan küçük bir
-          kavurucu. İşe, herkesin kendi damak tadına göre bir kahveye ulaşabilmesi
-          fikriyle başladık.
+          {BRAND.name}, İstanbul&apos;da küçük partiler hâlinde kahve kavuran bir dükkân.
+          Menüde hazır seçenekler var; istersen sütü, çekirdeği ve şurubu kendin ayarlayıp
+          kendi tarifini kuruyorsun. Her sipariş verildikten sonra taze hazırlanır.
         </p>
       </header>
+
+      <p className="about-demo-note" role="note">
+        Elmenes Coffee bir portföy / demo projesidir. Sipariş, ödeme ve teslimat akışları
+        gerçek değildir.
+      </p>
 
       <div className="about-media" aria-hidden="true">
         <span className="about-media-block">{BRAND.shortName}</span>
