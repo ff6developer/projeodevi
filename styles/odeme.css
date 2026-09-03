@@ -1,7 +1,7 @@
 /* Ödeme (checkout) — TASK-114. */
 
 .odeme {
-  padding-block: var(--s-7) var(--s-9);
+  padding-block: var(--s-7) var(--s-8);
 }
 .odeme h1 {
   margin: 0 0 var(--s-5);

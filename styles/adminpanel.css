@@ -1,7 +1,7 @@
 /* Admin — TASK-100/101/102 (component + token; generic SaaS dashboard kaldırıldı). */
 
 .admin {
-  padding-block: var(--s-7) var(--s-9);
+  padding-block: var(--s-7) var(--s-8);
 }
 
 .admin-gate {
