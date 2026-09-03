@@ -2,7 +2,13 @@
 // burada tipler, adım tanımları, doğrulama ve "son adres" kalıcılığı var.
 
 import type { Address, DeliveryMethod } from "./types"
-import { readRaw, writeRaw } from "./services/adapters/local/storage"
+import {
+  readRaw,
+  writeRaw,
+  readSessionJSON,
+  writeSessionJSON,
+  removeSession,
+} from "./services/adapters/local/storage"
 
 export type PaymentMethod = "demo" | "kapida"
 
@@ -149,4 +155,29 @@ export function getLastAddress(): Address | null {
 
 export function saveLastAddress(a: Address): void {
   writeRaw(LAST_ADDRESS_KEY, JSON.stringify(a))
+}
+
+/* --- Checkout taslağı: sekme ömrü (yenileme / geri sonrası kaldığı adım) --- */
+
+const DRAFT_KEY = "elmenes.checkoutDraft"
+
+export type CheckoutDraft = {
+  step: number
+  address: Address
+  delivery: DeliveryMethod
+  payment: PaymentMethod
+}
+
+export function saveCheckoutDraft(draft: CheckoutDraft): void {
+  writeSessionJSON(DRAFT_KEY, draft)
+}
+
+export function loadCheckoutDraft(): CheckoutDraft | null {
+  const d = readSessionJSON<CheckoutDraft | null>(DRAFT_KEY, null)
+  if (!d || typeof d.step !== "number" || !d.address) return null
+  return d
+}
+
+export function clearCheckoutDraft(): void {
+  removeSession(DRAFT_KEY)
 }

@@ -15,6 +15,9 @@ import {
   getLastAddress,
   initialCheckoutState,
   saveLastAddress,
+  loadCheckoutDraft,
+  saveCheckoutDraft,
+  clearCheckoutDraft,
   type CheckoutState,
 } from "@/lib/checkout"
 import { Button, Card, Stepper, LoadingState, Price } from "@/components/ui"
@@ -28,12 +31,23 @@ export default function OdemeClient() {
   const toast = useToast()
   const { lines, hydrated, clear } = useCart()
 
-  const [step, setStep] = useState(0)
   const [triedNext, setTriedNext] = useState(false)
   const [placing, setPlacing] = useState(false)
   const placedRef = useRef(false)
   const panelRef = useRef<HTMLDivElement>(null)
+
+  // Sekme ömrü taslağı: yenileme / geri sonrası kaldığı adım + form geri gelir.
+  const [step, setStep] = useState(() => loadCheckoutDraft()?.step ?? 0)
   const [state, setState] = useState<CheckoutState>(() => {
+    const draft = loadCheckoutDraft()
+    if (draft) {
+      return {
+        ...initialCheckoutState(),
+        address: draft.address,
+        delivery: draft.delivery,
+        payment: draft.payment,
+      }
+    }
     const last = getLastAddress()
     return last ? { ...initialCheckoutState(), address: last } : initialCheckoutState()
   })
@@ -61,6 +75,17 @@ export default function OdemeClient() {
     }
     if (lines.length === 0) router.replace("/sepet")
   }, [hydrated, authed, lines.length, router])
+
+  // Adım + adres + yöntem taslağını sakla (kart asla yazılmaz).
+  useEffect(() => {
+    if (placedRef.current) return
+    saveCheckoutDraft({
+      step,
+      address: state.address,
+      delivery: state.delivery,
+      payment: state.payment,
+    })
+  }, [step, state.address, state.delivery, state.payment])
 
   const totals = useMemo(
     () => computeCartTotals({ lines, delivery: state.delivery }),
@@ -131,6 +156,7 @@ export default function OdemeClient() {
       })
 
       clear()
+      clearCheckoutDraft()
       toast.success("Siparişin alındı.")
       router.replace(`/siparis?o=${order.id}`)
     } catch {

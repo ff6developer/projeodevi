@@ -45,6 +45,36 @@ export function writeJSON(key: string, value: unknown): void {
   writeRaw(key, JSON.stringify(value))
 }
 
+/* --- sessionStorage (sekme ömrü — ör. checkout taslağı) --- */
+
+export function readSessionJSON<T>(key: string, fallback: T): T {
+  if (!isBrowser) return fallback
+  try {
+    const raw = window.sessionStorage.getItem(key)
+    return raw == null ? fallback : (JSON.parse(raw) as T)
+  } catch {
+    return fallback
+  }
+}
+
+export function writeSessionJSON(key: string, value: unknown): void {
+  if (!isBrowser) return
+  try {
+    window.sessionStorage.setItem(key, JSON.stringify(value))
+  } catch {
+    /* kota / gizli mod — sessizce geç */
+  }
+}
+
+export function removeSession(key: string): void {
+  if (!isBrowser) return
+  try {
+    window.sessionStorage.removeItem(key)
+  } catch {
+    /* yoksay */
+  }
+}
+
 /** Basit yayın: aynı sekmede değişiklikleri dinlemek için. */
 export function emit(eventName: string): void {
   if (!isBrowser) return
