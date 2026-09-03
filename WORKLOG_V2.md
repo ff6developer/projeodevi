@@ -71,3 +71,24 @@ Format: `TASK-XXX | tarih | özet | build/tsc/lint | not`
 | TASK-262 | 2026-09-03 | Format helper denetimi: `grep toLocaleString/Intl./toFixed/getDate` → user-facing tüm tarih/para zaten `lib/format` (`formatPrice`/`formatDateTime`/`estimateDelivery`) + `Price` bileşeni üzerinden. Kalan 3 eşleşme: JSON-LD `price` string'i (`.toFixed(2)` — schema.org için doğru, `formatPrice` yanlış olurdu) + `community.ts` ay-anahtarı hesabı (görüntü değil). Değişiklik gerekmedi. | ✅ | — |
 | TASK-263 | 2026-09-03 | **FAZ F regresyon checkpoint.** `next build` ✅ (47 route) · `tsc` ✅ · `eslint` ✅. Edge-case matrisi (temiz tab prod): uzun metin 375px (isim/adres/e-posta 120+ krk → taşma yok), 0/1/20 öğe (sepet boş→EmptyState+2 CTA, 20 satır→sticky özet OK, menü 0 sonuç→EmptyState), form validasyon (auth email/şifre + checkout focus), checkout reload→aynı adım, görsel opt (`/_next/image` avif 640w). `/menu/[slug]` görselleri fresh tab'da `naturalWidth=420` — yükleniyor (aradaki "0" okumaları pane render glitch'i). Konsol temiz. **FAZ F COMPLETE.** | ✅ / ✅ / ✅ | — |
 | TASK-236 | 2026-09-03 | **FAZ C regresyon checkpoint.** `next build` ✅ · `tsc` ✅ · `eslint` ✅. Temiz tab prod smoke: `/` (hero 2-kolon + 2 satır lede) → `/menu` (kart başına 1 buton, görsel/başlık→modal) → toast "Sepete git" → `/sepet` (ücretsiz-kargo ilerleme + not) → `/odeme` (özet kalemleri + demo güven satırı) → `/siparis?o=` (adres + "Tahmini teslim: 5–6 Eylül" + demo notu) → `/siparis/[id]` (adres + kapanış aksiyonları). **REGRESYON BULUNDU & ÇÖZÜLDÜ:** `/siparis` + `/siparis/[id]` hard-load'da React #418 (hidrasyon uyuşmazlığı) — sipariş verisi localStorage'dan gelir, SSR'da "bulunamadı" render edip istemcide dolu render ediyordu. Fix: her iki client'a `useSyncExternalStore` `hydrated` kapısı + `LoadingState` iskeleti (`SiparislerimClient` deseniyle aynı). Temiz tab'da 4 route (dolu / bulunamadı / onay / takip) — **konsol tamamen temiz, #418 YOK**. **FAZ C COMPLETE.** | ✅ / ✅ / ✅ | Not: 3106'daki eski tab'da görülen #418 birikmiş buffer artefaktıydı; fresh tab'da /odeme, /menu, / temiz. |
+
+## FAZ G — Final simülasyon + re-audit
+
+### TASK-264 — Animasyon denetimi (kayıt)
+
+Tüm `transition` / `animation` / `@keyframes` + gerekçe. `styles/base.css` içinde
+`@media (prefers-reduced-motion: reduce)` → tüm animasyon/transition ~0ms (a11y).
+
+| Yer | Tür | Gerekçe (feedback / orientation / hierarchy / state) |
+|---|---|---|
+| `base.css` `.skip-link` | `transform` focus'ta kayar | **orientation/state** — klavye kullanıcısına atla-bağlantısını gösterir |
+| `layout.css` `.toast` `@keyframes toast-in` (160ms) | giriş: opacity + 8px translateY | **state** — yeni bildirimin belirişini bildirir; tek sefer |
+| `layout.css` `.site-nav-link`, `.nav-drawer-*`, `.site-cart` | `color` / `background` | **feedback** — hover/aktif durum |
+| `menu.css` `.menu-cat`, `.menu-card-open:hover .menu-card-name` | `background` / `color` | **feedback** — kategori seçimi + kartın tıklanabilir olduğu sinyali |
+| `odeme.css` `.odeme-choice` `transform` + `border`/`color` | seçim geri bildirimi | **feedback/state** — radyo seçim |
+| `profil.css` `.profil-avatar-overlay` | `opacity` hover/focus | **feedback** — "değiştir" ipucu |
+| `adminpanel.css` / `kahveniolustur.css` / `Tabs` / `Field` / `Card` / `IconButton` / `QuantityStepper` | `color` / `border-color` / `background` | **feedback** — hover / focus / aktif |
+| `Button.module.css` `@keyframes btn-spin`, `States` `@keyframes state-spin` | dönen spinner | **state** — yükleniyor |
+| `Progress.module.css` | `width` | **state** — ilerleme değeri değişimi |
+
+**Sonuç:** Gösteri amaçlı (parallax, scroll-reveal, glow pulse, dekoratif float) animasyon **0**. Her hareket bir durum/etkileşimi iletiyor; hepsi `prefers-reduced-motion` ile kapanıyor.
