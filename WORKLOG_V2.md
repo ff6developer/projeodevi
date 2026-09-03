@@ -92,3 +92,24 @@ Tüm `transition` / `animation` / `@keyframes` + gerekçe. `styles/base.css` iç
 | `Progress.module.css` | `width` | **state** — ilerleme değeri değişimi |
 
 **Sonuç:** Gösteri amaçlı (parallax, scroll-reveal, glow pulse, dekoratif float) animasyon **0**. Her hareket bir durum/etkileşimi iletiyor; hepsi `prefers-reduced-motion` ile kapanıyor.
+
+### TASK-266 — Prod deployment dry-run
+
+Temiz `.next` sil → `next build` → `next start`. İki kez: (a) env'siz, (b) `NEXT_PUBLIC_SITE_URL=https://elmenes-coffee.vercel.app`.
+
+| Kontrol | Sonuç |
+|---|---|
+| `next build` | ✅ 47 route (23 SSG ürün + 1 ƒ `/siparis/[id]`) |
+| Tüm public + app route → 200 | ✅ (/, /menu, /menu/[23 slug], /kahveniolustur, /topluluk, /hakkimizda, /giris, /kayit, /sepet, /odeme, /siparis, /siparislerim, /profil, /adminpanel, 4 yasal, robots.txt, sitemap.xml, opengraph-image) |
+| `/dev/ui` | ✅ 404 |
+| Geçersiz ürün slug `/menu/yok-boyle-urun` | ✅ 404 (`dynamicParams=false`) |
+| Rastgele yol | ✅ 404 → "Bu sayfa bulunamadı" + Ana sayfa / Menü CTA |
+| Yenileme sonrası doğru render | ✅ (SSG ürün sayfaları; `/siparis/[id]` hidrasyon kapısı → #418 yok) |
+| Konsol (fresh tab, hard-load /kahveniolustur→/topluluk→/menu/latte) | ✅ temiz |
+| `example.com` | ✅ hiçbir çıktıda yok |
+| env'siz base URL | ✅ `localhost:3000` (fallback) |
+| `NEXT_PUBLIC_SITE_URL` set → sitemap / robots `Host`+`Sitemap` / canonical | ✅ hepsi tam domain |
+| Görsel (avif opt) + font | ✅ `/_next/image` avif 640w; IBM Plex + Fraunces yükleniyor |
+| JSON-LD | ✅ home Organization+WebSite, /menu/[slug] Product+Offer |
+
+**Checklist tamamen ✅.**
