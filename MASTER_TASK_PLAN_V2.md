@@ -26,7 +26,7 @@ başkasını bozarsa önce regresyonu çöz. Her task sonrası `WORKLOG_V2.md`.
 | D | Visual professionalism | TASK-237 … TASK-248 | ✅ COMPLETE |
 | E | Copy / microcopy | TASK-249 … TASK-254 | ✅ COMPLETE |
 | F | Edge cases / states | TASK-255 … TASK-263 | ✅ COMPLETE |
-| G | Final simülasyon + re-audit | TASK-264 … TASK-270 | ⬜ |
+| G | Final simülasyon + re-audit | TASK-264 … TASK-270 | ✅ COMPLETE |
 
 ---
 
