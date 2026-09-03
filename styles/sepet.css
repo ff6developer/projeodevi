@@ -78,6 +78,10 @@
   text-align: right;
 }
 
+.sepet-summary {
+  position: sticky;
+  top: calc(var(--header-h) + var(--s-4));
+}
 .sepet-summary h2 {
   margin: 0 0 var(--s-4);
   font-size: var(--fs-h3);
@@ -125,6 +129,9 @@
 @media (max-width: 900px) {
   .sepet-layout {
     grid-template-columns: 1fr;
+  }
+  .sepet-summary {
+    position: static;
   }
 }
 @media (max-width: 560px) {
