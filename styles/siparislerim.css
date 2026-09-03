@@ -101,6 +101,12 @@
   gap: var(--s-3);
   font-size: var(--fs-sm);
 }
+.siparis-detay-lines li > :first-child {
+  min-width: 0;
+}
+.siparis-detay-lines li > :last-child {
+  flex-shrink: 0;
+}
 .siparis-detay-row {
   display: flex;
   justify-content: space-between;

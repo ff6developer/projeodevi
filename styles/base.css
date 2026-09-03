@@ -83,6 +83,11 @@ h2 { font-size: var(--fs-h2); }
 h3 { font-size: var(--fs-h3); }
 h4 { font-size: var(--fs-lg); }
 
+/* Uzun/kesintisiz kullanıcı metni (ürün adı, e-posta, adres) layout'u kırmasın. */
+h1, h2, h3, h4, p, strong, span, td, li {
+  overflow-wrap: anywhere;
+}
+
 p {
   line-height: var(--lh-body);
 }
