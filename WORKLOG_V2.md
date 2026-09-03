@@ -113,3 +113,19 @@ Temiz `.next` sil → `next build` → `next start`. İki kez: (a) env'siz, (b) 
 | JSON-LD | ✅ home Organization+WebSite, /menu/[slug] Product+Offer |
 
 **Checklist tamamen ✅.**
+
+### TASK-267 — 9 senaryo uçtan uca simülasyon (fresh tab, prod)
+
+| # | Senaryo | Sonuç |
+|---|---|---|
+| 1 | İlk ziyaret → menü → ürün → sepet | ✅ hero (2 CTA + görsel) → `/menu/latte` → sepete ekle + "Sepete git" toast + rozet → `/sepet` (Toplam ₺140, ücretsiz-kargo ilerleme) |
+| 2 | Builder → tasarla → sepete ekle → checkout | ✅ logged-out: 16 bölüm dolduruldu → "Sepete ekle" → `copiedRecipe` taslağı + toast + `/giris?next=` → demo giriş → `/kahveniolustur`'a dönüş, isim "Sabah Espressom" geri geldi → sepete ekle → sepet [Latte, Sabah Espressom] |
+| 3 | Checkout: adres → teslimat → demo ödeme → sipariş | ✅ adres → "Standart (2–3 gün)" → demo kart (`•••• 1111` maskeli + "deneme ekranı" notu) → özet (Ara ₺262 + Teslimat ₺30 = ₺292) → "Siparişi onayla" → `/siparis?o=A6104`, sepet + taslak temizlendi |
+| 4 | Sipariş → siparişlerim → detay → status tracking | ✅ `/siparislerim` → tıkla → `/siparis/A6104` (4-adım stepper "Alındı…Teslim edildi", adres, kapanış aksiyonları) |
+| 5 | Mobil (375) tüm ana akış | ✅ yatay taşma yok; hero CTA katlamada, lede 3 satır; drawer (marka + Çıkış); menü ızgarası 1 kolon; checkout adımları OK |
+| 6 | Hatalı form → validation → düzeltme | ✅ (TASK-259) auth email/şifre inline + focus; checkout ilk hatalı alana focus/scroll |
+| 7 | Boş veri → empty states | ✅ sepet (ShoppingBag + 2 CTA), siparişlerim (Package), menü 0-sonuç (SearchX), profil sıfır-stat nudge |
+| 8 | Yavaş/başarısız veri → loading/error | ✅ (kapsam TASK-257/258) hidrasyon kapısı → `LoadingState`; auth `MOCK_LATENCY` + buton spinner; `placeOrder` hata → `toast.error` + sepet korunur |
+| 9 | Recruiter 60 sn: aç, kaydol, 1 ürün al, mobil, konsol, repo | ✅ kayıt (parola SAKLANMAZ, network isteği 0) → auto-login → `/menu/cappuccino` → sepete ekle → checkout (özet doğru) → konsol temiz. Repo: `backend/` yok, `node_modules` commit'siz, WORKLOG/PLAN/AUDIT belgeleri var |
+
+**Bulgu:** 9 senaryonun tamamında friction/bozukluk **YOK**. TASK-268+ boş.
