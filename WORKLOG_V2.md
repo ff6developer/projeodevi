@@ -167,3 +167,9 @@ Her ana yüzey (bu FAZ boyunca alınan temiz ekran görüntüleri + DOM doğrula
 - PORTFOLIO READY? **YES** — gerçek ürün düşüncesi + tasarım sistemi + backend-ready mimari; sahte backend/ödeme yok, feature creep yok.
 
 **FAZ G COMPLETE. V2 turu tamamlandı.**
+
+---
+
+## HOTFIX 2026-09-06 — Vercel deploy
+
+**TASK-261 GERİ ALINDI.** `unoptimized:true` kaldırılınca `main` (`18dedec`) Vercel deploy'u iki projede de FAILURE oldu (`a688cff` = success). Neden: `/public` i'cinde boşluk + Türkçe karakterli dosya adları (`türk kahvesi.jpg`, `ıceMocha.jpg`) → `/_next/image` Vercel'de 404/hata (önceki dev bu yüzden kapatmış). `next.config.ts` → `unoptimized:true` geri + kalıcı çözüm notu (dosyaları ASCII kebab-case'e taşıyıp optimizasyonu aç). Yerel `next build` ✅ 47/47.
